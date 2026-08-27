@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_result"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/graybluemediam_light_bg">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_find_near"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_10sdp"
+        card_view:cardBackgroundColor="@color/white"
+        card_view:cardCornerRadius="@dimen/_5sdp"
+        card_view:cardElevation="4dp"
+        card_view:contentPadding="@dimen/_10sdp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/task_robotoslab_medium"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="Result"
+                android:textColor="@android:color/black"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/ivSmiley"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_below="@+id/tv_title"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/_15sdp"
+                android:src="@drawable/emojis_sad" />
+
+            <TextView
+                android:id="@+id/tvResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivSmiley"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/task_robotoslab_medium"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="Congratulations... You have passed "
+                android:textAllCaps="true"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvResult"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/task_robotoslab_regular"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="તમારો સ્કોર :  તમારો સ્કોર : "
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/Lvis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvScore"
+                android:layout_margin="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnHome"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_round_button"
+                    android:fontFamily="@font/task_robotoslab_regular"
+                    android:padding="@dimen/_10sdp"
+                    android:text="હોમ"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnViewResult"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_round_button"
+                    android:fontFamily="@font/task_robotoslab_regular"
+                    android:padding="@dimen/_10sdp"
+                    android:text="જવાબો જુઓ"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

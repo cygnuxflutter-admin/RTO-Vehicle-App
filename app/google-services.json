@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "607153644427",
+    "firebase_url": "https://rto-vehicle-information-b91cc-default-rtdb.firebaseio.com",
+    "project_id": "rto-vehicle-information-b91cc",
+    "storage_bucket": "rto-vehicle-information-b91cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:607153644427:android:1c5ac8f889c346ca50858e",
+        "android_client_info": {
+          "package_name": "com.vehicle.information.trending.rtoexam.rto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "607153644427-l5j1m331bpbr5pq5v9qlsbu13k0j4u33.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKUq-RTm7nIR84yX8jGhF_bHAKBvigXQ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "607153644427-l5j1m331bpbr5pq5v9qlsbu13k0j4u33.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

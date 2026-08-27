@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/main_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rlBanner">
+
+        <include
+            android:id="@+id/layoutToolbarOnly"
+            layout="@layout/template_toolbar_activity" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_app_bg"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/errorContainer"
+                    layout="@layout/error_contextual"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/contentLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:focusableInTouchMode="true"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <include
+                        layout="@layout/template_vehicle_details_cover"
+                        android:layout_width="match_parent"
+                        android:layout_height="210dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <include layout="@layout/view_vehicle_detail_options_card" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/ownerName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_owner_name"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/ownerNameValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/registrationNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_reg_no"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/registrationNoValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/regDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_reg_date"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/regDateValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:id="@+id/betweenAd"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvOwnership"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/ownership"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_ownership"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/ownershipValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvFinancier"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/financier"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_financier"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <RelativeLayout
+                            android:id="@+id/financierValueHiddenContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:id="@+id/financierValueHidden"
+                                style="@style/DetailLargeStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_toLeftOf="@+id/btnCheckHiddenFinancierValue"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textColor="@color/black_opaque_80" />
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/btnCheckHiddenFinancierValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginLeft="16dp"
+                                app:cardBackgroundColor="@color/colorPrimaryDark"
+                                app:cardCornerRadius="5dp">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/DetailSemiSmallStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="8dp"
+                                    android:gravity="center"
+                                    android:text="@string/txt_btn_check_hidden_value"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/white" />
+                            </androidx.cardview.widget.CardView>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/financierValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvInsuranceCompany"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/insuranceCompany"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_insurance_company"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <RelativeLayout
+                            android:id="@+id/insuranceCompanyValueHiddenContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                android:id="@+id/insuranceCompanyValueHidden"
+                                style="@style/DetailLargeStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_toLeftOf="@+id/btnCheckHiddenInsuranceCompanyValue"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textColor="@color/black_opaque_80" />
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/btnCheckHiddenInsuranceCompanyValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginLeft="16dp"
+                                app:cardBackgroundColor="@color/colorPrimaryDark"
+                                app:cardCornerRadius="5dp">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/DetailSemiSmallStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="8dp"
+                                    android:gravity="center"
+                                    android:text="@string/txt_btn_check_hidden_value"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/white" />
+                            </androidx.cardview.widget.CardView>
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/insuranceCompanyValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvChallan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/txvCheckChallan"
+                            style="@style/DetailSmallStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_check_challan"
+                            android:textColor="@color/colorPrimaryDark" />
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp">
+
+                            <TextView
+                                style="@style/DetailSemiSmallStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="64dp"
+                                android:layout_toLeftOf="@+id/btnCheckChallan"
+                                android:text="@string/txt_check_challan_description"
+                                android:textColor="@color/black_opaque_70" />
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/btnCheckChallan"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginLeft="16dp"
+                                app:cardBackgroundColor="@color/colorPrimaryDark"
+                                app:cardCornerRadius="5dp">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/DetailSemiSmallStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="8dp"
+                                    android:gravity="center"
+                                    android:text="@string/txt_btn_check_challan"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/white" />
+                            </androidx.cardview.widget.CardView>
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/regAuthority"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_reg_authority"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/regAuthorityValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/makerModel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_maker_model"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/makerModelValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/engineNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_engine_no"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/engineNoValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/chassisNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_chassis_no"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/chassisNoValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/fuelType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_fuel_type"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/fuelTypeValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:id="@+id/betweenAd1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/vehicleClass"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_vehicle_class"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/vehicleClassValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/fuelNorms"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_fuel_norms"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/fuelNormsValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvVehicleInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:weightSum="1">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="0.5"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/ivVehicleImage"
+                                android:layout_width="120dp"
+                                android:layout_height="100dp"
+                                android:contentDescription="@string/content_desc"
+                                app:srcCompat="@drawable/ic_default_car" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/txvVehicleModelName"
+                                style="@style/DetailMediumStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:textAllCaps="true"
+                                android:textColor="@color/black_opaque_70" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/txvVehicleBrandName"
+                                style="@style/DetailMediumStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:textColor="@color/black_opaque_60" />
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/btnVehicleDetails"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="8dp"
+                                app:cardBackgroundColor="@color/colorPrimaryDark"
+                                app:cardCornerRadius="5dp">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    style="@style/DetailSemiMediumStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="8dp"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:text="@string/txt_full_specs"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/white" />
+                            </androidx.cardview.widget.CardView>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvVehicleAge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/vehicleAge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_vehicle_age"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/vehicleAgeValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvInsuranceUpto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/insuranceUpto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_insurance_upto"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/insuranceUptoValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvFitnessUpto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/fitnessUpto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_fitness_upto"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/fitnessUptoValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvRoadTaxPaidUpto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/roadTaxPaidUpto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_road_tax_paid_upto"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/roadTaxPaidUptoValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvPuccUpto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/puccUpto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_pucc_upto"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/puccUptoValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:id="@+id/betweenAd2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvVehicleColor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/vehicleColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_vehicle_color"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/vehicleColorValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvSeatCapacity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/seatCapacity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_seat_capacity"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/seatCapacityValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvOwnerPopularity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/ownerPopularity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_owner_popularity"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/ownerPopularityValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvUnloadWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/unloadWeight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_unload_weight"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/unloadWeightValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvBodyTypeDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/bodyTypeDesc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_body_type_desc"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/bodyTypeDescValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvManufactureMonthYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/manufactureMonthYear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_manufacture_month_year"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/manufactureMonthYearValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cvRCStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/vehicle_detail_two"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/rcStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_rc_status"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            android:id="@+id/rcStatusValue"
+                            style="@style/DetailLargeStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:id="@+id/betweenAd3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="3dp"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/warning"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/txt_warning_head"
+                            android:textColor="@color/black_opaque_50" />
+
+                        <TextView
+                            style="@style/DetailSemiSmallStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/txt_warning_detail"
+                            android:textColor="@color/black_opaque_80" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlBanner"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black">
+
+        <RelativeLayout
+            android:id="@+id/rl_ad"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+</RelativeLayout>

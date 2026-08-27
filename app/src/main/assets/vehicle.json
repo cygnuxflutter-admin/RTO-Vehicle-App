@@ -1,0 +1,737 @@
+{
+
+
+    "all_list": [
+      {
+        
+        "name": "Priyanka Chopra",
+        "url": "MH02DJ9099"
+      
+      },
+      {
+       
+        "name": "Salman Khan",
+        "url": "MH46Z2727"
+     
+      },
+      {
+        
+        "name": "Emaran Hashmi",
+        "url": "MH02CP8880"
+      },
+      {
+       
+        "name": "Shardha Kapoor",
+        "url": "MH04GM9660"
+      },
+      {
+       
+        "name": " Ranbir Kapoor",
+        "url": "MH02BT0008"
+      },
+      {
+        
+        "name": "Rishi Kapoor",
+        "url": "MH12EX1313"
+        
+      },
+      {
+        
+        "name": "Saif Ali Khan",
+        "url": "MH02BF1010"
+        
+      },
+      {
+        
+        "name": "Farhan Akhtar",
+        "url": "MH02BJ7800"
+        
+      },
+      {
+       
+        "name": "Kangana Ranaut",
+        "url": "MH02BM0005"
+      
+      },
+      {
+        
+        "name": "John Abraham",
+        "url": "MH02CZ0300"
+        
+      },
+      {
+       
+        "name": "Arun Jaitley",
+        "url": "DL10CA6666"
+       
+      },
+      {
+       
+        "name": "Yuvraj Singh",
+        "url": "CH04H0001"
+        
+      },
+      {
+        
+        "name": "Mukesh Ambani",
+        "url": "MH01CP8619"
+        
+      },
+      {
+      
+        "name": "Ratan Tata",
+        "url": "MH01AL0111"
+       
+      }
+    ],
+	"dancer_list": [
+	 {
+        
+        "name": "Allu Arjun",
+        "url": "AP09CQ0666"
+        
+      },
+      {
+        
+        "name": "Farhan Khan",
+        "url": "MH02DJ6444"
+        
+      },
+      {
+       
+        "name": "Hema Malini",
+        "url": "HR26AM5556"
+       
+      },
+      {
+        
+        "name": "Kunwar amar's",
+        "url": "MH01AE8398"
+        
+      },
+      {
+       
+        "name": "Mudassar Khan",
+        "url": "MH04DR5499"
+       
+      },
+      {
+       
+        "name": "Tigar Shroff",
+        "url": "MH02EP0447"
+        
+      },
+      {
+        
+        "name": "Taraka Rama Rao",
+        "url": "TS09EL9999"
+       
+      }
+	],
+	
+	"business_list": [
+	{
+        
+       "name": "Mukesh Ambani",
+        "url": "MH01CP8619"
+        
+      },
+      {
+        
+        "name": "Anil Ambani",
+        "url": "DL4CAN5193"
+        
+      },
+      {
+       
+        "name": "Acharya Balkrishna",
+        "url": "UK08AL0008"
+       
+      },
+      {
+        
+        "name": "Raj Kundra",
+        "url": "MH05CA0010"
+        
+      },
+      {
+       
+        "name": "Anand Mahindra",
+        "url": "MH01BR1555"
+       
+      },
+      {
+       
+        "name": "Ashok Kumar",
+        "url": "TN51AF5555"
+        
+      },
+      {
+        
+        "name": "Naveen Jindal",
+        "url": "DL3CBV3946"
+       
+      },
+      {
+        
+        "name": "Dheera Vishnol",
+        "url": "RJ14CP0001"
+        
+      },
+      {
+        
+         "name": "Ratan Tata",
+        "url": "MH01AL0111"
+       
+      },
+      {
+        
+        "name": "Aakash Ambani",
+        "url": "MH01CL0123"
+       
+      },
+      {
+       
+        "name": "Sumit Gupta",
+        "url": "DL4CAW1895"
+       
+      },
+      {
+        
+        "name": "Brij Mohan Lal Munjal",
+        "url": "DL8CAF5030"
+       
+      },
+      {
+        
+        "name": "Rahul Sharma",
+        "url": "MH02CE0007"
+        
+      },
+      {
+        
+        "name": "Sudhir B Mehta",
+        "url": "MH02DZ1639"
+        
+      }
+	],
+	
+	"singer_list": [
+	{
+        
+        "name": "Sonu Nigam",
+        "url": "MH02CG0002"
+        
+      },
+      {
+        
+        "name": "Amrik Singh",
+        "url": "DL6CM5689"
+        
+      },
+      {
+       
+        "name": "Arman Malik",
+        "url": "PY01BS4040"
+       
+      },
+      {
+        
+        "name": "Aaditya Narayan",
+        "url": "MH14FZ6000"
+        
+      },
+      {
+       
+        "name": "Arijit Singh",
+        "url": "MP04CM6578"
+       
+      },
+      {
+       
+        "name": "Tajinder Singh",
+        "url": "PB04S9244"
+        
+      },
+      {
+        
+        "name": "Kumar Sanu",
+        "url": "MH46AP7171"
+       
+      },
+      {
+        
+        "name": "Javed Akhtar",
+        "url": "MH02DZ7800"
+        
+      },
+      {
+        
+        "name": "Jagjit Singh",
+        "url": "DL6CH1658"
+       
+      },
+      {
+        
+        "name": "Abhijit Bhatacharya",
+        "url": "MH40AR0919"
+       
+      },
+      {
+       
+        "name": "Abhijit Sawant",
+        "url": "MH02DW7576"
+       
+      },
+      {
+        
+        "name": "Salim Master",
+        "url": "MH02DN0600"
+       
+      },
+      {
+        
+        "name": "Allu Arjun",
+        "url": "AP09CQ0666"
+        
+      },
+      {
+        
+        "name": "Amit Kumar",
+        "url": "CG07BE4966"
+        
+      },
+      {
+       
+        "name": "Anu Malik",
+        "url": "MH02EP7027"
+        
+      },
+      {
+        
+        "name": "Joseph Vijay",
+        "url": "TN07BV0014"
+        
+      }
+	],
+	
+	"politician_list": [
+	{
+        
+        "name": "Arun Jaitley",
+        "url": "DL10CA6666"
+        
+      },
+      {
+        
+        "name": "Jayalalitha",
+        "url": "TN09BE6167"
+        
+      },
+      {
+       
+        "name": "Narendra Modi",
+        "url": "DL4CCB3333"
+       
+      },
+      {
+        
+        "name": "Arwind Kejriwal",
+        "url": "DL9CG9769"
+        
+      },
+      {
+       
+        "name": "Rahul Gandhi",
+        "url": "DL2CQ4067"
+       
+      },
+      {
+       
+        "name": "Nitin Gadakari",
+        "url": "MH49AE2700"
+        
+      },
+      {
+        
+        "name": "Swaroop Paresh Rawal",
+        "url": "MH02EP6798"
+       
+      },
+      {
+        
+        "name": "Sushma Swaraj",
+        "url": "DL1CS4444"
+        
+      },
+      {
+        
+        "name": "Akhilesh Yadav",
+        "url": "UP65CM4149"
+       
+      },
+      {
+        
+        "name": "Piyush Goyal",
+        "url": "DL9CZ0333"
+       
+      },
+      {
+       
+        "name": "Mulayam Singh",
+        "url": "UP32BG5804"
+       
+      },
+      {
+        
+        "name": "Paresh Rawal",
+        "url": "DL9CAE1914"
+       
+      },
+      {
+        
+        "name": "Sumitra Mahajan",
+        "url": "DL9CAV0005"
+        
+      },
+      {
+        
+        "name": "Subramanian Swamy",
+        "url": "DL3CBC6548"
+        
+      },
+      {
+       
+        "name": "Rajnath Singh",
+        "url": "UP32BG6152"
+        
+      },
+      {
+        
+        "name": "Satyavrat Chaturvedi",
+        "url": "DL14CA1577"
+        
+      },
+      {
+        
+        "name": "Mohammad Saleem",
+        "url": "AP09BG1313"
+       
+      },
+      {
+        
+        "name": "Atindar Pal Singh",
+        "url": "CH01AH3644"
+        
+      },
+      {
+        
+        "name": "Bhanu Pratap Singh",
+        "url": "JK02AU1212"
+        
+      },
+      {
+        "name": " Prem Kumar",
+        "url": "TN10AQ3508"
+        
+      }
+	],
+	
+	"sports_list": [
+	 {
+        
+        "name": "Sachin Tendulkar",
+        "url": "MH46W1011"
+        
+      },
+      {
+        
+        "name": "Virat Kohli",
+        "url": "HR26BW0018"
+        
+      },
+      {
+       
+        "name": "MS Dhoni",
+        "url": "JH01AV1976"
+       
+      },
+      {
+        
+        "name": "Yuvraj Singh",
+        "url": "CH04H0001"
+        
+      },
+
+      {
+        
+        "name": "Virendra Sehwag",
+        "url": "DL1CX2903"
+       
+      }
+  
+	],
+	
+	"actress_list": [
+	 {
+        
+        "name": "Shweta Tiwari",
+        "url": "MH02DJ8434"
+        
+      },
+      {
+        
+        "name": "Kajol",
+        "url": "MH46X4001"
+        
+      },
+      {
+       
+        "name": "Parneeti Chopra",
+        "url": "HR01AH0081"
+       
+      },
+      {
+        
+        "name": "Alia Bhatt",
+        "url": "MH02DW1500"
+        
+      },
+      {
+       
+        "name": "Priyanka Chopra",
+        "url": "MH02DJ9099"
+       
+      },
+      {
+       
+        "name": "Bipasa Basu",
+        "url": "MH02CZ0700"
+        
+      },
+      {
+        
+        "name": "Kareena Kapoor",
+        "url": "MH02DZ4323"
+       
+      },
+      {
+        
+        "name": "Rani Mukerji",
+        "url": "MH02JP9927"
+        
+      },
+      {
+        
+        "name": "Vidya Balan",
+        "url": "MH03AR9577"
+       
+      },
+      {
+        
+        "name": "Jacqueline",
+        "url": "MH02CL0200"
+       
+      },
+      {
+       
+        "name": "Sonakshi Sinnha",
+        "url": "MH12JB0222"
+       
+      },
+      {
+        
+        "name": "Sonam Kapoor",
+        "url": "MH46Al6116"
+       
+      },
+      {
+        
+        "name": "Neha Saraf",
+        "url": "MH01BN5539"
+        
+      },
+      {
+        
+        "name": "Kangana Ranaut",
+        "url": "MH02BM0005"
+        
+      },
+      {
+       
+        "name": "Shardha Kapoor",
+        "url": "MH04GM9660"
+        
+      },
+      {
+        
+        "name": "Rekha Ganeshan",
+        "url": "MH02BJ4681"
+        
+      },
+      {
+        
+        "name": "Shilpa Shetty",
+        "url": "MH05CA0010"
+       
+      },
+      {
+        
+        "name": "Asin Thottumkal",
+        "url": "MH02BZ0004"
+        
+      },
+      {
+        
+        "name": " Soha Ali Khan",
+        "url": "DL8CP4545"
+        
+      },
+      {
+        "name": " Genelia D'Souza",
+        "url": "MH02BP5550"
+        
+      }
+	],
+	
+	"actor_list": [
+	 {
+        
+        "name": "Farhan Akhtar",
+        "url": "MH02BJ7800"
+        
+      },
+      {
+        
+        "name": "Arbaaz Khan",
+        "url": "MH02BY2727"
+        
+      },
+      {
+       
+        "name": "Sanjay Dutt",
+        "url": "MH02CB4545"
+       
+      },
+      {
+        
+        "name": "Kapil Sharma",
+        "url": "MH04FZ7740"
+        
+      },
+      {
+       
+        "name": "Ranbir Kapoor",
+        "url": "MH02BT0008"
+       
+      },
+      {
+       
+        "name": "John Abraham",
+        "url": "MH02CZ0300"
+        
+      },
+      {
+        
+        "name": "Arjun Kapoor",
+        "url": "MH02CP2600"
+       
+      },
+      {
+        
+        "name": "Hartik Roshan",
+        "url": "MH46AD1001"
+        
+      },
+      {
+        
+        "name": "Amir Khan",
+        "url": "MH02DJ0007"
+       
+      },
+      {
+        
+        "name": "Sidharth Malhotra",
+        "url": "MH02DN1600"
+       
+      },
+      {
+       
+        "name": "Sushan Singh Rajput",
+        "url": "Mh02EC4747"
+       
+      },
+      {
+        
+        "name": "Sonu Sood",
+        "url": "MH02DM0007"
+       
+      },
+      {
+        
+        "name": "Shahid Kapoor",
+        "url": "MH02EH7000"
+        
+      },
+      {
+        
+        "name": "Neil Nitin",
+        "url": "MH01AU2277"
+        
+      },
+      {
+       
+        "name": "David Dhavan",
+        "url": "MH02CW7668"
+        
+      },
+      {
+        
+        "name": "Vivek Oberoi",
+        "url": "MH14FM9707"
+        
+      },
+      {
+        
+        "name": "Amitabh Bachchan",
+        "url": "MH02EE1100"
+       
+      },
+      {
+        
+        "name": "Bipin Deore",
+        "url": "MH02AY3200"
+        
+      },
+      {
+        
+        "name": "MR Govind A Ahuja",
+        "url": "MH02CW7281"
+        
+      },
+      {
+        "name": "Prabhas Uvsr",
+        "url": "AP09CJ5677"
+        
+      },
+      {
+        
+        "name": "Abhishek Bachchan",
+        "url": "MH02CV2882"
+        
+      },
+      {
+       
+        "name": "Emaran Hashmi",
+        "url": "MH02CP8880"
+        
+      },
+      {
+        
+        "name": "Saif Ali Khan",
+        "url": "MH02BF1010"
+       
+      }
+	]
+
+}

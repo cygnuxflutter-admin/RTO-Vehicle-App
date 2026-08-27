@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<!--    <color name="purple_200">#F52927</color> -->
+    <color name="purple_200">#EE8E31</color>
+    <color name="purple_300">#ED9B4C</color>
+    <color name="purple_500">#FB8919</color>
+    <color name="purple_700">#43226C</color>
+    <color name="teal_200">#018D7A</color>
+    <color name="teal_700">#018D7A</color>
+    <color name="m_black">#FF000000</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="gray">#8aaca9</color>
+
+
+    <color name="unselected_color">#ff7d7d7d</color>
+    <color name="selected">#07718B</color>
+
+    <color name="app_color">#212121</color>
+
+    <color name="fuel1_bg">#881e9b</color>
+    <color name="fuel2_bg">#ff9800</color>
+    <color name="fuel3_bg">#212121</color>
+    <color name="fuel4_bg">#ff5722</color>
+    <color name="graybluemediam_light_bg">#E7E8EC</color>
+    <color name="grayblue_light_bg">#EAEAEC</color>
+    <color name="medium_gray_bg">#dfdfdf</color>
+
+    <color name="colorAccent">#F52927</color>
+    <color name="colorPrimary">@color/purple_200</color>
+    <color name="colorPrimaryDark">@color/purple_500</color>
+
+    <color name="colorRed">#F52927</color>
+    <color name="colorYellow">#FFC107</color>
+    <color name="dark_teal_200">#489b92</color>
+    <color name="dark_meta_teal_200">#9fd4ce</color>
+    <color name="parrot_bg">#e6efee</color>
+
+
+    <color name="black_color">#000000</color>
+    <color name="black_opaque_40">#60000000</color>
+    <color name="black_opaque_50">#80000000</color>
+    <color name="black_opaque_60">#97000000</color>
+    <color name="black_opaque_70">#b3000000</color>
+    <color name="black_opaque_80">#cd000000</color>
+    <color name="black_opaque_90">#e6000000</color>
+
+
+
+    <color name="color_app_bg">#f4f4f5</color>
+    <color name="gray_light_2">#ffdadada</color>
+    <color name="transparent_background">#00000000</color>
+    <color name="widget_separator">#fff3f3f5</color>
+</resources>
