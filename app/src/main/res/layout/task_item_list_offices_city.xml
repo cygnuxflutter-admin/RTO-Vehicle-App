@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="5dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_city_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_clean_card_item"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="14dp">
+
+            <!-- Left RTO Code Badge -->
+            <FrameLayout
+                android:id="@+id/fl_code_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="56dp"
+                android:minHeight="42dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_rto_badge"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="6dp">
+
+                <TextView
+                    android:id="@+id/tv_rto_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:text="GJ01"
+                    android:textColor="#1E40AF"
+                    android:textSize="15sp" />
+            </FrameLayout>
+
+            <!-- Center District & State Info -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/iv_chevron"
+                android:layout_toEndOf="@+id/fl_code_badge"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_district_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:text="Ahmedabad"
+                    android:textColor="#0F172A"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_state_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/task_roboto_regular"
+                    android:text="Gujarat"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Right Chevron -->
+            <FrameLayout
+                android:id="@+id/iv_chevron"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_arrow_chip">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#64748B" />
+            </FrameLayout>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

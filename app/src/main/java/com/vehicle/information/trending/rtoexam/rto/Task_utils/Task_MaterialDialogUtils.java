@@ -6,7 +6,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 //import static com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_NativeAdUtil.loadNativeAd;
@@ -77,12 +80,14 @@ public class Task_MaterialDialogUtils {
         //                .cancelable(false)
         //                .build();
 
-        @SuppressLint("ResourceType")
-        Dialog materialDialog = new Dialog(activity, 16974126);
-        materialDialog.requestWindowFeature(1);
+        Dialog materialDialog = new Dialog(activity);
+        materialDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         materialDialog.setContentView(R.layout.task_reward_dialog);
         materialDialog.setCancelable(false);
-
+        if (materialDialog.getWindow() != null) {
+            materialDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            materialDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
 
         if (!materialDialog.isShowing())
             materialDialog.show();

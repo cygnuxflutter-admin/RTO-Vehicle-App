@@ -1,733 +1,298 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fitsSystemWindows="true">
+    android:background="#F8FAFC">
 
-    <RelativeLayout
+    <!-- Top Action Bar & Search Header -->
+    <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/purple_700">
+        android:layout_height="wrap_content"
+        android:background="#1E40AF"
+        android:orientation="vertical"
+        android:paddingBottom="12dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingHorizontal="16dp">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:padding="8dp"
+                android:src="@drawable/ic_back"
+                app:tint="@color/white" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@+id/iv_back"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:text="Rules of RTO"
+                    android:textColor="@color/white"
+                    android:textSize="19sp" />
+
+                <TextView
+                    android:id="@+id/tv_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/task_roboto_regular"
+                    android:text="Official guidelines, forms &amp; procedures"
+                    android:textColor="#E0E7FF"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- Search Bar -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_search_input_modern"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="Search Icon"
+                    android:src="@drawable/ic_search_modern"
+                    app:tint="#64748B" />
+
+                <EditText
+                    android:id="@+id/et_search_rules"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:fontFamily="@font/task_roboto_regular"
+                    android:hint="Search rules, forms (e.g. Form 20, NOC)..."
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="#0F172A"
+                    android:textColorHint="#94A3B8"
+                    android:textSize="13.5sp" />
+
+                <ImageView
+                    android:id="@+id/iv_clear_search"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Clear"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_close_clear"
+                    android:visibility="gone"
+                    app:tint="#64748B" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- Top Content Container below Header -->
+    <LinearLayout
+        android:id="@+id/ll_top_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:orientation="vertical">
+
+        <!-- Horizontal Category Filter Chips -->
+        <HorizontalScrollView
+            android:id="@+id/hsv_categories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingHorizontal="12dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="8dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/chip_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/bg_chip_selected"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="14dp"
+                    android:text="All (14)"
+                    android:textColor="@color/white"
+                    android:textSize="12.5sp" />
+
+                <TextView
+                    android:id="@+id/chip_registration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/bg_chip_unselected"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="14dp"
+                    android:text="Registration"
+                    android:textColor="#475569"
+                    android:textSize="12.5sp" />
+
+                <TextView
+                    android:id="@+id/chip_rc_services"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/bg_chip_unselected"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="14dp"
+                    android:text="RC Services"
+                    android:textColor="#475569"
+                    android:textSize="12.5sp" />
+
+                <TextView
+                    android:id="@+id/chip_transfer_noc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/bg_chip_unselected"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="14dp"
+                    android:text="Transfer &amp; NOC"
+                    android:textColor="#475569"
+                    android:textSize="12.5sp" />
+
+                <TextView
+                    android:id="@+id/chip_loan_finance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/bg_chip_unselected"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="14dp"
+                    android:text="Loan &amp; Finance"
+                    android:textColor="#475569"
+                    android:textSize="12.5sp" />
+
+                <TextView
+                    android:id="@+id/chip_commercial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/bg_chip_unselected"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="14dp"
+                    android:text="Commercial"
+                    android:textColor="#475569"
+                    android:textSize="12.5sp" />
+
+                <TextView
+                    android:id="@+id/chip_vehicle_norms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/bg_chip_unselected"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="14dp"
+                    android:text="Vehicle Norms"
+                    android:textColor="#475569"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/ll_empty_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:visibility="gone">
 
         <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="@dimen/_35sdp"
-            android:layout_height="35dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:padding="@dimen/_5sdp"
-            android:src="@drawable/ic_back"
-            android:tint="@color/white" />
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/ic_search_modern"
+            app:tint="#CBD5E1" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/task_robotoslab_regular"
-            android:text="Rules of RTO"
-            android:textColor="@color/white"
-            android:textSize="20dp" />
-    </RelativeLayout>
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/task_roboto_bold"
+            android:text="No Rules Found"
+            android:textColor="#475569"
+            android:textSize="16sp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/task_roboto_regular"
+            android:text="Try searching with a different keyword"
+            android:textColor="#94A3B8"
+            android:textSize="13sp" />
+    </LinearLayout>
 
-
-    <ScrollView
+    <!-- Rules RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_rules"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/rlBanner"
-        android:layout_below="@+id/header"
-        android:layout_margin="@dimen/_10sdp">
+        android:layout_below="@+id/ll_top_content"
+        android:clipToPadding="false"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="16dp"
+        android:scrollbars="none" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_5sdp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@drawable/ic_back"
-                            android:rotation="180"
-                            android:visibility="gone"/>
-
-                        <ImageView
-                            android:id="@+id/iv_temp_reg"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:onClick="onClick"
-                            android:paddingHorizontal="15dp"
-                            android:paddingBottom="15dp"
-                            android:src="@drawable/ic_temp_dl1" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Temporary Registration"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_5sdp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@drawable/ic_back"
-                            android:rotation="180"
-                            android:visibility="gone"/>
-
-                        <ImageView
-                            android:id="@+id/iv_perm_reg"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:onClick="onClick"
-                            android:paddingHorizontal="15dp"
-                            android:paddingBottom="15dp"
-                            android:src="@drawable/ic_permanent1" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Permanent Registration"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_5sdp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="180"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/ic_back"
-                            android:visibility="gone"/>
-                        <ImageView
-                            android:id="@+id/iv_renewal_reg"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:onClick="onClick"
-                            android:paddingHorizontal="15dp"
-                            android:paddingBottom="15dp"
-                            android:src="@drawable/ic_renewal" />
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Renewal of Registration"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_5sdp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="180"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/ic_back"
-                            android:visibility="gone"/>
-                    <ImageView
-                        android:id="@+id/iv_duplicate_rc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:onClick="onClick"
-                        android:paddingHorizontal="15dp"
-                        android:paddingBottom="15dp"
-                        android:src="@drawable/ic_duplicate1" />
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:lines="2"
-                        android:text="Duplicate RC"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_weight="1"
-                android:background="@drawable/card_exit_bg"
-                android:orientation="vertical"
-                android:padding="@dimen/_5sdp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:rotation="180"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:layout_gravity="right"
-                        android:background="@drawable/ic_back"
-                        android:visibility="gone"/>
-                    <ImageView
-                        android:id="@+id/iv_no_obj"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:onClick="onClick"
-                        android:paddingHorizontal="15dp"
-                        android:paddingBottom="15dp"
-                        android:src="@drawable/ic_noc" />
-                </LinearLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="No Objection Certificate"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_weight="1"
-                android:background="@drawable/card_exit_bg"
-                android:orientation="vertical"
-                android:padding="@dimen/_5sdp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:rotation="180"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:layout_gravity="right"
-                        android:background="@drawable/ic_back"
-                        android:visibility="gone"/>
-                    <ImageView
-                        android:id="@+id/iv_hp_endors"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:onClick="onClick"
-                        android:paddingHorizontal="15dp"
-                        android:paddingBottom="15dp"
-                        android:src="@drawable/ic_hp_endros1" />
-                </LinearLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:lines="2"
-                    android:text="HP Endorsment"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-        </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_5sdp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="180"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/ic_back"
-                            android:visibility="gone"/>
-                    <ImageView
-                        android:id="@+id/iv_hp_term"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:onClick="onClick"
-                        android:paddingHorizontal="15dp"
-                        android:paddingBottom="15dp"
-                        android:src="@drawable/ic_hp_termination" />
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:lines="2"
-                        android:text="HP Termination"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_5sdp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="180"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/ic_back"
-                            android:visibility="gone"/>
-                    <ImageView
-                        android:id="@+id/iv_add_change"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:onClick="onClick"
-                        android:paddingHorizontal="15dp"
-                        android:paddingBottom="15dp"
-                        android:src="@drawable/ic_address_change" />
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:lines="2"
-                        android:text="Address Change"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_5sdp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="180"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/ic_back"
-                            android:visibility="gone"/>
-                        <ImageView
-                            android:id="@+id/iv_reassi_vehi"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:onClick="onClick"
-                            android:paddingHorizontal="15dp"
-                            android:paddingBottom="15dp"
-                            android:src="@drawable/ic_reassignment_vechicle1" />
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:lines="2"
-                        android:text="Reassignment of Vehicle"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_5sdp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="180"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/ic_back"
-                            android:visibility="gone"/>
-                    <ImageView
-                        android:id="@+id/iv_trade_certi"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:onClick="onClick"
-                        android:paddingHorizontal="15dp"
-                        android:paddingBottom="15dp"
-                        android:src="@drawable/ic_trade_cert" />
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:lines="2"
-                        android:text="Trade Certificate"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_5sdp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="180"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/ic_back"
-                            android:visibility="gone"/>
-                        <ImageView
-                            android:id="@+id/iv_cert_issues"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:onClick="onClick"
-                            android:paddingHorizontal="15dp"
-                            android:paddingBottom="15dp"
-                            android:src="@drawable/ic_cert_issues" />
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:lines="2"
-                        android:text="Certificate Issues"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="5dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="180"
-                            android:layout_margin="5dp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/ic_back"
-                            android:visibility="gone"/>
-                        <ImageView
-                            android:id="@+id/iv_owner_trans"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:onClick="onClick"
-                            android:paddingHorizontal="15dp"
-                            android:paddingBottom="15dp"
-                            android:src="@drawable/ic_transfer1" />
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:lines="2"
-                        android:text="Ownership Transfer"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="5dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="180"
-                            android:layout_margin="5dp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/ic_back"
-                            android:visibility="gone"/>
-                    <ImageView
-                        android:id="@+id/iv_diplom_vehi"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:onClick="onClick"
-                        android:paddingHorizontal="15dp"
-                        android:paddingBottom="15dp"
-                        android:src="@drawable/ic_diplomatic_vehicle1" />
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:lines="2"
-                        android:text="Diplomatic Vehicles"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical"
-                    android:padding="5dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="180"
-                            android:layout_margin="5dp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/ic_back"
-                            android:visibility="gone"/>
-                    <ImageView
-                        android:id="@+id/iv_regi_display"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:onClick="onClick"
-                        android:paddingHorizontal="15dp"
-                        android:paddingBottom="15dp"
-                        android:src="@drawable/ic_reg_display" />
-                    </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:lines="2"
-                        android:text="Registration Display"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-            </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/card_exit_bg"
-                android:orientation="vertical"
-                android:padding="5dp"
-                android:visibility="invisible">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:rotation="180"
-                        android:layout_margin="5dp"
-                        android:layout_gravity="right"
-                        android:background="@drawable/ic_back"
-                        android:visibility="gone"/>
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:padding="15dp"
-                        android:src="@drawable/ic_reg_display" />
-                </LinearLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:lines="2"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-        </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-
-<!--    <LinearLayout
-        android:id="@+id/rlBanner"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_60sdp"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/banner_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>-->
+    <!-- Bottom Ad Banner Container -->
     <RelativeLayout
         android:id="@+id/rlBanner"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/black">
+        android:gravity="center">
 
         <RelativeLayout
             android:id="@+id/rl_ad"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:visibility="visible" />
-
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
+
 </RelativeLayout>

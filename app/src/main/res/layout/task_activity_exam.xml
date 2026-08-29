@@ -1,123 +1,383 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/graybluemediam_light_bg">
+    android:background="#F8FAFC"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-
+    <!-- Top Action Bar -->
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:background="@color/purple_700"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="56dp"
+        android:background="#1E40AF"
+        android:paddingStart="12dp"
+        android:paddingEnd="16dp">
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:onClick="onClick"
-            android:padding="@dimen/_5sdp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
             android:src="@drawable/ic_back"
-            android:tint="@color/white"/>
+            app:tint="@color/white" />
 
         <TextView
+            android:id="@+id/tv_title_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/task_robotoslab_regular"
-            android:text="Exam"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/iv_back"
+            android:fontFamily="@font/task_roboto_bold"
+            android:text="RTO Exam"
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
-
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_find_near"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/header"
-
-        android:layout_margin="15dp"
-        card_view:cardBackgroundColor="@color/white"
-        card_view:cardCornerRadius="@dimen/_10sdp"
-        card_view:contentPadding="@dimen/_10sdp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="never">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/_10sdp"
-            android:paddingRight="@dimen/_10sdp"
-            android:paddingBottom="@dimen/_10sdp">
+            android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tv_header"
+            <!-- Exam Stats Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:padding="@dimen/_5sdp"
-                android:text=" સૂચનાઓ"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textColor="@color/purple_200"
-                android:textStyle="bold" />
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp">
 
-            <TextView
-                android:id="@+id/tv_instructions"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_lang_avatar">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_exam_que" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_header"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/task_roboto_bold"
+                                android:text="Instructions"
+                                android:textColor="#0F172A"
+                                android:textSize="17sp" />
+
+                            <TextView
+                                android:id="@+id/tv_pattern_sub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:fontFamily="@font/task_roboto_regular"
+                                android:text="Driving License Test Pattern"
+                                android:textColor="#64748B"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- 3 Stat Pills Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <!-- Pill 1: Questions -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_exam_stat_pill"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/tv_stat_q_val"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/task_roboto_bold"
+                                android:text="15"
+                                android:textColor="#1E40AF"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tv_stat_q_lbl"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:fontFamily="@font/task_roboto_regular"
+                                android:text="Questions"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+
+                        <!-- Pill 2: Time -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginEnd="4dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_exam_stat_pill"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/tv_stat_t_val"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/task_roboto_bold"
+                                android:text="30s"
+                                android:textColor="#1E40AF"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tv_stat_t_lbl"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:fontFamily="@font/task_roboto_regular"
+                                android:text="Per Que"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+
+                        <!-- Pill 3: Pass -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_exam_stat_pill"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/tv_stat_p_val"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/task_roboto_bold"
+                                android:text="9 (60%)"
+                                android:textColor="#16A34A"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tv_stat_p_lbl"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:fontFamily="@font/task_roboto_regular"
+                                android:text="Pass Marks"
+                                android:textColor="#64748B"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Instructions Details Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:padding="@dimen/_5sdp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:textColor="#151515" />
+                android:layout_marginTop="14dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Point 1 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/bg_lang_avatar">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_exam_traffic" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/tv_point_1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:lineSpacingExtra="3dp"
+                            android:textColor="#334155"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="#F1F5F9" />
+
+                    <!-- Point 2 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/bg_lang_avatar">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_exam_pass" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/tv_point_2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:lineSpacingExtra="3dp"
+                            android:textColor="#334155"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="#F1F5F9" />
+
+                    <!-- Point 3 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/bg_lang_avatar">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_exam_timer" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/tv_point_3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:lineSpacingExtra="3dp"
+                            android:textColor="#334155"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <!-- Hidden legacy fallback textview -->
+                    <TextView
+                        android:id="@+id/tv_instructions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Bottom Start Button -->
             <Button
                 android:id="@+id/btnStart"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_exam_start_btn"
+                android:fontFamily="@font/task_roboto_bold"
+                android:letterSpacing="0.03"
+                android:text="START EXAM"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_ad"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/emi_calc"
-                android:fontFamily="@font/task_robotoslab_regular"
-                android:text="પ્રારંભ પરીક્ષા"
-                android:textColor="#ffffff"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:layout_marginTop="16dp"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/rlBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-
-
-   <!-- <LinearLayout
-        android:id="@+id/rlBanner"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_60sdp"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/banner_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>-->
-    <RelativeLayout
-        android:id="@+id/rlBanner"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/black">
-
-        <RelativeLayout
-            android:id="@+id/rl_ad"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:visibility="visible" />
-
-    </RelativeLayout>
-</RelativeLayout>
+    </ScrollView>
+</LinearLayout>

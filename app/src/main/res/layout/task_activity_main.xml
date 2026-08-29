@@ -4,495 +4,1014 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fitsSystemWindows="true">
+    android:background="@color/theme_bg">
 
+    <!-- Top App Bar / Hero Section Header -->
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/purple_700">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_modern"
+        android:paddingStart="16dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="20dp">
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:onClick="onClick"
-            android:padding="@dimen/_5sdp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
             android:src="@drawable/ic_back"
             app:tint="@color/white" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/task_robotoslab_regular"
-            android:text="RTO Vehicle Information"
-            android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/iv_back"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/task_roboto_bold"
+                android:text="RTO Exam &amp; Guides"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/task_roboto_regular"
+                android:text="Prepare, Practice &amp; Pass Driving Test"
+                android:textColor="#D1E4FF"
+                android:textSize="12sp" />
+        </LinearLayout>
     </RelativeLayout>
 
-
-    <ScrollView
+    <!-- Main Scroll Content -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/header"
-        android:layout_margin="@dimen/_10sdp"
         android:layout_above="@id/rlBottom"
+        android:layout_below="@+id/header"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="24dp"
         android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/rl_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
 
+            <!-- SECTION 1: HERO FEATURE CARDS -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="@font/task_roboto_bold"
+                android:text="Learning &amp; Mock Exam"
+                android:textColor="@color/theme_text_primary"
+                android:textSize="16sp" />
+
+            <!-- HERO CARD 1: RTO MOCK EXAM -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_rto_exam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="14dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
+                app:cardMaxElevation="6dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="false"
+                app:rippleColor="#151E40AF"
+                app:strokeColor="#E2E8F0"
+                app:strokeWidth="1dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/iv_exam_hero_icon"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_single_theme"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:paddingStart="8dp"
+                            android:paddingTop="3dp"
+                            android:paddingEnd="8dp"
+                            android:paddingBottom="3dp"
+                            android:text="•  LIVE PRACTICE TEST"
+                            android:textColor="@color/theme_primary"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="RTO Mock Test"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:text="15 timed questions with real exam format &amp; instant score"
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="12sp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/bg_button_primary_pill"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="14dp"
+                            android:paddingTop="6dp"
+                            android:paddingEnd="14dp"
+                            android:paddingBottom="6dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/task_roboto_bold"
+                                android:text="START TEST"
+                                android:textColor="@color/white"
+                                android:textSize="11sp" />
+
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_marginStart="4dp"
+                                android:src="@drawable/ic_chevron_right_modern"
+                                app:tint="@color/white" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_exam_hero_icon"
+                        android:layout_width="95dp"
+                        android:layout_height="95dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="8dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/img_3d_mock_test" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- HERO CARD 2: EXAM PREPARATION / QUESTION BANK -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_rto_exam_prep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
+                app:cardMaxElevation="6dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="false"
+                app:rippleColor="#151E40AF"
+                app:strokeColor="#E2E8F0"
+                app:strokeWidth="1dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/iv_study_hero_icon"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_single_theme"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:paddingStart="8dp"
+                            android:paddingTop="3dp"
+                            android:paddingEnd="8dp"
+                            android:paddingBottom="3dp"
+                            android:text=" OFFICIAL QUESTION BANK"
+                            android:textColor="@color/theme_primary"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="Exam Preparation"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:text="Questions, answers &amp; complete traffic sign handbook"
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="12sp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/bg_button_primary_pill"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="14dp"
+                            android:paddingTop="6dp"
+                            android:paddingEnd="14dp"
+                            android:paddingBottom="6dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/task_roboto_bold"
+                                android:text="STUDY NOW"
+                                android:textColor="@color/white"
+                                android:textSize="11sp" />
+
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_marginStart="4dp"
+                                android:src="@drawable/ic_chevron_right_modern"
+                                app:tint="@color/white" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_study_hero_icon"
+                        android:layout_width="95dp"
+                        android:layout_height="95dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="8dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/img_3d_exam_prep" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- SECTION 2: RTO INFORMATION & GUIDES (2x2 GRID) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/task_roboto_bold"
+                android:text="RTO Information &amp; Guides"
+                android:textColor="@color/theme_text_primary"
+                android:textSize="16sp" />
+
+            <!-- Row 1: Traffic Signs & RTO Offices -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:baselineAligned="false"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingTop="2dp"
+                android:paddingBottom="6dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
+                <!-- Traffic Signs Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_rto_symbols"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical">
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardMaxElevation="6dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="false"
+                    app:rippleColor="#151E40AF"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp">
 
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingStart="12dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="16dp">
 
                         <ImageView
+                            android:id="@+id/iv_rto_symbols"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/img_3d_traffic_signs" />
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@drawable/ic_back"
-                            android:rotation="180"
-                            android:visibility="gone"/>
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:gravity="center"
+                            android:text="Traffic Signs"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="14sp" />
 
-                        <ImageView
-                            android:id="@+id/iv_owner_details"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginEnd="0dp"
-                            android:layout_marginBottom="0dp"
-                            android:adjustViewBounds="true"
-                            android:padding="15dp"
-                            android:src="@drawable/vehicle_information1" />
-
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:text="Vehicle Info"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@drawable/ic_back"
-                            android:rotation="180"
-                            android:visibility="gone"/>
+                            android:layout_marginTop="3dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:gravity="center"
+                            android:text="Mandatory &amp; caution signs"
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- RTO Offices Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_rto_office"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardMaxElevation="6dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="false"
+                    app:rippleColor="#151E40AF"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingStart="12dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="16dp">
 
                         <ImageView
-                            android:id="@+id/iv_rc_details"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/iv_rto_office"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:adjustViewBounds="true"
-                            android:padding="@dimen/_15sdp"
-                            android:src="@drawable/ic_book_info1" />
-                    </RelativeLayout>
+                            android:src="@drawable/img_3d_rto_office" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:text="DL Details"
-                        android:textColor="@color/black" />
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:gravity="center"
+                            android:text="RTO Offices"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:gravity="center"
+                            android:text="Find nearby RTO code &amp; city"
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
+            <!-- Row 2: RTO Rules & Celebrity Cars -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:baselineAligned="false"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingTop="2dp"
+                android:paddingBottom="6dp">
+
+                <!-- Rules of RTO Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_rules_rto"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardMaxElevation="6dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="false"
+                    app:rippleColor="#151E40AF"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingStart="12dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="16dp">
+
+                        <ImageView
+                            android:id="@+id/iv_rules_rto"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/img_3d_rto_rules" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:gravity="center"
+                            android:text="RTO Rules &amp; Fines"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:gravity="center"
+                            android:text="Traffic fines &amp; guidelines"
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- e-Challan Status Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_challan_status"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardMaxElevation="6dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="false"
+                    app:rippleColor="#151E40AF"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingStart="12dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="16dp">
+
+                        <ImageView
+                            android:id="@+id/iv_challan_status"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/icon_3d_hsrp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:gravity="center"
+                            android:text="e-Challan Status"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:gravity="center"
+                            android:text="Check traffic memo online"
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- SECTION 3: VEHICLE TOOLS & CALCULATORS (2x2 GRID) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/task_roboto_bold"
+                android:text="Vehicle Calculators &amp; Tools"
+                android:textColor="@color/theme_text_primary"
+                android:textSize="16sp" />
+
+            <!-- Row 1: Loan EMI & Mileage Calculator -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingTop="2dp"
+                android:paddingBottom="6dp">
+
+                <!-- Loan EMI Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_loan_emi"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardMaxElevation="6dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingStart="12dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="16dp">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/icon_3d_hp_endorse" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:gravity="center"
+                            android:text="Loan &amp; EMI Calc"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:gravity="center"
+                            android:text="Monthly EMI &amp; interest"
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Mileage & Trip Cost Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_mileage_calc"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardMaxElevation="6dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingStart="12dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="16dp">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/img_3d_fuel_pump" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:gravity="center"
+                            android:text="Mileage &amp; Fuel"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:gravity="center"
+                            android:text="Trip budget &amp; km/L"
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Row 2: Resale Value & RTO Forms Hub -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:baselineAligned="false"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingTop="2dp"
+                android:paddingBottom="6dp">
+
+                <!-- Resale Value Estimator Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_resale_calc"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardMaxElevation="6dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingStart="12dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="16dp">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/icon_3d_owner_trans" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:gravity="center"
+                            android:text="Resale Value"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:gravity="center"
+                            android:text="Car &amp; bike valuation"
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- RTO Forms Hub Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_forms_hub"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardMaxElevation="6dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingStart="12dp"
+                        android:paddingTop="16dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="16dp">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/icon_3d_temp_reg" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:gravity="center"
+                            android:text="RTO Forms Hub"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:gravity="center"
+                            android:text="Forms 20, 26, 28, 35"
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- SECTION 4: VEHICLE DOCUMENT VAULT & EXPIRY REMINDER -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/task_roboto_bold"
+                android:text="Vehicle Document Vault"
+                android:textColor="@color/theme_text_primary"
+                android:textSize="16sp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_expiry_reminder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="3dp"
+                app:cardMaxElevation="6dp"
+                app:strokeColor="#E2E8F0"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp">
+
+                    <FrameLayout
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:background="@drawable/bg_icon_3d_container"
+                        android:padding="2dp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/icon_3d_noc" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="PUC &amp; Insurance Reminder"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="14.5sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:text="Track expiry dates &amp; renewal alerts"
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_3d_arrow_circle">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_chevron_right_modern"
+                            app:tint="#64748B" />
+                    </FrameLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- SECTION 3: DAILY ROAD SAFETY TIP CARD -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_tip_single_theme"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_lightbulb"
+                        app:tint="@color/theme_primary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="Daily Road Safety Tip"
+                            android:textColor="@color/theme_text_primary"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:text="Always wear a helmet or seatbelt. Maintain a safe 3-second distance from vehicles ahead."
+                            android:textColor="@color/theme_text_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Native Ad Container (Preserved) -->
             <RelativeLayout
                 android:id="@+id/ads"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/graybluemediam_light_bg"
-                android:minHeight="@dimen/_180sdp">
+                android:layout_marginTop="16dp"
+                android:visibility="gone">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="6dp"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
 
                     <RelativeLayout
+                        android:id="@+id/native_banner_ad_container"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_180sdp"
-                        android:background="@drawable/knack_ad_bg">
-
-                        <RelativeLayout
-                            android:id="@+id/native_banner_ad_container"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_180sdp"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="@dimen/_4sdp"
-                            android:layout_marginTop="@dimen/_4sdp"
-                            android:layout_marginEnd="@dimen/_4sdp"
-                            android:layout_marginBottom="@dimen/_4sdp"
-                            android:visibility="visible" />
-                    </RelativeLayout>
-
+                        android:layout_height="@dimen/_180sdp" />
                 </androidx.cardview.widget.CardView>
-
-
             </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@drawable/ic_back"
-                            android:rotation="180"
-                            android:visibility="gone"/>
-
-                        <ImageView
-                            android:id="@+id/iv_rto_office"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:padding="15dp"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/ic_rto_offices1" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:text="RTO Offices"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@drawable/ic_back"
-                            android:rotation="180"
-                            android:visibility="gone"/>
-
-                        <ImageView
-                            android:id="@+id/iv_rto_symbols"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:padding="@dimen/_15sdp"
-                            android:src="@drawable/ic_symbolic1" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:text="RTO Symbol"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@drawable/ic_back"
-                            android:rotation="180"
-                            android:visibility="gone"/>
-
-                        <ImageView
-                            android:id="@+id/iv_rto_exam_preparation"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:padding="@dimen/_15sdp"
-                            android:src="@drawable/ic_exam_preparation1" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:text="Exam Preparation"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@drawable/ic_back"
-                            android:rotation="180"
-                            android:visibility="gone"/>
-
-                        <ImageView
-                            android:id="@+id/iv_rto_exam"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:padding="@dimen/_15sdp"
-                            android:src="@drawable/ic_rto_exams1" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:text="RTO Exam"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@drawable/ic_back"
-                            android:rotation="180"
-                            android:visibility="gone"/>
-
-                        <ImageView
-                            android:id="@+id/iv_celebrity_info"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginEnd="0dp"
-                            android:layout_marginBottom="0dp"
-                            android:adjustViewBounds="true"
-                            android:padding="15dp"
-                            android:src="@drawable/celebrity1" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:gravity="center"
-                        android:text="Celebrity Vehicle Details"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:background="@drawable/card_exit_bg"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@drawable/ic_back"
-                            android:rotation="180"
-                            android:visibility="gone"/>
-
-                        <ImageView
-                            android:id="@+id/iv_rules_rto"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:adjustViewBounds="true"
-                            android:padding="15dp"
-                            android:src="@drawable/ic_rules1" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:text="Rules of RTO"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-
-
-
+    <!-- Bottom Ad Container (Preserved) -->
+        <!-- Bottom Ad Container -->
     <RelativeLayout
         android:id="@+id/rlBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:minHeight="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#F8FAFC"
+        android:gravity="center"
+        android:visibility="visible">
 
-        <RelativeLayout
-            android:id="@+id/rlBanner"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:background="@color/black"
-            android:visibility="gone">
-
-            <RelativeLayout
-                android:id="@+id/rl_ad"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:visibility="visible" />
-
-        </RelativeLayout>
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="#E2E8F0" />
 
         <RelativeLayout
-            android:id="@+id/rl_collapsible"
-            android:layout_width="wrap_content"
+            android:id="@+id/rl_ad"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible">
-
-            <FrameLayout
-                android:id="@+id/CollapsibleContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp" />
-
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmer_view_CollapsibleContainer"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                app:shimmer_auto_start="true">
-
-                <TextView
-                    android:id="@+id/CollapsibleTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Ad Loading...."
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-
-            </com.facebook.shimmer.ShimmerFrameLayout>
-
-        </RelativeLayout>
-
+            android:minHeight="50dp"
+            android:gravity="center" />
     </RelativeLayout>
-
-
 </RelativeLayout>

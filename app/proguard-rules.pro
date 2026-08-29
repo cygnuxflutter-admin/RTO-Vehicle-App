@@ -9,6 +9,6 @@
 -dontwarn com.vehicle.information.trending.rtoexam.rto.Task_Extra.**
 -dontwarn com.vehicle.information.trending.rtoexam.rto.Task_utils.**
 -dontwarn com.vehicle.information.trending.rtoexam.rto.Task_interfaces.**
--dontwarn com.vehicle.information.trending.rtoexam.rto.handlers.**
-#-dontwarn com.vehicle.information.trending.rtoexam.rto.Task_Fragment.**
-#-dontwarn com.vehicle.information.trending.rtoexam.rto.Task_ListenerData.**
+-dontwarn com.facebook.infer.annotation.**
+-dontwarn com.google.firebase.messaging.**
+-dontwarn org.conscrypt.**

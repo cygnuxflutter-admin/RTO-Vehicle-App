@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
+    app:strokeColor="#E2E8F0"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/fl_dialog_icon_container"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/bg_icon_3d_container"
+                android:padding="4dp">
+
+                <ImageView
+                    android:id="@+id/iv_dialog_form_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_3d_temp_reg" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_toStartOf="@+id/iv_dialog_close"
+                android:layout_toEndOf="@+id/fl_dialog_icon_container"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_dialog_form_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_form_pill"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:text="FORM 20"
+                    android:textColor="#2563EB"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tv_dialog_form_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/task_roboto_regular"
+                    android:text="Registration Category"
+                    android:textColor="#64748B"
+                    android:textSize="11.5sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_dialog_close"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="6dp"
+                android:src="@drawable/ic_close_clear"
+                app:tint="#94A3B8" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_dialog_form_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/task_roboto_bold"
+            android:text="Application for Registration of a Motor Vehicle"
+            android:textColor="#0F172A"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_dialog_form_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/task_roboto_regular"
+            android:lineSpacingMultiplier="1.2"
+            android:text="Mandatory form submitted to RTO for new vehicle permanent registration &amp; number allocation."
+            android:textColor="#475569"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tv_dialog_form_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="#F0FDF4"
+            android:fontFamily="@font/task_roboto_bold"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:text="Official Govt Fee: ₹ 300 - ₹ 600"
+            android:textColor="#15803D"
+            android:textSize="12sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_dialog_share"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_btn_primary_blue"
+            android:fontFamily="@font/task_roboto_bold"
+            android:text="Share Form Guidelines"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+             />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

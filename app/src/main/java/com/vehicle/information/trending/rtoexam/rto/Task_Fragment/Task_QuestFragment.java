@@ -12,7 +12,6 @@ import com.vehicle.information.trending.rtoexam.rto.Task_Adapter.Task_QuestionLi
 import com.vehicle.information.trending.rtoexam.rto.R;
 import java.util.ArrayList;
 
-
 public class Task_QuestFragment extends Fragment {
     ListView ivQuestions;
     ArrayList questionList;
@@ -24,20 +23,19 @@ public class Task_QuestFragment extends Fragment {
 
     @Override
     public String toString() {
-        if (this.str_language.equals("gujarati")) {
+        if ("gujarati".equalsIgnoreCase(this.str_language)) {
             return "પ્રશ્નો";
         }
-        if (this.str_language.equals("hindi")) {
+        if ("hindi".equalsIgnoreCase(this.str_language)) {
             return "प्रश्न";
         }
-        this.str_language.equals("english");
         return "Questions";
     }
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View inflate = layoutInflater.inflate(R.layout.task_question_fragment, viewGroup, false);
-        this.ivQuestions = (ListView) inflate.findViewById(R.id.firstListView);
+        this.ivQuestions = inflate.findViewById(R.id.firstListView);
         this.questionList = new Task_DBHandler(getContext()).getAllQuestions();
         this.ivQuestions.setAdapter((ListAdapter) new Task_QuestionListAdapter(getActivity(), this.questionList, this.str_language));
         return inflate;

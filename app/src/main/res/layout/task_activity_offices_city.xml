@@ -1,82 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC">
 
-
-
-    <RelativeLayout
+    <!-- Top Action Bar -->
+    <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:background="@color/purple_700"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="wrap_content"
+        android:background="#1E40AF"
+        android:orientation="vertical"
+        android:paddingBottom="12dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingHorizontal="16dp">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:padding="8dp"
+                android:src="@drawable/ic_back"
+                app:tint="@color/white" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@+id/iv_back"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_state_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:maxLines="1"
+                    android:text="RTO Offices"
+                    android:textColor="@color/white"
+                    android:textSize="19sp" />
+
+                <TextView
+                    android:id="@+id/tv_state_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/task_roboto_regular"
+                    android:text="Search RTO code, district or city"
+                    android:textColor="#E0E7FF"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- Search Bar -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_search_input_modern">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="14dp"
+                android:src="@drawable/ic_search_modern"
+                app:tint="#64748B" />
+
+            <EditText
+                android:id="@+id/et_search_city"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="44dp"
+                android:layout_marginEnd="40dp"
+                android:background="@null"
+                android:fontFamily="@font/task_roboto_regular"
+                android:hint="Search RTO code or city (e.g. GJ01, Surat)..."
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="#0F172A"
+                android:textColorHint="#94A3B8"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_clear_search_city"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="6dp"
+                android:src="@drawable/ic_close_clear"
+                android:visibility="gone" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/ll_empty_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:visibility="gone">
 
         <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:onClick="onClick"
-            android:padding="@dimen/_5sdp"
-            android:src="@drawable/ic_back"
-            android:tint="@color/white"/>
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/ic_search_modern"
+            app:tint="#CBD5E1" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/task_robotoslab_regular"
-            android:text="RTO Office"
-            android:textColor="@color/white"
-            android:textSize="20dp" />
-    </RelativeLayout>
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/task_roboto_bold"
+            android:text="No RTO Offices Found"
+            android:textColor="#0F172A"
+            android:textSize="17sp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/task_roboto_regular"
+            android:text="Try searching with a different code or city name"
+            android:textColor="#64748B"
+            android:textSize="13sp" />
+    </LinearLayout>
 
+    <!-- Cities/Offices List -->
     <ListView
         android:id="@+id/lv_cities"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/rlBanner"
         android:layout_below="@+id/header"
-        android:layout_margin="@dimen/_5sdp"
+        android:clipToPadding="false"
         android:divider="@null"
-        tools:listitem="@layout/task_item_list_offices_state"
-        android:listSelector="@android:color/transparent" />
+        android:listSelector="@android:color/transparent"
+        android:paddingTop="8dp"
+        android:paddingBottom="12dp"
+        android:scrollbars="none"
+        tools:listitem="@layout/task_item_list_offices_city" />
 
-
-  <!--  <LinearLayout
-        android:id="@+id/rlBanner"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_60sdp"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/banner_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>-->
-
+    <!-- Banner Ad -->
     <RelativeLayout
         android:id="@+id/rlBanner"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/black">
+        android:background="@color/white">
 
         <RelativeLayout
             android:id="@+id/rl_ad"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:visibility="visible" />
-
     </RelativeLayout>
-
 </RelativeLayout>

@@ -32,6 +32,7 @@ public class Task_LoadAds {
     public static ShimmerFrameLayout shimmerFrameLayout;
 
     public static void loadAdmobBannerAd(Activity activity, RelativeLayout mainLayout) {
+        // Test ads allowed in DEBUG
         mainLayout.removeAllViews();
         RelativeLayout.LayoutParams bannerParameters =
                 new RelativeLayout.LayoutParams(
@@ -40,7 +41,7 @@ public class Task_LoadAds {
         bannerParameters.addRule(RelativeLayout.CENTER_IN_PARENT);
         mainLayout.addView(getBannerView(activity));
 
-        String bannerAdunitID = new Task_PreferenceClass(activity).getAdsId("GoogleBannerAd");
+        String bannerAdunitID = new Task_PreferenceClass(activity).getAdsId("GoogleBannerAd"); if (bannerAdunitID == null || bannerAdunitID.isEmpty()) { bannerAdunitID = "ca-app-pub-3940256099942544/6300978111"; }
         Log.e("TAG%%Banner", "GoogleBannerAd: " + bannerAdunitID);
 
         if (bannerAdunitID != null) {
@@ -84,20 +85,26 @@ public class Task_LoadAds {
             AdRequest adRequest = new AdRequest.Builder().build();
             adView.loadAd(adRequest);
 
+            RelativeLayout.LayoutParams bannerParameters =
+                    new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.WRAP_CONTENT,
+                            RelativeLayout.LayoutParams.WRAP_CONTENT);
+            bannerParameters.addRule(RelativeLayout.CENTER_IN_PARENT);
+
             adView.setAdListener(new AdListener() {
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                     super.onAdFailedToLoad(loadAdError);
                     loadFBBannerAd(activity, mainLayout);
                 }
-            });
 
-            RelativeLayout.LayoutParams bannerParameters =
-                    new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.WRAP_CONTENT,
-                            RelativeLayout.LayoutParams.WRAP_CONTENT);
-            bannerParameters.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            mainLayout.addView(adView, bannerParameters);
+                @Override
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    mainLayout.removeAllViews();
+                    mainLayout.addView(adView, bannerParameters);
+                }
+            });
         }
     }
     private static void loadFBBannerAd(Activity activity, RelativeLayout mainLayout) {
@@ -152,6 +159,14 @@ public class Task_LoadAds {
 
 
     public static void loadCollapsibleBanner(Activity activity, String str,FrameLayout mainLayout, RelativeLayout relativeLayout,ShimmerFrameLayout shimmer_view_container) {
+        if (com.vehicle.information.trending.rtoexam.rto.BuildConfig.DEBUG) {
+            mainLayout.setVisibility(View.GONE);
+            if (shimmer_view_container != null) {
+                shimmer_view_container.stopShimmer();
+                shimmer_view_container.setVisibility(View.GONE);
+            }
+            return;
+        }
 
         String CollapsiblebannerID = new Task_PreferenceClass(activity).getAdsId("CollapsibleBannerID");
 
@@ -220,3 +235,4 @@ public class Task_LoadAds {
     }
 
 }
+

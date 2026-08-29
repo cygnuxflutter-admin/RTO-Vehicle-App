@@ -1,16 +1,18 @@
 package com.vehicle.information.trending.rtoexam.rto.Task_Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_StartActivity;
 import com.vehicle.information.trending.rtoexam.rto.R;
@@ -43,12 +45,29 @@ public class Task_FuelCityAdapter extends RecyclerView.Adapter<Task_FuelCityAdap
         final Task_StateListModel taskStateListModel = this.list.get(i);
         viewHolder.txt.setText(taskStateListModel.getStateName());
         if (taskStateListModel.getId().equalsIgnoreCase("null")) {
-            viewHolder.layout.setBackgroundResource(R.drawable.bg_fuel3_bg);
-            viewHolder.txt.setTextColor(-1);
+            viewHolder.layout.setBackgroundResource(R.drawable.bg_state_header);
+            viewHolder.txt.setTextColor(ContextCompat.getColor(this.context, R.color.theme_primary));
+            viewHolder.txt.setTypeface(null, Typeface.BOLD);
+            viewHolder.txt.setTextSize(13.0f);
+            if (viewHolder.ivIcon != null) {
+                viewHolder.ivIcon.setVisibility(View.GONE);
+            }
+            if (viewHolder.ivArrow != null) {
+                viewHolder.ivArrow.setVisibility(View.GONE);
+            }
+        } else {
+            viewHolder.layout.setBackgroundResource(R.drawable.bg_city_item);
+            viewHolder.txt.setTextColor(ContextCompat.getColor(this.context, R.color.theme_text_primary));
+            viewHolder.txt.setTypeface(null, Typeface.NORMAL);
+            viewHolder.txt.setTextSize(15.0f);
+            if (viewHolder.ivIcon != null) {
+                viewHolder.ivIcon.setVisibility(View.VISIBLE);
+            }
+            if (viewHolder.ivArrow != null) {
+                viewHolder.ivArrow.setVisibility(View.VISIBLE);
+            }
         }
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
-       
-
             public void onClick(View view) {
                 if (!taskStateListModel.getId().equalsIgnoreCase("null")) {
                     Intent intent = new Intent(Task_FuelCityAdapter.this.context, Task_StartActivity.class);
@@ -56,7 +75,10 @@ public class Task_FuelCityAdapter extends RecyclerView.Adapter<Task_FuelCityAdap
                     edit.putString("cityName", taskStateListModel.getStateName());
                     edit.putString("cityId", taskStateListModel.getId());
                     edit.apply();
-                    context.startActivity(intent);
+                    Task_FuelCityAdapter.this.context.startActivity(intent);
+                    if (Task_FuelCityAdapter.this.context instanceof Activity) {
+                        ((Activity) Task_FuelCityAdapter.this.context).finish();
+                    }
                 }
             }
         });
@@ -68,13 +90,17 @@ public class Task_FuelCityAdapter extends RecyclerView.Adapter<Task_FuelCityAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ConstraintLayout layout;
+        View layout;
         TextView txt;
+        ImageView ivIcon;
+        ImageView ivArrow;
 
         public ViewHolder(View view) {
             super(view);
             this.txt = (TextView) view.findViewById(R.id.textView4);
-            this.layout = (ConstraintLayout) view.findViewById(R.id.lay);
+            this.layout = view.findViewById(R.id.lay);
+            this.ivIcon = (ImageView) view.findViewById(R.id.iv_icon);
+            this.ivArrow = (ImageView) view.findViewById(R.id.iv_arrow);
         }
     }
 }

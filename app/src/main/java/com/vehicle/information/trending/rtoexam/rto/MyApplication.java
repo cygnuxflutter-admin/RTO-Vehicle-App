@@ -23,12 +23,24 @@ public class MyApplication extends android.app.Application {
         ((MyApplication) activity.getApplication()).getInterstitialAdManager().showAdIfAvailable(activity, onAdLoadInterface);
     }
     public static void showInterstitialAdWithOutCount(Activity activity, Task_InterstitialAdManager.OnAdLoadInterface onAdLoadInterface) {
+        if (BuildConfig.DEBUG) {
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+            return;
+        }
         ((MyApplication) activity.getApplication()).getInterstitialAdManager().showInterstitialAd(activity, onAdLoadInterface);
     }
     public static void showFaceBookInterstitial(Activity activity, Task_InterstitialAdManager.OnAdLoadInterface onAdLoadInterface) {
+        if (BuildConfig.DEBUG) {
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+            return;
+        }
         ((MyApplication) activity.getApplication()).getInterstitialAdManager().showFaceBookInterstitial(activity, onAdLoadInterface);
     }
     public static void showEditInterstitialAd(Activity activity, Task_InterstitialAdManager.OnAdLoadInterface onAdLoadInterface) {
+        if (BuildConfig.DEBUG) {
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+            return;
+        }
         ((MyApplication) activity.getApplication()).getInterstitialAdManager().showEDitAdIfAvailable(activity, onAdLoadInterface);
     }
 
@@ -59,10 +71,14 @@ public class MyApplication extends android.app.Application {
 //        OneSignal.sendTag("Apps", "Text Art");
 
         AudienceNetworkAds.initialize(this);
-
-//        List<String> testDeviceIds = Collections.singletonList("9EB1C89D5458256B2C93F844BAAC93F5");
-//        RequestConfiguration configuration = new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-//        MobileAds.setRequestConfiguration(configuration);
+        if (BuildConfig.DEBUG) {
+            com.facebook.ads.AdSettings.setTestMode(true);
+            com.google.android.gms.ads.RequestConfiguration configuration =
+                    new com.google.android.gms.ads.RequestConfiguration.Builder()
+                            .setTestDeviceIds(java.util.Arrays.asList(com.google.android.gms.ads.AdRequest.DEVICE_ID_EMULATOR, "012A7B0296D761BF65FF2E7E14112689", "9EB1C89D5458256B2C93F844BAAC93F5"))
+                            .build();
+            MobileAds.setRequestConfiguration(configuration);
+        }
 
         MobileAds.initialize(this, initializationStatus -> Log.d(" AD", " RTO open ad"));
         taskAppOpenManager = new Task_AppOpenManager(this);
@@ -82,10 +98,18 @@ public class MyApplication extends android.app.Application {
     }
 
     public void showAdIfAvailable(@NonNull Activity activity, @NonNull OnShowAdCompleteListener onShowAdCompleteListener) {
+        if (BuildConfig.DEBUG) {
+            onShowAdCompleteListener.onShowAdComplete();
+            return;
+        }
         taskAppOpenManager.showAdIfSplashAvailable(activity, onShowAdCompleteListener);
     }
 
     public void showAdIfHomeAvailable(@NonNull Activity activity, @NonNull OnShowAdCompleteListener onShowAdCompleteListener) {
+        if (BuildConfig.DEBUG) {
+            onShowAdCompleteListener.onShowAdComplete();
+            return;
+        }
         taskAppOpenManager.showAdIfAvailable(activity, onShowAdCompleteListener);
     }
 

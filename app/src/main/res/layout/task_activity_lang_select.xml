@@ -1,152 +1,286 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fitsSystemWindows="true">
+    android:background="#F8FAFC"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-
+    <!-- Top Action Bar -->
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/purple_700">
+        android:layout_height="56dp"
+        android:background="#1E40AF"
+        android:paddingStart="12dp"
+        android:paddingEnd="16dp">
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:onClick="onClick"
-            android:padding="@dimen/_5sdp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
             android:src="@drawable/ic_back"
-            android:tint="@color/white" />
+            app:tint="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/task_robotoslab_regular"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/iv_back"
+            android:fontFamily="@font/task_roboto_bold"
             android:text="Select Language"
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
-
+    <!-- Sub Header Banner -->
     <LinearLayout
-        android:id="@+id/ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/header"
-        android:layout_margin="@dimen/_15sdp"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/iv_gujarati"
-            android:layout_width="@dimen/_135sdp"
-            android:layout_height="@dimen/_90sdp"
-            android:layout_margin="@dimen/_5sdp"
-            android:layout_weight="1"
-            android:background="@drawable/lang_bg_guj"
-            android:orientation="vertical">
-
-            <ImageView
-
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:adjustViewBounds="true"
-                android:padding="12dp"
-                android:src="@drawable/ic_guj"
-                app:tint="#489b92"
-                android:visibility="gone"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/iv_hindi"
-            android:layout_width="@dimen/_135sdp"
-            android:layout_height="@dimen/_90sdp"
-            android:layout_margin="@dimen/_5sdp"
-            android:layout_weight="1"
-            android:background="@drawable/lang_bg_hindi"
-            android:orientation="vertical">
-
-            <ImageView
-
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:adjustViewBounds="true"
-                android:padding="@dimen/_10sdp"
-                android:src="@drawable/ic_hindi"
-                app:tint="#489b92"
-                android:visibility="gone"/>
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-
-        android:id="@+id/iv_english"
-        android:layout_width="@dimen/_135sdp"
-        android:layout_height="@dimen/_90sdp"
-        android:layout_below="@+id/ll"
-        android:layout_marginBottom="@dimen/_25sdp"
-        android:layout_marginHorizontal="@dimen/_20sdp"
-        android:background="@drawable/lang_english"
-        android:orientation="vertical">
+        android:background="@drawable/bg_state_header"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="16dp">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:gravity="center"
-            android:padding="@dimen/_10sdp"
-            android:text="EN"
-            android:textColor="#489b92"
-            android:textSize="@dimen/_60sdp"
-            android:textStyle="bold"
-            android:visibility="gone"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/task_roboto_bold"
+            android:text="Choose Your Preferred Language"
+            android:textColor="#1E40AF"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:fontFamily="@font/task_roboto_regular"
+            android:text="All RTO mock tests and rules will be presented in this language"
+            android:textColor="#475569"
+            android:textSize="12sp" />
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/ads"
-        android:layout_below="@+id/iv_english"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/graybluemediam_light_bg"
-        android:minHeight="@dimen/_170sdp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="never">
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:layout_alignParentBottom="true"
-            app:cardCornerRadius="@dimen/_10sdp">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <RelativeLayout
+            <!-- Gujarati Card -->
+            <LinearLayout
+                android:id="@+id/iv_gujarati"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_170sdp"
-                android:background="@drawable/knack_ad_bg">
+                android:layout_height="72dp"
+                android:background="@drawable/bg_lang_card"
+                android:clickable="true"
+                android:elevation="2dp"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <FrameLayout
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_lang_avatar">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:text="ગુ"
+                        android:textColor="#1E40AF"
+                        android:textSize="18sp" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:text="ગુજરાતી"
+                        android:textColor="#0F172A"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:fontFamily="@font/task_roboto_regular"
+                        android:text="Gujarati"
+                        android:textColor="#64748B"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_chevron_right_modern"
+                    app:tint="#94A3B8" />
+            </LinearLayout>
+
+            <!-- Hindi Card -->
+            <LinearLayout
+                android:id="@+id/iv_hindi"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_lang_card"
+                android:clickable="true"
+                android:elevation="2dp"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <FrameLayout
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_lang_avatar">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:text="हि"
+                        android:textColor="#1E40AF"
+                        android:textSize="18sp" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:text="हिन्दी"
+                        android:textColor="#0F172A"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:fontFamily="@font/task_roboto_regular"
+                        android:text="Hindi"
+                        android:textColor="#64748B"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_chevron_right_modern"
+                    app:tint="#94A3B8" />
+            </LinearLayout>
+
+            <!-- English Card -->
+            <LinearLayout
+                android:id="@+id/iv_english"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_lang_card"
+                android:clickable="true"
+                android:elevation="2dp"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <FrameLayout
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_lang_avatar">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:text="EN"
+                        android:textColor="#1E40AF"
+                        android:textSize="16sp" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:text="English"
+                        android:textColor="#0F172A"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:fontFamily="@font/task_roboto_regular"
+                        android:text="Default Indian English"
+                        android:textColor="#64748B"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_chevron_right_modern"
+                    app:tint="#94A3B8" />
+            </LinearLayout>
+
+
+        
+            <!-- Compact Native Ad Card (Fixed 110dp) -->
+            <RelativeLayout
+                android:id="@+id/ads"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:id="@+id/native_banner_ad_container"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_170sdp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/_4sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    android:layout_marginEnd="@dimen/_4sdp"
-                    android:layout_marginBottom="@dimen/_4sdp"
-                    android:visibility="visible" />
+                    android:layout_height="wrap_content" />
             </RelativeLayout>
-
-        </androidx.cardview.widget.CardView>
-
-
-    </RelativeLayout>
-
-</RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

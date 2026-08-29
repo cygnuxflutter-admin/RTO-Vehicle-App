@@ -1,84 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/graybluemediam_light_bg"
-    android:fitsSystemWindows="true">
+    android:background="#F8FAFC"
+    android:orientation="vertical">
 
-
-
-    <RelativeLayout
+    <!-- Top Action Bar -->
+    <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:background="@color/purple_700"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="60dp"
+        android:background="#1E40AF"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="10dp"
-            android:onClick="onClick"
-            android:padding="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:padding="8dp"
             android:src="@drawable/ic_back"
-            android:tint="@color/white"/>
+            app:tint="@color/white" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_header_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/task_robotoslab_regular"
-            android:text="Exam Preparation"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/task_roboto_bold"
+            android:text="પરીક્ષાની તૈયારી"
             android:textColor="@color/white"
-            android:textSize="20dp" />
-    </RelativeLayout>
+            android:textSize="19sp" />
+    </LinearLayout>
 
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/mTab_ID"
+    <!-- Modern Pixel-Perfect Segmented Tab Bar -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/header"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/ic_round_button"
-        app:tabGravity="center"
-        app:tabMode="auto"
-        app:tabTextColor="#151515" />
+        android:paddingStart="16dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="10dp">
 
+        <LinearLayout
+            android:id="@+id/llTabContainer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_tabs_container"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/tvTabQuestions"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_tab_selected"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/task_roboto_bold"
+                android:gravity="center"
+                android:text="પ્રશ્નો"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvTabSigns"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/task_roboto_bold"
+                android:gravity="center"
+                android:text="ચિહ્નો"
+                android:textColor="#64748B"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Content ViewPager -->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/mViewpager_ID"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/rlBanner"
-        android:layout_below="@+id/mTab_ID"
-        android:layout_margin="5dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never" />
 
-
-<!--    <LinearLayout
-        android:id="@+id/rlBanner"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_60sdp"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/banner_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>-->
+    <!-- Optional Banner Ad Container -->
     <RelativeLayout
         android:id="@+id/rlBanner"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/black">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rl_ad"
@@ -87,6 +109,5 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:visibility="visible" />
-
     </RelativeLayout>
-</RelativeLayout>
+</LinearLayout>

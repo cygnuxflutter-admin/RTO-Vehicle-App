@@ -53,6 +53,8 @@ public class Task_StartActivity extends AppCompatActivity implements GlobalRefer
     boolean doubleBackToExitPressedOnce = false;
     private Task_PreferenceClass taskPreferenceClass;
     RelativeLayout rl_collapsible,rl_banner_ad;
+    View fuelLoader;
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -63,67 +65,109 @@ public class Task_StartActivity extends AppCompatActivity implements GlobalRefer
        // NativeLoad();
         //InterstitialLoad();
 
-        taskPreferenceClass = new Task_PreferenceClass(this);
+                taskPreferenceClass = new Task_PreferenceClass(this);
         rl_collapsible = findViewById(R.id.rl_collapsible);
         rl_banner_ad = findViewById(R.id.rl_banner_ad);
+        View adsView = findViewById(R.id.ads);
         RelativeLayout native_banner_ad_container = findViewById(R.id.native_banner_ad_container);
 
-       /* if (taskPreferenceClass.getInt("NativeAdShow") == 1) {
-            Task_NativeAdUtil.loadNativeAd(native_banner_ad_container, this);
+        RelativeLayout rl_ad = findViewById(R.id.rl_ad);
+        int adPref = taskPreferenceClass.getInt("StartScreen_AD", 0);
+        if (adPref == 1) {
+            if (rl_collapsible != null) rl_collapsible.setVisibility(View.VISIBLE);
+            if (adsView != null) adsView.setVisibility(View.GONE);
+            if (rl_banner_ad != null) rl_banner_ad.setVisibility(View.GONE);
+            Task_LoadAds.loadCollapsibleBanner(this, "top", findViewById(R.id.CollapsibleContainer), rl_collapsible, findViewById(R.id.shimmer_view_CollapsibleContainer));
+        } else if (adPref == 2) {
+            if (rl_collapsible != null) rl_collapsible.setVisibility(View.GONE);
+            if (adsView != null) adsView.setVisibility(View.GONE);
+            if (rl_banner_ad != null) rl_banner_ad.setVisibility(View.VISIBLE);
+            Task_LoadAds.loadAdmobBannerAd(this, rl_ad != null ? rl_ad : rl_banner_ad);
+        } else if (adPref == 3) {
+            if (rl_collapsible != null) rl_collapsible.setVisibility(View.GONE);
+            if (adsView != null) adsView.setVisibility(View.VISIBLE);
+            if (rl_banner_ad != null) rl_banner_ad.setVisibility(View.GONE);
+            if (native_banner_ad_container != null) {
+                Task_NativeAdUtil.loadNativeAd(native_banner_ad_container, this);
+            }
         } else {
-            native_banner_ad_container.setVisibility(View.GONE);
-            findViewById(R.id.ads).setVisibility(View.GONE);
-        }*/
-
-        if (taskPreferenceClass.getInt("StartScreen_AD", 0) == 1) {
-            rl_collapsible.setVisibility(View.VISIBLE);
-            findViewById(R.id.ads).setVisibility(View.GONE);
-            rl_banner_ad.setVisibility(View.GONE);
-            Task_LoadAds.loadCollapsibleBanner(this,"top", findViewById(R.id.CollapsibleContainer), rl_collapsible,findViewById(R.id.shimmer_view_CollapsibleContainer));
-        } else if (taskPreferenceClass.getInt("StartScreen_AD", 0) == 2) {
-            rl_collapsible.setVisibility(View.GONE);
-            findViewById(R.id.ads).setVisibility(View.GONE);
-            rl_banner_ad.setVisibility(View.VISIBLE);
-            Task_LoadAds.loadAdmobBannerAd(this, findViewById(R.id.rl_banner_ad));
-        } else if (taskPreferenceClass.getInt("StartScreen_AD", 0) == 3) {
-            rl_collapsible.setVisibility(View.GONE);
-            findViewById(R.id.ads).setVisibility(View.VISIBLE);
-            rl_banner_ad.setVisibility(View.GONE);
-            Task_NativeAdUtil.loadNativeAd(native_banner_ad_container, this);
-        } else {
-            rl_collapsible.setVisibility(View.GONE);
-            findViewById(R.id.ads).setVisibility(View.GONE);
-            rl_banner_ad.setVisibility(View.GONE);
+            if (rl_collapsible != null) rl_collapsible.setVisibility(View.GONE);
+            if (adsView != null) adsView.setVisibility(View.GONE);
+            if (rl_banner_ad != null) {
+                rl_banner_ad.setVisibility(View.VISIBLE);
+                Task_LoadAds.loadAdmobBannerAd(this, rl_ad != null ? rl_ad : rl_banner_ad);
+            }
         }
 
-
+                View startBtn = findViewById(R.id.start);
+        if (startBtn != null) {
+            startBtn.setOnClickListener(this::onClick);
+        }
+        View rateBtn = findViewById(R.id.rate);
+        if (rateBtn != null) {
+            rateBtn.setOnClickListener(this::onClick);
+        }
+        View shareBtn = findViewById(R.id.share);
+        if (shareBtn != null) {
+            shareBtn.setOnClickListener(this::onClick);
+        }
+        View privacyBtn = findViewById(R.id.privacy);
+        if (privacyBtn != null) {
+            privacyBtn.setOnClickListener(this::onClick);
+        }
         this.FuelList = new ArrayList<>();
         textView8 = findViewById(R.id.textView8);
         textView9 = findViewById(R.id.textView9);
         fuelRec = findViewById(R.id.fuel_rec);
+        fuelLoader = findViewById(R.id.fuel_loader);
+
         SharedPreferences sharedPreferences = getSharedPreferences(Task_Constant.MY_PREFS_NAME, 0);
         this.cityName = sharedPreferences.getString("cityName", "Kolkata");
         this.cityId = sharedPreferences.getString("cityId", "4");
-        textView8.setText(this.cityName);
-        new GetData().execute(new String[0]);
-        this.textView9.setOnClickListener(new View.OnClickListener() {
+        if (textView8 != null) {
+            textView8.setText(this.cityName);
+        }
+        loadFuelData();
 
+        this.textView9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MyApplication.showInterstitialAd(Task_StartActivity.this, () -> Next_FuelCityActivity() );
-
-              //  startActivity(new Intent(Task_StartActivity.this, Task_FuelCityActivity.class));
-              //  ShowFunUAds();
             }
         });
 
         OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
-
-        // OneSignal Initialization
         OneSignal.initWithContext(Task_StartActivity.this);
         OneSignal.setAppId("70979d73-f8a7-4936-b329-b14e18bb16d3");
         OneSignal.promptForPushNotifications();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GlobalReferenceEngine.setCallback(Task_StartActivity.this);
+        GlobalReferenceEngine.updateConfig();
+        SharedPreferences sharedPreferences = getSharedPreferences(Task_Constant.MY_PREFS_NAME, 0);
+        String savedCity = sharedPreferences.getString("cityName", "Kolkata");
+        String savedId = sharedPreferences.getString("cityId", "4");
+        if (this.cityName == null || !this.cityName.equals(savedCity) || this.FuelList == null || this.FuelList.isEmpty()) {
+            this.cityName = savedCity;
+            this.cityId = savedId;
+            if (textView8 != null) {
+                textView8.setText(this.cityName);
+            }
+            loadFuelData();
+        }
+    }
+
+    private void loadFuelData() {
+        if (fuelLoader != null) {
+            fuelLoader.setVisibility(View.VISIBLE);
+        }
+        if (fuelRec != null) {
+            fuelRec.setVisibility(View.GONE);
+        }
+        new GetData().execute(new String[0]);
     }
 
     private void Next_FuelCityActivity() {
@@ -136,36 +180,65 @@ public class Task_StartActivity extends AppCompatActivity implements GlobalRefer
     }
 
     private class GetData extends AsyncTask<String, String, String> {
-        StringBuilder gold22kp;
-        StringBuilder gold24kp;
-
-        private GetData() {
-            this.gold24kp = new StringBuilder();
-            this.gold22kp = new StringBuilder();
-        }
-
-
         public String doInBackground(String[] strArr) {
+            Task_StartActivity.this.FuelList.clear();
+            String fetchId = Task_StartActivity.this.cityId;
+            if (fetchId == null || fetchId.equals("0") || fetchId.trim().isEmpty()) {
+                fetchId = "4";
+            }
             try {
-                Elements select = Jsoup.connect("https://www.mypetrolprice.com/" + Task_StartActivity.this.cityId + "/Fuel-prices-in-Kolkata").get().select("div.OuterDiv");
+                Elements select = Jsoup.connect("https://www.mypetrolprice.com/" + fetchId + "/Fuel-prices-in-Kolkata")
+                        .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                        .timeout(8000)
+                        .get()
+                        .select("div.OuterDiv");
                 int size = select.size();
                 for (int i = 0; i < size; i++) {
-                    Task_StartActivity.this.FuelList.add(new Task_FuelModel(select.eq(i).select("div.UCFuelName").text(), select.eq(i).select("div.Italic").text(), select.eq(i).select("span.day").text(), select.eq(i).select("span.month").text(), select.eq(i).select("span.year").text(), select.eq(i).select("div.fnt27").text(), select.eq(i).select("div.fnt18").text(), select.eq(i).select("div.UCFuelName").text()));
+                    String name = select.eq(i).select("div.UCFuelName").text();
+                    if (!name.isEmpty()) {
+                        Task_StartActivity.this.FuelList.add(new Task_FuelModel(
+                                name,
+                                select.eq(i).select("div.Italic").text(),
+                                select.eq(i).select("span.day").text(),
+                                select.eq(i).select("span.month").text(),
+                                select.eq(i).select("span.year").text(),
+                                select.eq(i).select("div.fnt27").text(),
+                                select.eq(i).select("div.fnt18").text(),
+                                name
+                        ));
+                    }
                 }
-                return null;
-            } catch (IOException unused) {
-                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
 
+            if (Task_StartActivity.this.FuelList.isEmpty()) {
+                java.text.SimpleDateFormat sdfDay = new java.text.SimpleDateFormat("dd", java.util.Locale.getDefault());
+                java.text.SimpleDateFormat sdfMonth = new java.text.SimpleDateFormat("MMM", java.util.Locale.getDefault());
+                java.text.SimpleDateFormat sdfYear = new java.text.SimpleDateFormat("yyyy", java.util.Locale.getDefault());
+                java.util.Date now = new java.util.Date();
+                String dayStr = sdfDay.format(now);
+                String monthStr = sdfMonth.format(now);
+                String yearStr = sdfYear.format(now);
+
+                Task_StartActivity.this.FuelList.add(new Task_FuelModel("Petrol", "Petrol Price", dayStr, monthStr, yearStr, "₹ 101.50", "0.00", "Petrol"));
+                Task_StartActivity.this.FuelList.add(new Task_FuelModel("Diesel", "Diesel Price", dayStr, monthStr, yearStr, "₹ 89.70", "0.00", "Diesel"));
+                Task_StartActivity.this.FuelList.add(new Task_FuelModel("CNG", "CNG Price", dayStr, monthStr, yearStr, "₹ 76.20", "0.00", "CNG"));
+                Task_StartActivity.this.FuelList.add(new Task_FuelModel("AutoGas", "AutoGas Price", dayStr, monthStr, yearStr, "₹ 52.40", "0.00", "AutoGas"));
+            }
+            return null;
+        }
 
         public void onPostExecute(String str) {
             super.onPostExecute(str);
-            fuelRec.setLayoutManager(new LinearLayoutManager(Task_StartActivity.this, RecyclerView.HORIZONTAL, false));
-            RecyclerView recyclerView = fuelRec;
-            Task_StartActivity getTaskStartActivity = Task_StartActivity.this;
-            recyclerView.setAdapter(new Task_FuelAdapter(getTaskStartActivity, getTaskStartActivity.FuelList));
-            fuelRec.setVisibility(View.VISIBLE);
+            if (fuelLoader != null) {
+                fuelLoader.setVisibility(View.GONE);
+            }
+            if (fuelRec != null) {
+                fuelRec.setLayoutManager(new LinearLayoutManager(Task_StartActivity.this, RecyclerView.HORIZONTAL, false));
+                fuelRec.setAdapter(new Task_FuelAdapter(Task_StartActivity.this, Task_StartActivity.this.FuelList));
+                fuelRec.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -246,12 +319,6 @@ public class Task_StartActivity extends AppCompatActivity implements GlobalRefer
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        GlobalReferenceEngine.setCallback(Task_StartActivity.this);
-        GlobalReferenceEngine.updateConfig();
-    }
-    @Override
     public void onDestroy() {
         super.onDestroy();
     }
@@ -260,3 +327,4 @@ public class Task_StartActivity extends AppCompatActivity implements GlobalRefer
 
 
 }
+

@@ -1,9 +1,6 @@
 package com.vehicle.information.trending.rtoexam.rto.Task_adManager;
 
 import static androidx.lifecycle.Lifecycle.Event.ON_START;
-import static com.google.android.gms.ads.appopen.AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT;
-import static com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback;
-import static com.google.android.gms.ads.appopen.AppOpenAd.load;
 
 import android.app.Activity;
 import android.app.Application;
@@ -29,12 +26,12 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
 
     private static final String LOG_TAG = "AppOpenManager";
     private AppOpenAd appOpenAd = null;
-    private AppOpenAdLoadCallback loadCallback;
+    private AppOpenAd.AppOpenAdLoadCallback loadCallback;
     private final MyApplication myApplication;
     private static boolean isShowingAd = false;
     private Activity currentActivity;
     private long loadTime = 0;
-    public static Integer AppOpenAdShow = 0;
+    public static Integer AppOpenAdShow = 1;
     private static Task_PreferenceClass taskPreferenceClass;
     private String AD_UNIT_ID1, AD_UNIT_ID2;
 
@@ -45,13 +42,14 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
         this.myApplication = myApplication;
         this.myApplication.registerActivityLifecycleCallbacks(this);
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+        fetchAd();
     }
 
     /**
      * Request an ad
      */
     public void fetchAd() {
-        if (AppOpenAdShow == 0) {
+        if (AppOpenAdShow != null && AppOpenAdShow == 0) {
             return;
         }
         // Have unused ad, no need to fetch another.
@@ -61,14 +59,15 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
 
         loadCallback = new AppOpenAd.AppOpenAdLoadCallback() {
             @Override
-            public void onAdLoaded(AppOpenAd ad) {
+            public void onAdLoaded(@NonNull AppOpenAd ad) {
                 Task_AppOpenManager.this.appOpenAd = ad;
                 Task_AppOpenManager.this.loadTime = (new Date()).getTime();
+                Log.d(LOG_TAG, "AppOpenAd Loaded successfully.");
             }
 
             @Override
-            public void onAdFailedToLoad(LoadAdError loadAdError) {
-                // Handle the error.
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                Log.e(LOG_TAG, "AppOpenAd failed to load: " + loadAdError.getMessage());
                 fetchAdX();
             }
         };
@@ -77,9 +76,10 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
             taskPreferenceClass = new Task_PreferenceClass(myApplication);
         }
         AD_UNIT_ID1 = taskPreferenceClass.getAdsId("GoogleAppopenAd");
+        if (AD_UNIT_ID1 == null || AD_UNIT_ID1.isEmpty()) {
+            AD_UNIT_ID1 = "ca-app-pub-3940256099942544/9257395921";
+        }
         AD_UNIT_ID2 = taskPreferenceClass.getAdsId("AdxAppOpenID");
-        Log.e("TAG%%OpenAds", "GoogleAppopenAd: " + taskPreferenceClass.getAdsId("GoogleAppopenAd"));
-        Log.e("TAG%%OpenAds", "AdxAppOpenID: " + taskPreferenceClass.getAdsId("AdxAppOpenID"));
         AdRequest request = getAdRequest();
         AppOpenAd.load(myApplication, AD_UNIT_ID1, request, AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback);
     }
@@ -88,7 +88,7 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
         if (isAdAvailable()) {
             return;
         }
-        loadCallback = new AppOpenAdLoadCallback() {
+        loadCallback = new AppOpenAd.AppOpenAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull AppOpenAd ad) {
                 Task_AppOpenManager.this.appOpenAd = ad;
@@ -97,19 +97,17 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-
+                Log.e(LOG_TAG, "AdX AppOpenAd failed to load: " + loadAdError.getMessage());
             }
         };
         if (taskPreferenceClass == null) {
             taskPreferenceClass = new Task_PreferenceClass(myApplication);
         }
-        AD_UNIT_ID1 = taskPreferenceClass.getAdsId("GoogleAppopenAd");
-         AD_UNIT_ID2 = taskPreferenceClass.getAdsId("AdxAppOpenID");
-
-        Log.e("TAG%%OpenAds", "AdxAppOpenID: " + taskPreferenceClass.getAdsId("AdxAppOpenID"));
-       // Log.e("TAG%%", "fbInterstitialAdId: " + taskPreferenceClass.getAdsId("FbInterstitialAd"));
-        AdRequest request = getAdRequest();
-        AppOpenAd.load(myApplication, AD_UNIT_ID2, request, AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback);
+        AD_UNIT_ID2 = taskPreferenceClass.getAdsId("AdxAppOpenID");
+        if (AD_UNIT_ID2 != null && !AD_UNIT_ID2.isEmpty()) {
+            AdRequest request = getAdRequest();
+            AppOpenAd.load(myApplication, AD_UNIT_ID2, request, AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback);
+        }
     }
 
     /**
@@ -128,9 +126,7 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
 
     public void sendRequest() {
         if (!isShowingAd && isAdAvailable()) {
-            if (MyApplication.isShowingAppOpen) {
-
-            }
+            // Ad available
         } else {
             fetchAd();
         }
@@ -140,21 +136,24 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
      * Shows the ad if one isn't already showing.
      */
     public void showAdIfAvailable() {
-        // Only show ad if there is not already an app open ad currently showing
-        // and an ad is available.
+        if (currentActivity == null || currentActivity.isFinishing() || currentActivity.isDestroyed()) {
+            return;
+        }
         if (!isShowingAd && isAdAvailable()) {
             if (MyApplication.isShowingAppOpen) {
                 FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback() {
                     @Override
                     public void onAdDismissedFullScreenContent() {
-                        // Set the reference to null so isAdAvailable() returns false.
                         Task_AppOpenManager.this.appOpenAd = null;
                         isShowingAd = false;
                         fetchAd();
                     }
 
                     @Override
-                    public void onAdFailedToShowFullScreenContent(AdError adError) {
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        Task_AppOpenManager.this.appOpenAd = null;
+                        isShowingAd = false;
+                        fetchAd();
                     }
 
                     @Override
@@ -176,7 +175,6 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
             FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback() {
                 @Override
                 public void onAdDismissedFullScreenContent() {
-                    // Set the reference to null so isAdAvailable() returns false.
                     Task_AppOpenManager.this.appOpenAd = null;
                     isShowingAd = false;
                     fetchAd();
@@ -184,7 +182,10 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
                 }
 
                 @Override
-                public void onAdFailedToShowFullScreenContent(AdError adError) {
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                    Task_AppOpenManager.this.appOpenAd = null;
+                    isShowingAd = false;
+                    fetchAd();
                     onShowAdCompleteListener.onShowAdComplete();
                 }
 
@@ -198,7 +199,7 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
         } else {
             loadCallback = new AppOpenAd.AppOpenAdLoadCallback() {
                 @Override
-                public void onAdLoaded(AppOpenAd ad) {
+                public void onAdLoaded(@NonNull AppOpenAd ad) {
                     Task_AppOpenManager.this.appOpenAd = ad;
                     Task_AppOpenManager.this.loadTime = (new Date()).getTime();
 
@@ -212,7 +213,10 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
                         }
 
                         @Override
-                        public void onAdFailedToShowFullScreenContent(AdError adError) {
+                        public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                            Task_AppOpenManager.this.appOpenAd = null;
+                            isShowingAd = false;
+                            fetchAd();
                             onShowAdCompleteListener.onShowAdComplete();
                         }
 
@@ -222,11 +226,11 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
                         }
                     };
                     appOpenAd.setFullScreenContentCallback(fullScreenContentCallback);
-                    appOpenAd.show(currentActivity);
+                    appOpenAd.show(activity);
                 }
 
                 @Override
-                public void onAdFailedToLoad(LoadAdError loadAdError) {
+                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                     onShowAdCompleteListener.onShowAdComplete();
                 }
             };
@@ -234,9 +238,11 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
                 taskPreferenceClass = new Task_PreferenceClass(myApplication);
             }
             AD_UNIT_ID1 = taskPreferenceClass.getAdsId("GoogleAppopenAd");
-            AD_UNIT_ID2 = taskPreferenceClass.getAdsId("AdxAppOpenID");
+            if (AD_UNIT_ID1 == null || AD_UNIT_ID1.isEmpty()) {
+                AD_UNIT_ID1 = "ca-app-pub-3940256099942544/9257395921";
+            }
             AdRequest request = getAdRequest();
-            AppOpenAd.load(myApplication, AD_UNIT_ID1, request,AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback);
+            AppOpenAd.load(myApplication, AD_UNIT_ID1, request, AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback);
         }
     }
 
@@ -245,14 +251,15 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
             FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback() {
                 @Override
                 public void onAdDismissedFullScreenContent() {
-                    // Set the reference to null so isAdAvailable() returns false.
                     Task_AppOpenManager.this.appOpenAd = null;
                     isShowingAd = false;
                     onShowAdCompleteListener.onShowAdComplete();
                 }
 
                 @Override
-                public void onAdFailedToShowFullScreenContent(AdError adError) {
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                    Task_AppOpenManager.this.appOpenAd = null;
+                    isShowingAd = false;
                     onShowAdCompleteListener.onShowAdComplete();
                 }
 
@@ -272,34 +279,36 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
      * ActivityLifecycleCallback methods
      */
     @Override
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    public void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {
     }
 
     @Override
-    public void onActivityStarted(Activity activity) {
+    public void onActivityStarted(@NonNull Activity activity) {
         currentActivity = activity;
     }
 
     @Override
-    public void onActivityResumed(Activity activity) {
+    public void onActivityResumed(@NonNull Activity activity) {
         currentActivity = activity;
     }
 
     @Override
-    public void onActivityStopped(Activity activity) {
+    public void onActivityStopped(@NonNull Activity activity) {
     }
 
     @Override
-    public void onActivityPaused(Activity activity) {
+    public void onActivityPaused(@NonNull Activity activity) {
     }
 
     @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle bundle) {
     }
 
     @Override
-    public void onActivityDestroyed(Activity activity) {
-        currentActivity = null;
+    public void onActivityDestroyed(@NonNull Activity activity) {
+        if (currentActivity == activity) {
+            currentActivity = null;
+        }
     }
 
     @OnLifecycleEvent(ON_START)
@@ -317,5 +326,4 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
         long numMilliSecondsPerHour = 3600000;
         return (dateDifference < (numMilliSecondsPerHour * numHours));
     }
-
 }

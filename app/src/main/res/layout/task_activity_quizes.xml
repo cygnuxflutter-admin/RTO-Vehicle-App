@@ -4,261 +4,334 @@
     android:id="@+id/activity_quiz2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/graybluemediam_light_bg">
+    android:background="#F8FAFC"
+    android:fitsSystemWindows="true">
 
-
-
+    <!-- Top Action Bar -->
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:background="@color/purple_200"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="56dp"
+        android:background="#1E40AF"
+        android:paddingStart="12dp"
+        android:paddingEnd="16dp">
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:onClick="onClick"
-            android:padding="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
             android:src="@drawable/ic_back"
-            android:tint="@color/white"/>
+            app:tint="@color/white" />
 
         <TextView
+            android:id="@+id/tv_header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/task_robotoslab_regular"
-            android:text="Exam"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/iv_back"
+            android:fontFamily="@font/task_roboto_bold"
+            android:text="RTO Exam"
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="18sp" />
 
-        <RelativeLayout
+        <!-- Timer Pill -->
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_timer_pill"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingEnd="12dp">
 
             <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/tvTimer"
-                android:adjustViewBounds="true"
-                android:padding="5dp"
-                android:src="@drawable/ic_alarm_black_24dp"
-                android:tint="@color/white"/>
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_exam_timer"
+                app:tint="#93C5FD" />
 
             <TextView
                 android:id="@+id/tvTimer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="5dp"
-                android:padding="5dp"
+                android:layout_marginStart="6dp"
+                android:fontFamily="@font/task_roboto_bold"
                 android:text="30s"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </RelativeLayout>
+                android:textSize="14sp" />
+        </LinearLayout>
     </RelativeLayout>
 
-
-
-    <RelativeLayout
+    <!-- Main Content Area -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_bottom"
         android:layout_below="@+id/header"
-        android:layout_margin="5dp">
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Question Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Question Number Chip -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_question_chip"
+                        android:paddingStart="10dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="4dp">
+
+                        <TextView
+                            android:id="@+id/tv_question_badge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="QUESTION 1 / 15"
+                            android:textColor="#1E40AF"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <!-- Question Text -->
+                    <TextView
+                        android:id="@+id/tvQuestion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:lineSpacingExtra="4dp"
+                        android:textColor="#0F172A"
+                        android:textSize="16sp" />
+
+                    <!-- Traffic Sign Image (if applicable) -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_image_wrapper"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="12dp"
+                        app:cardBackgroundColor="#F8FAFC"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="1dp">
+
+                        <ImageView
+                            android:id="@+id/ivImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="8dp"
+                            android:scaleType="fitCenter" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Options Section Header -->
+            <TextView
+                android:id="@+id/tv_options_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/task_roboto_bold"
+                android:text="Select one answer:"
+                android:textColor="#64748B"
+                android:textSize="12sp" />
+
+            <RadioGroup
+                android:id="@+id/rgChoice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- Option 1 -->
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_quiz_option"
+                    android:buttonTint="#1E40AF"
+                    android:clickable="true"
+                    android:elevation="1dp"
+                    android:focusable="true"
+                    android:fontFamily="@font/task_roboto_regular"
+                    android:lineSpacingExtra="2dp"
+                    android:minHeight="54dp"
+                    android:paddingStart="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="12dp"
+                    android:textColor="#334155"
+                    android:textSize="14sp" />
+
+                <!-- Option 2 -->
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_quiz_option"
+                    android:buttonTint="#1E40AF"
+                    android:clickable="true"
+                    android:elevation="1dp"
+                    android:focusable="true"
+                    android:fontFamily="@font/task_roboto_regular"
+                    android:lineSpacingExtra="2dp"
+                    android:minHeight="54dp"
+                    android:paddingStart="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="12dp"
+                    android:textColor="#334155"
+                    android:textSize="14sp" />
+
+                <!-- Option 3 -->
+                <RadioButton
+                    android:id="@+id/radioButton3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_quiz_option"
+                    android:buttonTint="#1E40AF"
+                    android:clickable="true"
+                    android:elevation="1dp"
+                    android:focusable="true"
+                    android:fontFamily="@font/task_roboto_regular"
+                    android:lineSpacingExtra="2dp"
+                    android:minHeight="54dp"
+                    android:paddingStart="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="12dp"
+                    android:textColor="#334155"
+                    android:textSize="14sp" />
+            </RadioGroup>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation & Score Bar -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="10dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-            <RelativeLayout
-                android:id="@+id/Rel"
-                android:layout_width="match_parent"
+            <!-- Score Badges (Wrong & Correct) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/rl_bottom"
-                android:layout_marginBottom="10dp">
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvQuestion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/task_robotoslab_regular"
-                    android:padding="8dp"
-                    android:text=""
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/ivImage"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_below="@+id/tvQuestion"
-                    android:layout_centerHorizontal="true"
-                    android:padding="10dp"
-                    app:srcCompat="@mipmap/ic_launcher" />
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/ivImage"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="5dp"
-                    app:contentPadding="10dp">
-
-                    <RadioGroup
-                        android:id="@+id/rgChoice"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_above="@+id/tvTimer"
-                        android:layout_below="@+id/ivImage">
-
-                        <RadioButton
-                            android:id="@+id/radioButton2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:buttonTint="@color/black"
-                            android:fontFamily="@font/task_robotoslab_regular"
-                            android:padding="5dp"
-                            android:text="RadioButton"
-                            android:textColor="#151515"
-                            android:textSize="18sp" />
-
-                        <RadioButton
-                            android:id="@+id/radioButton"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:buttonTint="@color/black"
-                            android:fontFamily="@font/task_robotoslab_regular"
-                            android:padding="5dp"
-                            android:text="RadioButton"
-                            android:textColor="#151515"
-                            android:textSize="18sp" />
-
-                        <RadioButton
-                            android:id="@+id/radioButton3"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:buttonTint="@color/black"
-                            android:fontFamily="@font/task_robotoslab_regular"
-                            android:padding="5dp"
-                            android:text="RadioButton"
-                            android:textColor="#151515"
-                            android:textSize="18sp" />
-                    </RadioGroup>
-                </androidx.cardview.widget.CardView>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_60sdp"
-                android:layout_alignParentBottom="true">
-
-                <RelativeLayout
-                    android:id="@+id/rl_anss"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true">
-
-                    <LinearLayout
-                        android:id="@+id/ll_red"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:background="@drawable/ic_round_btn_red"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="5dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_close"
-                            app:tint="@android:color/white" />
-
-                        <TextView
-                            android:id="@+id/tvNegative"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_margin="5dp"
-                            android:gravity="center"
-                            android:padding="5dp"
-                            android:text="0"
-                            android:textColor="@android:color/white"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_green"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_toRightOf="@+id/ll_red"
-                        android:background="@drawable/ic_round_btn_green"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="5dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_done"
-                            app:tint="@android:color/white" />
-
-                        <TextView
-                            android:id="@+id/tvPositive"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_margin="5dp"
-                            android:gravity="center"
-                            android:padding="5dp"
-                            android:text="0"
-                            android:textColor="@android:color/white"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <Button
-                    android:id="@+id/btnNext"
+                <!-- Red Negative Count -->
+                <LinearLayout
+                    android:id="@+id/ll_red"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/ic_round_button"
-                    android:fontFamily="@font/task_robotoslab_regular"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="આગળ"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
+                    android:layout_height="36dp"
+                    android:background="@drawable/ic_round_btn_red"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="12dp">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_close"
+                        app:tint="#DC2626" />
+
+                    <TextView
+                        android:id="@+id/tvNegative"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:text="0"
+                        android:textColor="#DC2626"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <!-- Green Positive Count -->
+                <LinearLayout
+                    android:id="@+id/ll_green"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/ic_round_btn_green"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="12dp">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_done"
+                        app:tint="#16A34A" />
+
+                    <TextView
+                        android:id="@+id/tvPositive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:text="0"
+                        android:textColor="#16A34A"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Next Button -->
+            <Button
+                android:id="@+id/btnNext"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_btn_next_quiz"
+                android:fontFamily="@font/task_roboto_bold"
+                android:minWidth="110dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="Next"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
         </RelativeLayout>
-    </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

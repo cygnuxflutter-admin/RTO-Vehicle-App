@@ -52,4 +52,39 @@
     <color name="gray_light_2">#ffdadada</color>
     <color name="transparent_background">#00000000</color>
     <color name="widget_separator">#fff3f3f5</color>
+
+    <!-- Modern Theme Palette -->
+    <color name="theme_primary">#1E40AF</color>
+    <color name="theme_primary_dark">#1E3A8A</color>
+    <color name="theme_primary_gradient_end">#3B82F6</color>
+    <color name="theme_bg">#F8FAFC</color>
+    <color name="theme_card_bg">#FFFFFF</color>
+    <color name="theme_card_stroke">#E2E8F0</color>
+    <color name="theme_text_primary">#0F172A</color>
+    <color name="theme_text_secondary">#64748B</color>
+    <color name="theme_text_muted">#94A3B8</color>
+    
+    <color name="theme_tint_blue">#EFF6FF</color>
+    <color name="theme_accent_blue">#2563EB</color>
+    <color name="theme_tint_emerald">#ECFDF5</color>
+    <color name="theme_accent_emerald">#059669</color>
+    <color name="theme_tint_violet">#F5F3FF</color>
+    <color name="theme_accent_violet">#7C3AED</color>
+    <color name="theme_tint_amber">#FFFBEB</color>
+    <color name="theme_accent_amber">#D97706</color>
+    <color name="theme_tint_indigo">#EEF2FF</color>
+    <color name="theme_accent_indigo">#4F46E5</color>
+    <color name="theme_tint_rose">#FFF1F2</color>
+    <color name="theme_accent_rose">#E11D48</color>
+    <color name="theme_tint_sky">#F0F9FF</color>
+    <color name="theme_accent_sky">#0284C7</color>
+    <color name="theme_tint_teal">#F0FDFA</color>
+    <color name="theme_accent_teal">#0D9488</color>
+    
+    <color name="theme_search_bg">#FFFFFF</color>
+    <color name="theme_search_border">#CBD5E1</color>
+    <color name="theme_badge_prep">#E0E7FF</color>
+    <color name="theme_badge_prep_text">#3730A3</color>
+    <color name="theme_badge_exam">#FFE4E6</color>
+    <color name="theme_badge_exam_text">#9F1239</color>
 </resources>

@@ -35,7 +35,7 @@ public class Task_QueConstructor {
     }
 
     public void setQuestion(String str) {
-        this.question = str;
+        this.question = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(str);
     }
 
     public String getAnswer() {
@@ -43,7 +43,7 @@ public class Task_QueConstructor {
     }
 
     public void setAnswer(String str) {
-        this.answer = str;
+        this.answer = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(str);
     }
 
     public String getOption1() {
@@ -51,7 +51,7 @@ public class Task_QueConstructor {
     }
 
     public void setOption1(String str) {
-        this.option1 = str;
+        this.option1 = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(str);
     }
 
     public String getOption2() {
@@ -59,7 +59,7 @@ public class Task_QueConstructor {
     }
 
     public void setOption2(String str) {
-        this.option2 = str;
+        this.option2 = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(str);
     }
 
     public String getOption3() {
@@ -67,7 +67,7 @@ public class Task_QueConstructor {
     }
 
     public void setOption3(String str) {
-        this.option3 = str;
+        this.option3 = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(str);
     }
 
     public String getOption4() {
@@ -75,22 +75,22 @@ public class Task_QueConstructor {
     }
 
     public void setOption4(String str) {
-        this.option4 = str;
+        this.option4 = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(str);
     }
 
     public Task_QueConstructor(int i, String question, String answer, String option1, String option2, String option3, String str6) {
         this.id = i;
-        this.question = question;
-        this.answer = answer;
-        this.option1 = option1;
-        this.option2 = option2;
-        this.option3 = option3;
+        this.question = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(question);
+        this.answer = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(answer);
+        this.option1 = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(option1);
+        this.option2 = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(option2);
+        this.option3 = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(option3);
         this.option4 = str6;
         this.photo = str6;
     }
 
     public Task_QueConstructor(String question, String answer) {
-        this.question = question;
-        this.answer = answer;
+        this.question = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(question);
+        this.answer = com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler.fixMojibake(answer);
     }
 }

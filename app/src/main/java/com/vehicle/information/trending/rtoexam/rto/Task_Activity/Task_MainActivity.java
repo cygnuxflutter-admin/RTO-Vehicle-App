@@ -8,215 +8,160 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.vehicle.information.trending.rtoexam.rto.R;
-
-import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_LoadAds;
-import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
-import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_NativeAdUtil;
 import com.vehicle.information.trending.rtoexam.rto.MyApplication;
+import com.vehicle.information.trending.rtoexam.rto.R;
+import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_LoadAds;
+import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_NativeAdUtil;
+import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
 
 public class Task_MainActivity extends AppCompatActivity {
-    private static final String TAG = "123";
+    private static final String TAG = "Task_MainActivity";
 
-    ImageView iv_celebrity_info;
-    ImageView iv_owner_details;
-    ImageView iv_rc_details;
-    ImageView iv_rto_exam;
-    ImageView iv_rto_exam_preparation;
-    ImageView iv_rto_office;
-    ImageView iv_rto_symbols;
-    ImageView iv_rules_rto;
     private Task_PreferenceClass taskPreferenceClass;
-/*    private NativeAd mobNativeView;
-
-    private void NativeBinding(NativeAd nativeAd, NativeAdView adView) {
-        MediaView mediaView = adView.findViewById(R.id.ad_media);
-        adView.setMediaView(mediaView);
-        adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
-        adView.setBodyView(adView.findViewById(R.id.ad_body));
-        adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
-        adView.setIconView(adView.findViewById(R.id.ad_app_icon));
-        ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
-        if (nativeAd.getBody() == null) {
-            adView.getBodyView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getBodyView().setVisibility(View.VISIBLE);
-            ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
-        }
-        if (nativeAd.getCallToAction() == null) {
-            adView.getCallToActionView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getCallToActionView().setVisibility(View.VISIBLE);
-            ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
-        }
-        if (nativeAd.getIcon() == null) {
-            adView.getIconView().setVisibility(View.GONE);
-        } else {
-            ((ImageView) adView.getIconView()).setImageDrawable(
-                    nativeAd.getIcon().getDrawable());
-            adView.getIconView().setVisibility(View.VISIBLE);
-        }
-        adView.setNativeAd(nativeAd);
-    }
-
-    public void NativeShow(final FrameLayout frameLayout) {
-        AdLoader.Builder builder = new AdLoader.Builder(getApplication(), getString(R.string.AdMob_Native));
-
-        builder.forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
-            @Override
-            public void onNativeAdLoaded(NativeAd nativeAd) {
-
-                boolean isDestroyed = false;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    isDestroyed = isDestroyed();
-                }
-                if (isDestroyed || isFinishing() || isChangingConfigurations()) {
-                    nativeAd.destroy();
-                    return;
-                }
-                if (Task_MainActivity.this.mobNativeView != null) {
-                    Task_MainActivity.this.mobNativeView.destroy();
-                }
-                Task_MainActivity.this.mobNativeView = nativeAd;
-                NativeAdView adView = (NativeAdView) getLayoutInflater().inflate(R.layout.mobnative, null);
-                NativeBinding(nativeAd, adView);
-                frameLayout.removeAllViews();
-                frameLayout.addView(adView);
-            }
-        });
-        VideoOptions videoOptions = new VideoOptions.Builder().build();
-        com.google.android.gms.ads.nativead.NativeAdOptions adOptions = new com.google.android.gms.ads.nativead.NativeAdOptions.Builder().setVideoOptions(videoOptions).build();
-        builder.withNativeAdOptions(adOptions);
-        AdLoader adLoader = builder.withAdListener(new AdListener() {
-            @Override
-            public void onAdFailedToLoad(LoadAdError loadAdError) {
-
-
-            }
-        }).build();
-        adLoader.loadAd(new AdRequest.Builder().build());
-
-
-    }
-
-    public void NativeLoad() {
-        NativeShow((FrameLayout) findViewById(R.id.mobadslayout));
-    }*/
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.task_activity_main);
-//        NativeLoad();
 
-        taskPreferenceClass = new Task_PreferenceClass(this);
+                taskPreferenceClass = new Task_PreferenceClass(this);
 
         RelativeLayout native_banner_ad_container = findViewById(R.id.native_banner_ad_container);
-        RelativeLayout rl_ad = this.findViewById(R.id.rl_ad);
-        RelativeLayout rl_collapsible = this.findViewById(R.id.rl_collapsible);
+        RelativeLayout rl_ad = findViewById(R.id.rl_ad);
+        RelativeLayout rl_collapsible = findViewById(R.id.rl_collapsible);
+        View adsView = findViewById(R.id.ads);
+        View rlBanner = findViewById(R.id.rlBanner);
 
-        if (taskPreferenceClass.getInt("MainScreenAd") == 1){
-            rl_collapsible.setVisibility(View.VISIBLE);
-            findViewById(R.id.ads).setVisibility(View.GONE);
-            findViewById(R.id.rlBanner).setVisibility(View.GONE);
-            Task_LoadAds.loadCollapsibleBanner(this,"bottom", findViewById(R.id.CollapsibleContainer), rl_collapsible,findViewById(R.id.shimmer_view_CollapsibleContainer));
-        } else if (taskPreferenceClass.getInt("MainScreenAd") == 2){
-            Task_LoadAds.loadAdmobBannerAd(this, rl_ad);
-            native_banner_ad_container.setVisibility(View.GONE);
-            findViewById(R.id.ads).setVisibility(View.GONE);
-            rl_collapsible.setVisibility(View.GONE);
-        }else if (taskPreferenceClass.getInt("MainScreenAd") == 3){
-            Task_NativeAdUtil.loadNativeAd(native_banner_ad_container, this);
-            rl_ad.setVisibility(View.GONE);
-            findViewById(R.id.rlBanner).setVisibility(View.GONE);
-            rl_collapsible.setVisibility(View.GONE);
+        int mainAdPref = taskPreferenceClass.getInt("MainScreenAd");
+        if (mainAdPref == 1) {
+            if (rl_collapsible != null) rl_collapsible.setVisibility(View.VISIBLE);
+            if (adsView != null) adsView.setVisibility(View.GONE);
+            if (rlBanner != null) rlBanner.setVisibility(View.GONE);
+            Task_LoadAds.loadCollapsibleBanner(this, "bottom", findViewById(R.id.CollapsibleContainer), rl_collapsible, findViewById(R.id.shimmer_view_CollapsibleContainer));
+        } else if (mainAdPref == 2) {
+            if (rl_ad != null) Task_LoadAds.loadAdmobBannerAd(this, rl_ad);
+            if (native_banner_ad_container != null) native_banner_ad_container.setVisibility(View.GONE);
+            if (adsView != null) adsView.setVisibility(View.GONE);
+            if (rl_collapsible != null) rl_collapsible.setVisibility(View.GONE);
+        } else if (mainAdPref == 3) {
+            if (native_banner_ad_container != null) Task_NativeAdUtil.loadNativeAd(native_banner_ad_container, this);
+            if (rl_ad != null) rl_ad.setVisibility(View.GONE);
+            if (rlBanner != null) rlBanner.setVisibility(View.GONE);
+            if (rl_collapsible != null) rl_collapsible.setVisibility(View.GONE);
         } else {
-            native_banner_ad_container.setVisibility(View.GONE);
-            findViewById(R.id.ads).setVisibility(View.GONE);
-            findViewById(R.id.rlBanner).setVisibility(View.GONE);
-            rl_ad.setVisibility(View.GONE);
-            rl_collapsible.setVisibility(View.GONE);
+            if (native_banner_ad_container != null) native_banner_ad_container.setVisibility(View.GONE);
+            if (adsView != null) adsView.setVisibility(View.GONE);
+            if (rl_collapsible != null) rl_collapsible.setVisibility(View.GONE);
+            if (rl_ad != null) {
+                Task_LoadAds.loadAdmobBannerAd(this, rl_ad);
+            }
         }
 
-        ((ImageView) findViewById(R.id.iv_back)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Task_MainActivity.this.onBackPressed();
-            }
-        });
-        this.iv_owner_details = (ImageView) findViewById(R.id.iv_owner_details);
-        this.iv_rc_details = (ImageView) findViewById(R.id.iv_rc_details);
-        this.iv_rto_office = (ImageView) findViewById(R.id.iv_rto_office);
-        this.iv_celebrity_info = (ImageView) findViewById(R.id.iv_celebrity_info);
-        this.iv_rto_symbols = (ImageView) findViewById(R.id.iv_rto_symbols);
-        this.iv_rto_exam_preparation = (ImageView) findViewById(R.id.iv_rto_exam_preparation);
-        this.iv_rto_exam = (ImageView) findViewById(R.id.iv_rto_exam);
-        this.iv_rules_rto = (ImageView) findViewById(R.id.iv_rules_rto);
-        this.iv_owner_details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyApplication.showInterstitialAd(Task_MainActivity.this, () -> Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, SearchVehicleActivity.class).putExtra("TYPE", "RC")));
+        findViewById(R.id.iv_back).setOnClickListener(v -> onBackPressed());
 
-//                MyApplication.showInterstitialAd(Task_MainActivity.this, () -> Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_EnterInformationActivity.class)));
-        /*        AdsManager.getInstance().showInterstitialAd(Task_MainActivity.this, new AdsManager.AdCloseListener() {
-                    @Override
-                    public void onAdClosed() {
-                        Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_EnterInformationActivity.class));
-                   }
-               });*/
+        // 1. RTO Office
+        View cardOffice = findViewById(R.id.card_rto_office);
+        if (cardOffice != null) {
+            cardOffice.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, () ->
+                            Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_OficeActivity.class))
+                    )
+            );
+        }
 
-            }
-        });
-        this.iv_rc_details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyApplication.showInterstitialAd(Task_MainActivity.this, () -> Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, DLActivity.class)));
+        // 2. Symbols / Traffic Signs
+        View cardSymbols = findViewById(R.id.card_rto_symbols);
+        if (cardSymbols != null) {
+            cardSymbols.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, () ->
+                            Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_SymbolActivity.class))
+                    )
+            );
+        }
 
-            }
-        });
-        this.iv_rto_office.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyApplication.showInterstitialAd(Task_MainActivity.this, () -> Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_OficeActivity.class)));
+        // 3. Exam Preparation Bank
+        View cardExamPrep = findViewById(R.id.card_rto_exam_prep);
+        if (cardExamPrep != null) {
+            cardExamPrep.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, this::Next_LanguageSelectActivity1)
+            );
+        }
 
-            }
-        });
-        this.iv_rto_symbols.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyApplication.showInterstitialAd(Task_MainActivity.this, () -> Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_SymbolActivity.class)));
+        // 4. RTO Mock Exam
+        View cardExam = findViewById(R.id.card_rto_exam);
+        if (cardExam != null) {
+            cardExam.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, this::Next_LanguageSelectActivity2)
+            );
+        }
 
-            }
-        });
-        this.iv_rto_exam_preparation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyApplication.showInterstitialAd(Task_MainActivity.this, () -> Next_LanguageSelectActivity1());
-            }
-        });
+        // 5. RTO Rules & Forms
+        View cardRules = findViewById(R.id.card_rules_rto);
+        if (cardRules != null) {
+            cardRules.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, this::Next_RulesActivity)
+            );
+        }
 
-        this.iv_rto_exam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyApplication.showInterstitialAd(Task_MainActivity.this, () -> Next_LanguageSelectActivity2());
-            }
-        });
+        // 6. e-Challan Official Status
+        View cardChallan = findViewById(R.id.card_challan_status);
+        if (cardChallan != null) {
+            cardChallan.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, () ->
+                            Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_ChallanSearchActivity.class))
+                    )
+            );
+        }
 
-        this.iv_celebrity_info.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        // 7. Vehicle Loan & EMI Calculator
+        View cardLoanEmi = findViewById(R.id.card_loan_emi);
+        if (cardLoanEmi != null) {
+            cardLoanEmi.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, () ->
+                            Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_LoanEmiActivity.class))
+                    )
+            );
+        }
 
-                MyApplication.showInterstitialAd(Task_MainActivity.this, () -> Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_CelebrityListActivity.class))
-                );
-            }
-        });
-        this.iv_rules_rto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyApplication.showInterstitialAd(Task_MainActivity.this, () -> Next_RulesActivity()
-                );
-            }
-        });
+        // 8. Mileage & Trip Cost Calculator
+        View cardMileage = findViewById(R.id.card_mileage_calc);
+        if (cardMileage != null) {
+            cardMileage.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, () ->
+                            Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_MileageCalculatorActivity.class))
+                    )
+            );
+        }
+
+        // 9. Resale Value Estimator
+        View cardResale = findViewById(R.id.card_resale_calc);
+        if (cardResale != null) {
+            cardResale.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, () ->
+                            Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_ResaleEstimatorActivity.class))
+                    )
+            );
+        }
+
+        // 10. RTO Forms Hub
+        View cardFormsHub = findViewById(R.id.card_forms_hub);
+        if (cardFormsHub != null) {
+            cardFormsHub.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, () ->
+                            Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_FormsHubActivity.class))
+                    )
+            );
+        }
+
+        // 11. PUC & Insurance Expiry Reminder (Document Vault)
+        View cardExpiry = findViewById(R.id.card_expiry_reminder);
+        if (cardExpiry != null) {
+            cardExpiry.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, () ->
+                            Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_ExpiryReminderActivity.class))
+                    )
+            );
+        }
     }
 
     @Override
@@ -241,12 +186,4 @@ public class Task_MainActivity extends AppCompatActivity {
         intent.putExtra("from", "from_exam");
         Task_MainActivity.this.startActivity(intent);
     }
-
-    @Override
-    public void onDestroy() {
-
-        super.onDestroy();
-    }
-
-
 }

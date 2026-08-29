@@ -1,54 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/_5sdp"
-    android:orientation="vertical">
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="false">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/tvQuestion2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5sdp"
-            android:fontFamily="@font/task_robotoslab_medium"
-            android:padding="6dp"
+            android:fontFamily="@font/task_roboto_bold"
+            android:lineSpacingExtra="2dp"
             android:text="Question"
-            android:textColor="#151515"
-            android:textSize="20sp" />
+            android:textColor="#0F172A"
+            android:textSize="15sp" />
 
         <ImageView
             android:id="@+id/ivImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/_5sdp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_marginTop="12dp"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="#F1F5F9" />
 
         <TextView
             android:id="@+id/yourAnswer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5sdp"
-            android:fontFamily="@font/task_robotoslab_regular"
-            android:padding="@dimen/_5sdp"
-            android:text="My answer"
-            android:textColor="#545454"
-            android:textSize="18sp" />
+            android:fontFamily="@font/task_roboto_regular"
+            android:text="તમારો જવાબ:"
+            android:textColor="#DC2626"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/RightAnwer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5sdp"
-            android:fontFamily="@font/task_robotoslab_regular"
-            android:padding="@dimen/_5sdp"
-            android:text="Correct Ans"
-            android:textColor="#545454"
-            android:textSize="18sp" />
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/task_roboto_bold"
+            android:text="સાચો જવાબ:"
+            android:textColor="#16A34A"
+            android:textSize="14sp" />
+
     </LinearLayout>
-</LinearLayout>
+</androidx.cardview.widget.CardView>

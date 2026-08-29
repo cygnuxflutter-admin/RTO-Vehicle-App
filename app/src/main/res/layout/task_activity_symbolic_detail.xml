@@ -1,76 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white">
+    android:background="#F8FAFC"
+    android:orientation="vertical">
 
-
-
-    <RelativeLayout
+    <!-- Top Action Bar -->
+    <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:background="@color/purple_700"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="60dp"
+        android:background="#1E40AF"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="10dp"
-            android:onClick="onClick"
-            android:padding="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:padding="8dp"
             android:src="@drawable/ic_back"
-            android:tint="@color/white"/>
+            app:tint="@color/white" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_header_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/task_robotoslab_regular"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/task_roboto_bold"
             android:text="RTO Symbols"
             android:textColor="@color/white"
-            android:textSize="20dp" />
-    </RelativeLayout>
+            android:textSize="19sp" />
+    </LinearLayout>
 
-
+    <!-- Symbol List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rto_list_recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/rlBanner"
-        android:layout_below="@+id/header"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:scrollbarSize="5dp"
-        tools:itemCount="8"
-        tools:listitem="@layout/task_item_symbolic_detail"
-        android:scrollbarThumbVertical="@color/teal_200"
-        android:scrollbars="vertical" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        android:scrollbars="none"
+        tools:listitem="@layout/task_item_symbolic_detail" />
 
-   <!-- <LinearLayout
-        android:id="@+id/rlBanner"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_60sdp"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/banner_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>-->
+    <!-- Optional Banner Ad Container -->
     <RelativeLayout
         android:id="@+id/rlBanner"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/black">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rl_ad"
@@ -79,6 +70,5 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:visibility="visible" />
-
     </RelativeLayout>
-</RelativeLayout>
+</LinearLayout>

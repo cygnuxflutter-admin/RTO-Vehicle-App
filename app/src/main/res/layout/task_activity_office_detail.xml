@@ -1,288 +1,474 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/graybluemediam_light_bg">
+    android:background="#F8FAFC">
 
-
-    <RelativeLayout
+    <!-- Action Bar Header -->
+    <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:background="@color/purple_700"
-        android:layout_height="?attr/actionBarSize">
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="10dp"
-            android:onClick="onClick"
-            android:padding="5dp"
-            android:src="@drawable/ic_back"
-            android:tint="@color/white"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/task_robotoslab_regular"
-            android:text="RTO Office"
-            android:textColor="@color/white"
-            android:textSize="20dp" />
-    </RelativeLayout>
-
-
-
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#1E40AF"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingHorizontal="16dp">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:padding="8dp"
+                android:src="@drawable/ic_back"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@+id/iv_back"
+                android:fontFamily="@font/task_roboto_bold"
+                android:text="RTO Office Details"
+                android:textColor="@color/white"
+                android:textSize="19sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@+id/rlBanner"
         android:layout_below="@+id/header"
-        android:layout_margin="5dp">
+        android:clipToPadding="false"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="24dp"
+        android:scrollbars="none">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <!-- Hero Summary Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="false">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_clean_card_item"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_rto_badge"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:id="@+id/code_hero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="GJ01"
+                            android:textColor="#1E40AF"
+                            android:textSize="20sp" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/distinct_hero"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:gravity="center"
+                        android:text="Ahmedabad"
+                        android:textColor="#0F172A"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_location_pin_modern"
+                            app:tint="#64748B" />
+
+                        <TextView
+                            android:id="@+id/state_hero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:fontFamily="@font/task_roboto_regular"
+                            android:text="Gujarat"
+                            android:textColor="#64748B"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Quick Action Buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cv_find_near"
+                <!-- Call Button -->
+                <LinearLayout
+                    android:id="@+id/btn_action_call"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_clean_card_item"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="12dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_phone_call"
+                        app:tint="#1E40AF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:text="Call"
+                        android:textColor="#1E40AF"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <!-- Directions Button -->
+                <LinearLayout
+                    android:id="@+id/btn_action_map"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_clean_card_item"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="12dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_map_directions"
+                        app:tint="#1E40AF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:text="Directions"
+                        android:textColor="#1E40AF"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <!-- Copy / Share Button -->
+                <LinearLayout
+                    android:id="@+id/btn_action_copy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_clean_card_item"
+                    android:clickable="true"
+                    android:elevation="2dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="12dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_copy_content"
+                        app:tint="#1E40AF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/task_roboto_bold"
+                        android:text="Copy Info"
+                        android:textColor="#1E40AF"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Details Card Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="false">
+
+                <LinearLayout
+                    android:id="@+id/share_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    card_view:cardBackgroundColor="@color/white"
-                    card_view:cardCornerRadius="10dp"
-                    card_view:cardElevation="4dp"
-                    card_view:contentPadding="10dp">
+                    android:background="@drawable/bg_clean_card_item"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
+                    <!-- Code Row -->
                     <LinearLayout
-                        android:id="@+id/share_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="RTO CODE"
+                            android:textColor="#64748B"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/code_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="GJ01"
+                            android:textColor="#0F172A"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="12dp"
+                        android:background="#F1F5F9" />
+
+                    <!-- District Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="DISTRICT / CITY"
+                            android:textColor="#64748B"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/distinct_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="Ahmedabad"
+                            android:textColor="#0F172A"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="12dp"
+                        android:background="#F1F5F9" />
+
+                    <!-- State Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="STATE / UT"
+                            android:textColor="#64748B"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/state_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/task_roboto_bold"
+                            android:text="Gujarat"
+                            android:textColor="#0F172A"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="12dp"
+                        android:background="#F1F5F9" />
+
+                    <!-- Address Row -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
+                            android:layout_toStartOf="@+id/map_img"
+                            android:layout_marginEnd="8dp"
                             android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/task_robotoslab_medium"
-                                android:text="Code :"
-                                android:textColor="#151515"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/code_txt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:fontFamily="@font/task_robotoslab_regular"
-                                android:text="Code"
-                                android:textColor="#545454"
-                                android:textSize="18sp" />
-                        </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:background="#545454" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/task_robotoslab_medium"
-                                android:text="Distinct :"
-                                android:textColor="#151515"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/distinct_txt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:fontFamily="@font/task_robotoslab_regular"
-                                android:text="Distinct"
-                                android:textColor="#545454"
-                                android:textSize="18sp" />
-                        </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:background="#545454" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/task_robotoslab_medium"
-                                android:text="State :"
-                                android:textColor="#151515"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/state_txt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:fontFamily="@font/task_robotoslab_regular"
-                                android:text="State"
-                                android:textColor="#545454"
-                                android:textSize="18sp" />
-                        </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:background="#545454" />
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/address"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/task_robotoslab_medium"
-                                android:text="Address : "
-                                android:textColor="#151515"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                android:fontFamily="@font/task_roboto_bold"
+                                android:text="OFFICE ADDRESS"
+                                android:textColor="#64748B"
+                                android:textSize="12sp" />
 
                             <TextView
                                 android:id="@+id/address_txt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@+id/address"
-                                android:layout_marginTop="5dp"
-                                android:fontFamily="@font/task_robotoslab_regular"
-                                android:text="Address"
-                                android:textColor="#545454"
-                                android:textSize="18sp" />
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/task_roboto_regular"
+                                android:lineSpacingExtra="3dp"
+                                android:text="Regional Transport Office, Subhash Bridge, Ahmedabad, Gujarat"
+                                android:textColor="#0F172A"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:id="@+id/map_img"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/bg_arrow_chip">
 
                             <ImageView
-                                android:id="@+id/map_img"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerInParent="true"
-                                android:padding="5dp"
-                                android:src="@drawable/ic_locator" />
-                        </RelativeLayout>
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_map_directions"
+                                app:tint="#1E40AF" />
+                        </FrameLayout>
+                    </RelativeLayout>
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:background="#545454" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="12dp"
+                        android:background="#F1F5F9" />
 
-                        <RelativeLayout
+                    <!-- Contact Number Row -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
+                            android:layout_toStartOf="@+id/contact_img"
+                            android:layout_marginEnd="8dp"
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/contact"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/task_robotoslab_medium"
-                                android:text="Contact No :"
-                                android:textColor="#151515"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                android:fontFamily="@font/task_roboto_bold"
+                                android:text="CONTACT NUMBER"
+                                android:textColor="#64748B"
+                                android:textSize="12sp" />
 
                             <TextView
                                 android:id="@+id/contact_txt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@+id/contact"
-                                android:layout_marginTop="5dp"
-                                android:fontFamily="@font/task_robotoslab_regular"
-                                android:text="123456789"
-                                android:textColor="#545454"
-                                android:textSize="18sp" />
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/task_roboto_bold"
+                                android:text="079-27559900"
+                                android:textColor="#0F172A"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:id="@+id/contact_img"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/bg_arrow_chip">
 
                             <ImageView
-                                android:id="@+id/contact_img"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerInParent="true"
-                                android:padding="5dp"
-                                android:src="@drawable/whats_app" />
-                        </RelativeLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-        </ScrollView>
-    </RelativeLayout>
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_phone_call"
+                                app:tint="#1E40AF" />
+                        </FrameLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 
-
-   <!-- <LinearLayout
-        android:id="@+id/rlBanner"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_60sdp"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/banner_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>-->
+    <!-- Banner Ad -->
     <RelativeLayout
         android:id="@+id/rlBanner"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/black">
+        android:background="@color/white">
 
         <RelativeLayout
             android:id="@+id/rl_ad"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:visibility="visible" />
-
     </RelativeLayout>
 </RelativeLayout>

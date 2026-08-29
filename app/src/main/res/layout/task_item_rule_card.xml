@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:cardMaxElevation="4dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="false"
+    app:rippleColor="#151E40AF"
+    app:strokeColor="#E2E8F0"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="12dp">
+
+        <!-- 3D Real Icon Container -->
+        <FrameLayout
+            android:id="@+id/fl_icon_container"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_marginEnd="14dp"
+            android:background="@drawable/bg_icon_3d_container"
+            android:padding="2dp">
+
+            <ImageView
+                android:id="@+id/iv_rule_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="3D Rule Icon"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icon_3d_temp_reg" />
+        </FrameLayout>
+
+        <!-- Clean Text Section -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Single Clean Form & Category Pill -->
+            <TextView
+                android:id="@+id/tv_form_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_form_pill"
+                android:fontFamily="@font/task_roboto_bold"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2.5dp"
+                android:text="FORM 20 • REGISTRATION"
+                android:textColor="#2563EB"
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
+
+            <TextView
+                android:id="@+id/tv_rule_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/task_roboto_bold"
+                android:text="Temporary Registration"
+                android:textColor="#0F172A"
+                android:textSize="15.5sp" />
+
+            <TextView
+                android:id="@+id/tv_rule_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/task_roboto_regular"
+                android:maxLines="1"
+                android:text="1 Month validity &amp; required documents"
+                android:textColor="#64748B"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Right Chevron Circle -->
+        <FrameLayout
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_3d_arrow_circle">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:contentDescription="Arrow"
+                android:src="@drawable/ic_chevron_right_modern"
+                app:tint="#64748B" />
+        </FrameLayout>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

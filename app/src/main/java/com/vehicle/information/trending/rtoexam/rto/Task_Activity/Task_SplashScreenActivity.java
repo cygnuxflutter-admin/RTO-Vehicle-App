@@ -15,6 +15,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.view.ViewGroup;
+import android.view.Window;
 
 import com.facebook.ads.Ad;
 import com.facebook.ads.InterstitialAdListener;
@@ -36,7 +40,11 @@ import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_AppOpenM
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_MaterialDialogUtils;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_NetworkUtils;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
-
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.os.Looper;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageView;
 import java.util.Objects;
 
 
@@ -48,36 +56,80 @@ public class Task_SplashScreenActivity extends AppCompatActivity {
     public com.facebook.ads.InterstitialAd interstitialFB;
 
 
+    private long startTime = 0;
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        startTime = System.currentTimeMillis();
         requestWindowFeature(1);
         getWindow().setFlags(1024, 1024);
         setContentView(R.layout.task_activity_splash_screen);
 
+        ImageView ivSplashLogo = findViewById(R.id.iv_splash_logo);
+        if (ivSplashLogo != null) {
+            ObjectAnimator floatAnim = ObjectAnimator.ofFloat(ivSplashLogo, "translationY", 0f, -10f, 0f);
+            floatAnim.setDuration(2200);
+            floatAnim.setRepeatCount(ValueAnimator.INFINITE);
+            floatAnim.setRepeatMode(ValueAnimator.RESTART);
+            floatAnim.setInterpolator(new AccelerateDecelerateInterpolator());
+            floatAnim.start();
+        }
 
-        taskPreferenceClass = new Task_PreferenceClass(this);
+        TextView tvStatus = findViewById(R.id.tv_splash_status);
+        String[] statusMessages = new String[]{"Loading RTO exam questions...", "Preparing traffic signs guide...", "Checking vehicle utilities...", "Welcome!"};
+        Handler statusHandler = new Handler(Looper.getMainLooper());
+        for (int i = 0; i < statusMessages.length; i++) {
+            final String msg = statusMessages[i];
+            statusHandler.postDelayed(() -> {
+                if (tvStatus != null && !isFinishing()) {
+                    tvStatus.setText(msg);
+                }
+            }, (long) i * 700);
+        }
+
+                taskPreferenceClass = new Task_PreferenceClass(this);
+        if (BuildConfig.DEBUG) {
+            taskPreferenceClass.setDataType("GoogleNativeAd", "ca-app-pub-3940256099942544/2247696110");
+            taskPreferenceClass.setDataType("GoogleAppopenAd", "ca-app-pub-3940256099942544/9257395921");
+            taskPreferenceClass.setDataType("GoogleBannerAd", "ca-app-pub-3940256099942544/6300978111");
+            taskPreferenceClass.setDataType("GoogleInterstitialAd", "ca-app-pub-3940256099942544/1033173712");
+            taskPreferenceClass.setDataType("GoogleRewardedAd", "ca-app-pub-3940256099942544/5224354917");
+            taskPreferenceClass.setDataType("GoogleInterstialRewardAd", "ca-app-pub-3940256099942544/5354046379");
+            taskPreferenceClass.setDataType("CollapsibleBannerID", "ca-app-pub-3940256099942544/9214589741");
+            taskPreferenceClass.setInt("NativeAdShow", 1);
+            taskPreferenceClass.setInt("BannerAdShow", 1);
+            taskPreferenceClass.setInt("MainScreenAd", 2);
+            taskPreferenceClass.setInt("StartScreen_AD", 2);
+            taskPreferenceClass.setInt("splashscreen", 1);
+            Task_AppOpenManager.AppOpenAdShow = 1;
+            taskPreferenceClass.setInt("InerstialClickCount", 1);
+        }
         MyApplication.isAdsSplash = true;
         if (Task_NetworkUtils.isNetworkAvailable(this)) {
             getData();
         } else {
-            Toast.makeText(this, "no internet", Toast.LENGTH_SHORT).show();
-            //Task_MaterialDialogUtils.getInstance().errorDialog(this, getResources().getString(R.string.internet_error));
+            next();
         }
     }
 
-    public void startToMainActivity() {
+    private boolean hasStarted = false;
+
+    public synchronized void startToMainActivity() {
+        if (hasStarted) return;
+        hasStarted = true;
         startIntent();
     }
 
     public void next() {
-        new Handler().postDelayed(new Runnable() {
-            @Override // java.lang.Runnable
-            public final void run() {
-
+        long elapsed = System.currentTimeMillis() - startTime;
+        long remaining = Math.max(600, 2800 - elapsed);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
                 startToMainActivity();
             }
-        }, 3000);
+        }, remaining);
     }
 
 
@@ -90,120 +142,77 @@ public class Task_SplashScreenActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Log.e("snapshot", "" + snapshot);
                     try {
-
                         taskPreferenceClass.setInt("splashscreen", Integer.parseInt(snapshot.child("SplashScreenAdsManage").getValue().toString()));
                         taskPreferenceClass.setInt("UpdateAvailable", Integer.parseInt(snapshot.child("UpdateAvailable").getValue().toString()));
                         taskPreferenceClass.setDataType("UpdateVersionName", Objects.requireNonNull(snapshot.child("UpdateVersionName").getValue()).toString());
-////                      ----------------------------------------------- Live ADS -----------------------------------------------
-                        taskPreferenceClass.setDataType("GoogleBannerAd", Objects.requireNonNull(snapshot.child("GoogleBannerAd").getValue()).toString());
-                        taskPreferenceClass.setDataType("GoogleAppopenAd", Objects.requireNonNull(snapshot.child("GoogleAppopenAd").getValue()).toString());
-                        taskPreferenceClass.setDataType("GoogleInterstitialAd", Objects.requireNonNull(snapshot.child("GoogleInterstitialAd").getValue()).toString());
-                        taskPreferenceClass.setDataType("GoogleInterstialRewardAd", Objects.requireNonNull(snapshot.child("GoogleInterstialRewardAd").getValue()).toString());
-                        taskPreferenceClass.setDataType("GoogleRewardedAd", Objects.requireNonNull(snapshot.child("GoogleRewardedAd").getValue()).toString());
-                        taskPreferenceClass.setDataType("GoogleNativeAd", Objects.requireNonNull(snapshot.child("GoogleNativeAd").getValue()).toString());
-//
-                        taskPreferenceClass.setDataType("FbNativeAd", Objects.requireNonNull(snapshot.child("FbNativeAd").getValue()).toString());
-                        taskPreferenceClass.setDataType("FbInterstitialAd", Objects.requireNonNull(snapshot.child("FbInterstitialAd").getValue()).toString());
-                        taskPreferenceClass.setDataType("FbBannerAd", Objects.requireNonNull(snapshot.child("FbBannerAd").getValue()).toString());
-//
-//
-                        taskPreferenceClass.setDataType("AdxBannerAdunitID", Objects.requireNonNull(snapshot.child("AdxBannerAdunitID").getValue()).toString());
-                        taskPreferenceClass.setDataType("AdxInterstitalAdunitID", Objects.requireNonNull(snapshot.child("AdxInterstitalAdunitID").getValue()).toString());
-                        taskPreferenceClass.setDataType("AdxRewardVideoUnitID", Objects.requireNonNull(snapshot.child("AdxRewardVideoUnitID").getValue()).toString());
-                        taskPreferenceClass.setDataType("AdxNativeUnitID", Objects.requireNonNull(snapshot.child("AdxNativeUnitID").getValue()).toString());
-                        taskPreferenceClass.setDataType("AdxAppOpenID", Objects.requireNonNull(snapshot.child("AdxAppOpenID").getValue()).toString());
-                        taskPreferenceClass.setDataType("CollapsibleBannerID", Objects.requireNonNull(snapshot.child("CollapsibleBannerID").getValue()).toString());
 
-                        //                   ----------------------------------------------- Test ADS -----------------------------------------------
+                        if (BuildConfig.DEBUG) {
+                            // ----------------------------------------------- Test ADS (Debug Mode) -----------------------------------------------
+                            taskPreferenceClass.setDataType("GoogleNativeAd", "ca-app-pub-3940256099942544/2247696110");
+                            taskPreferenceClass.setDataType("GoogleAppopenAd", "ca-app-pub-3940256099942544/9257395921");
+                            taskPreferenceClass.setDataType("GoogleBannerAd", "ca-app-pub-3940256099942544/6300978111");
+                            taskPreferenceClass.setDataType("GoogleInterstitialAd", "ca-app-pub-3940256099942544/1033173712");
+                            taskPreferenceClass.setDataType("GoogleRewardedAd", "ca-app-pub-3940256099942544/5224354917");
+                            taskPreferenceClass.setDataType("GoogleInterstialRewardAd", "ca-app-pub-3940256099942544/5354046379");
+                            taskPreferenceClass.setDataType("CollapsibleBannerID", "ca-app-pub-3940256099942544/9214589741");
 
-//                        taskPreferenceClass.setDataType("GoogleNativeAd", "ca-app-pub-3940256099942544/2247696110");
-//                        taskPreferenceClass.setDataType("GoogleAppopenAd", "ca-app-pub-3940256099942544/9257395921");
-//                        taskPreferenceClass.setDataType("GoogleBannerAd", "ca-app-pub-3940256099942544/6300978111");
-//                        taskPreferenceClass.setDataType("GoogleInterstitialAd", "ca-app-pub-3940256099942544/1033173712");
-//                        taskPreferenceClass.setDataType("GoogleRewardedAd", "ca-app-pub-3940256099942544/5224354917");
-//                        taskPreferenceClass.setDataType("GoogleInterstialRewardAd", "ca-app-pub-3940256099942544/5354046379");
-//                        taskPreferenceClass.setDataType("CollapsibleBannerID","ca-app-pub-3940256099942544/9214589741");
-//
-//                        taskPreferenceClass.setDataType("FbNativeAd", "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID");
-//                        taskPreferenceClass.setDataType("FbInterstitialAd", "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID");
-//                        taskPreferenceClass.setDataType("FbBannerAd", "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID");
-//
-//                        taskPreferenceClass.setDataType("AdxBannerAdunitID", "ca-app-pub-3940256099942544/6300978111");
-//                        taskPreferenceClass.setDataType("AdxInterstitalAdunitID", "ca-app-pub-3940256099942544/1033173712");
-//                        taskPreferenceClass.setDataType("AdxRewardVideoUnitID", "ca-app-pub-3940256099942544/5224354917");
-//                        taskPreferenceClass.setDataType("AdxNativeUnitID", "ca-app-pub-3940256099942544/2247696110");
-//                        taskPreferenceClass.setDataType("AdxAppOpenID", "ca-app-pub-3940256099942544/9257395921");
+                            taskPreferenceClass.setDataType("FbNativeAd", "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID");
+                            taskPreferenceClass.setDataType("FbInterstitialAd", "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID");
+                            taskPreferenceClass.setDataType("FbBannerAd", "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID");
 
-//                    --------------------------------------------------------------------------------------------------------
-                        taskPreferenceClass.setInt("NativeAdShow", Integer.parseInt(snapshot.child("NativeAdShow").getValue().toString()));
-                        taskPreferenceClass.setInt("BannerAdShow", Integer.parseInt(snapshot.child("BannerAdShow").getValue().toString()));
-                        taskPreferenceClass.setInt("MainScreenAd", Integer.parseInt(snapshot.child("MainScreenAd").getValue().toString()));
-                        taskPreferenceClass.setInt("StartScreen_AD", Integer.parseInt(snapshot.child("StartScreen_AD").getValue().toString()));
+                            taskPreferenceClass.setDataType("AdxBannerAdunitID", "ca-app-pub-3940256099942544/6300978111");
+                            taskPreferenceClass.setDataType("AdxInterstitalAdunitID", "ca-app-pub-3940256099942544/1033173712");
+                            taskPreferenceClass.setDataType("AdxRewardVideoUnitID", "ca-app-pub-3940256099942544/5224354917");
+                            taskPreferenceClass.setDataType("AdxNativeUnitID", "ca-app-pub-3940256099942544/2247696110");
+                            taskPreferenceClass.setDataType("AdxAppOpenID", "ca-app-pub-3940256099942544/9257395921");
 
-                        Task_AppOpenManager.AppOpenAdShow = Integer.parseInt(snapshot.child("AppOpenAdShow").getValue().toString());
+                            taskPreferenceClass.setInt("NativeAdShow", 1);
+                            taskPreferenceClass.setInt("BannerAdShow", 1);
+                            taskPreferenceClass.setInt("MainScreenAd", 2);
+                            taskPreferenceClass.setInt("StartScreen_AD", 2);
+                            taskPreferenceClass.setInt("splashscreen", 1);
+                            Task_AppOpenManager.AppOpenAdShow = 1;
+                            taskPreferenceClass.setInt("InerstialClickCount", 1);
+                        } else {
+                            // ----------------------------------------------- Live ADS (Release Mode) -----------------------------------------------
+                            taskPreferenceClass.setDataType("GoogleBannerAd", Objects.requireNonNull(snapshot.child("GoogleBannerAd").getValue()).toString());
+                            taskPreferenceClass.setDataType("GoogleAppopenAd", Objects.requireNonNull(snapshot.child("GoogleAppopenAd").getValue()).toString());
+                            taskPreferenceClass.setDataType("GoogleInterstitialAd", Objects.requireNonNull(snapshot.child("GoogleInterstitialAd").getValue()).toString());
+                            taskPreferenceClass.setDataType("GoogleInterstialRewardAd", Objects.requireNonNull(snapshot.child("GoogleInterstialRewardAd").getValue()).toString());
+                            taskPreferenceClass.setDataType("GoogleRewardedAd", Objects.requireNonNull(snapshot.child("GoogleRewardedAd").getValue()).toString());
+                            taskPreferenceClass.setDataType("GoogleNativeAd", Objects.requireNonNull(snapshot.child("GoogleNativeAd").getValue()).toString());
 
-                        taskPreferenceClass.setInt("InerstialClickCount", Integer.parseInt(Objects.requireNonNull(snapshot.child("InerstialClickCount").getValue().toString())));//Premium background Ads Type Reward / Full
-//                        taskPreferenceClass.setInt("GoogleAdsTime", Integer.parseInt(Objects.requireNonNull(snapshot.child("GoogleAdsTime").getValue().toString())));
+                            taskPreferenceClass.setDataType("FbNativeAd", Objects.requireNonNull(snapshot.child("FbNativeAd").getValue()).toString());
+                            taskPreferenceClass.setDataType("FbInterstitialAd", Objects.requireNonNull(snapshot.child("FbInterstitialAd").getValue()).toString());
+                            taskPreferenceClass.setDataType("FbBannerAd", Objects.requireNonNull(snapshot.child("FbBannerAd").getValue()).toString());
+
+                            taskPreferenceClass.setDataType("AdxBannerAdunitID", Objects.requireNonNull(snapshot.child("AdxBannerAdunitID").getValue()).toString());
+                            taskPreferenceClass.setDataType("AdxInterstitalAdunitID", Objects.requireNonNull(snapshot.child("AdxInterstitalAdunitID").getValue()).toString());
+                            taskPreferenceClass.setDataType("AdxRewardVideoUnitID", Objects.requireNonNull(snapshot.child("AdxRewardVideoUnitID").getValue()).toString());
+                            taskPreferenceClass.setDataType("AdxNativeUnitID", Objects.requireNonNull(snapshot.child("AdxNativeUnitID").getValue()).toString());
+                            taskPreferenceClass.setDataType("AdxAppOpenID", Objects.requireNonNull(snapshot.child("AdxAppOpenID").getValue()).toString());
+                            taskPreferenceClass.setDataType("CollapsibleBannerID", Objects.requireNonNull(snapshot.child("CollapsibleBannerID").getValue()).toString());
+
+                            taskPreferenceClass.setInt("NativeAdShow", Integer.parseInt(snapshot.child("NativeAdShow").getValue().toString()));
+                            taskPreferenceClass.setInt("BannerAdShow", Integer.parseInt(snapshot.child("BannerAdShow").getValue().toString()));
+                            taskPreferenceClass.setInt("MainScreenAd", Integer.parseInt(snapshot.child("MainScreenAd").getValue().toString()));
+                            taskPreferenceClass.setInt("StartScreen_AD", Integer.parseInt(snapshot.child("StartScreen_AD").getValue().toString()));
+                            Task_AppOpenManager.AppOpenAdShow = Integer.parseInt(snapshot.child("AppOpenAdShow").getValue().toString());
+                            taskPreferenceClass.setInt("InerstialClickCount", Integer.parseInt(Objects.requireNonNull(snapshot.child("InerstialClickCount").getValue().toString())));
+                        }
                     } catch (Exception e) {
-                        e.getMessage();
+                        Log.e("SPLASH_AD", "Error reading Firebase ads data: " + e.getMessage());
                     }
 
                     try {
-                        if (taskPreferenceClass.getInt("UpdateAvailable") == 1 && !taskPreferenceClass.getAdsId("UpdateVersionName").equals(BuildConfig.VERSION_NAME)) {
-
-                            @SuppressLint("ResourceType") Dialog materialDialog = new Dialog(Task_SplashScreenActivity.this, 16974126);
-                            materialDialog.requestWindowFeature(1);
-                            materialDialog.setContentView(R.layout.task_reward_dialog);
-                            materialDialog.setCancelable(false);
-
-                            if (!materialDialog.isShowing()) materialDialog.show();
-
-                            TextView tv_title = materialDialog.findViewById(R.id.title);
-                            TextView tv_description = materialDialog.findViewById(R.id.description);
-
-                            TextView button1 = materialDialog.findViewById(R.id.button1);
-                            TextView button2 = materialDialog.findViewById(R.id.button2);
-
-                            tv_title.setText("Update is Available");
-//                        tv_description.setText(message);
-                            button1.setText("Cancal");
-                            button2.setText("Update Now");
-                            button2.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    try {
-                                        startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id=" + getPackageName())));
-                                    } catch (ActivityNotFoundException unused) {
-                                        Toast.makeText(Task_SplashScreenActivity.this, " unable to find market app", Toast.LENGTH_LONG).show();
-                                    }
-
-                                    if (materialDialog != null && materialDialog.isShowing()) {
-                                        materialDialog.dismiss();
-                                        next();
-                                    }
-                                }
-                            });
-                            button1.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (materialDialog != null && materialDialog.isShowing()) {
-                                        materialDialog.dismiss();
-                                        next();
-                                    }
-                                }
-                            });
-
+                        if (!BuildConfig.DEBUG && taskPreferenceClass.getInt("UpdateAvailable") == 1 && !taskPreferenceClass.getAdsId("UpdateVersionName").equals(BuildConfig.VERSION_NAME)) {
+                            showUpdateDialog(taskPreferenceClass.getAdsId("UpdateVersionName"));
                         } else {
                             next();
                         }
                     } catch (Exception e) {
-                        e.getMessage();
+                        next();
                     }
-
-//
-//                    Intent intent = new Intent(getApplicationContext(), Task_MainActivity.class);
-//                    startActivity(intent);
-//                    finish();
                 }
 
                 @Override
@@ -215,8 +224,64 @@ public class Task_SplashScreenActivity extends AppCompatActivity {
             Task_MaterialDialogUtils.getInstance().errorDialog(this, getResources().getString(R.string.internet_error));
         }
     }
+    private Dialog materialDialog = null;
+
+    private void showUpdateDialog(String versionName) {
+        runOnUiThread(() -> {
+            if (isFinishing() || isDestroyed()) return;
+            if (materialDialog != null && materialDialog.isShowing()) return;
+
+            materialDialog = new Dialog(Task_SplashScreenActivity.this);
+            materialDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            materialDialog.setContentView(R.layout.task_reward_dialog);
+            materialDialog.setCancelable(false);
+            if (materialDialog.getWindow() != null) {
+                materialDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                materialDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            }
+
+            TextView tv_title = materialDialog.findViewById(R.id.title);
+            TextView tv_description = materialDialog.findViewById(R.id.description);
+            TextView button1 = materialDialog.findViewById(R.id.button1);
+            TextView button2 = materialDialog.findViewById(R.id.button2);
+
+            tv_title.setText("New Update Available");
+            if (versionName != null && !versionName.isEmpty()) {
+                tv_description.setText("A newer version (v" + versionName + ") of RTO Vehicle Guide is ready with updated 2026 questions, live fuel rates, and improvements.");
+            } else {
+                tv_description.setText("A newer version of RTO Vehicle Guide is ready with updated 2026 questions, live fuel rates, and improvements.");
+            }
+
+            button1.setText("Later");
+            button2.setText("Update Now");
+            button2.setOnClickListener(v -> {
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+                } catch (ActivityNotFoundException unused) {
+                    Toast.makeText(Task_SplashScreenActivity.this, "Unable to find Google Play Store", Toast.LENGTH_LONG).show();
+                }
+                if (materialDialog != null && materialDialog.isShowing()) {
+                    materialDialog.dismiss();
+                    next();
+                }
+            });
+
+            button1.setOnClickListener(v -> {
+                if (materialDialog != null && materialDialog.isShowing()) {
+                    materialDialog.dismiss();
+                    next();
+                }
+            });
+
+            materialDialog.show();
+        });
+    }
 
     private void startIntent() {
+        if (BuildConfig.DEBUG) {
+            callMainActivity();
+            return;
+        }
         if (taskPreferenceClass.getInt("splashscreen") == 1) {
             callStartActivity();
         } else if (taskPreferenceClass.getInt("splashscreen") == 0) {

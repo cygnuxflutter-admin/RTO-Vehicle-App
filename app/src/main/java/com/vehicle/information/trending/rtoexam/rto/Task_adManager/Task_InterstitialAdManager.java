@@ -33,13 +33,14 @@ public class Task_InterstitialAdManager {
     public Task_InterstitialAdManager(Context context) {
         this.context = context;
         taskPreferenceClass = new Task_PreferenceClass(this.context);
-        admobInterstitialAdId = taskPreferenceClass.getAdsId("GoogleInterstitialAd");
+        String rawAdmob = taskPreferenceClass.getAdsId("GoogleInterstitialAd"); if (rawAdmob == null || rawAdmob.isEmpty()) { rawAdmob = "ca-app-pub-3940256099942544/1033173712"; } admobInterstitialAdId = rawAdmob;
         adXInterstitialAdId = taskPreferenceClass.getAdsId("AdxInterstitalAdunitID");
         fbInterstitialAdId = taskPreferenceClass.getAdsId("FbInterstitialAd");
 
         Log.e("TAG%%", "admobInterstitialAdId: " + taskPreferenceClass.getAdsId("GoogleInterstitialAd"));
         Log.e("TAG%%", "adXInterstitialAdId: " + taskPreferenceClass.getAdsId("AdxInterstitalAdunitID"));
         Log.e("TAG%%", "fbInterstitialAdId: " + taskPreferenceClass.getAdsId("FbInterstitialAd"));
+        // Test ads allowed in DEBUG
         fetchAdMobAd();
 //        fetchFbAd();
     }
@@ -320,6 +321,10 @@ public class Task_InterstitialAdManager {
 
     public void showInterstitialAd(Activity activity, OnAdLoadInterface onAdLoadInterface) {
         this.onAdLoadInterface = onAdLoadInterface;
+        if (com.vehicle.information.trending.rtoexam.rto.BuildConfig.DEBUG) {
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+            return;
+        }
 
         if (isFailed) {
             isFailed = false;
@@ -393,6 +398,10 @@ public class Task_InterstitialAdManager {
 
     public void showFaceBookInterstitial(Activity activity, OnAdLoadInterface onAdLoadInterface) {
         this.onAdLoadInterface = onAdLoadInterface;
+        if (com.vehicle.information.trending.rtoexam.rto.BuildConfig.DEBUG) {
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+            return;
+        }
         if (isFbAdAvailable()) {
             fbInterstitialAd.show();
         } else {
@@ -406,6 +415,10 @@ public class Task_InterstitialAdManager {
 
     public void showEDitAdIfAvailable(Activity activity, OnAdLoadInterface onAdLoadInterface) {
         this.onAdLoadInterface = onAdLoadInterface;
+        if (com.vehicle.information.trending.rtoexam.rto.BuildConfig.DEBUG) {
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+            return;
+        }
 
         if (isFailed) {
             isFailed = false;
@@ -483,3 +496,4 @@ public class Task_InterstitialAdManager {
     }
 
 }
+

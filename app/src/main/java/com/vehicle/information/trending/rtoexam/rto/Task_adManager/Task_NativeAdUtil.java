@@ -53,10 +53,12 @@ public class Task_NativeAdUtil {
     }
 
     public static void loadNativeAd(RelativeLayout nativeAdContainer, Activity context) {
+        if (nativeAdContainer == null || context == null || context.isFinishing()) return;
 
-        nativeAdContainer.addView(getLoadingView(context));//ads loading View
-
+        nativeAdContainer.removeAllViews();
+        nativeAdContainer.addView(getLoadingView(context));
         nativeAdContainer.setVisibility(View.VISIBLE);
+
         Task_NativeAdUtil taskNativeAdUtil = new Task_NativeAdUtil(context);
         taskNativeAdUtil.fillAdmobNativeAd(nativeAdContainer);
     }
@@ -64,15 +66,19 @@ public class Task_NativeAdUtil {
     private static View getLoadingView(Activity context) {
         View adView = LayoutInflater.from(context).inflate(R.layout.task_native_ad_layout_loading, null);
         ShimmerFrameLayout shimmerLayout = adView.findViewById(R.id.shimmerLayout);
-
-        shimmerLayout.startShimmer(); // Start the shimmer effect
-        shimmerLayout.setVisibility(View.VISIBLE);
+        if (shimmerLayout != null) {
+            shimmerLayout.startShimmer();
+            shimmerLayout.setVisibility(View.VISIBLE);
+        }
         return adView;
     }
 
     public void fillAdmobNativeAd(final RelativeLayout nativeAdContainer) {
-        AdLoader.Builder builder = new AdLoader.Builder(context, taskPreferenceClass.getAdsId("GoogleNativeAd") /*"ca-app-pub-5706123402805812/8186296336"*/);
-        Log.e("TAG%%Native", "GoogleNativeAd: " + taskPreferenceClass.getAdsId("GoogleNativeAd"));
+        String nativeId = taskPreferenceClass.getAdsId("GoogleNativeAd");
+        if (nativeId == null || nativeId.isEmpty()) {
+            nativeId = "ca-app-pub-3940256099942544/2247696110";
+        }
+        AdLoader.Builder builder = new AdLoader.Builder(context, nativeId);
 
         builder.forNativeAd(nativeAd -> {
             if (this.nativeAd != null) {
@@ -83,7 +89,7 @@ public class Task_NativeAdUtil {
             populateUnifiedNativeAdView(nativeAd, adView);
             nativeAdContainer.removeAllViews();
             nativeAdContainer.addView(adView);
-            nativeAdContainer.setBackgroundColor(Color.parseColor("#151515"));
+            nativeAdContainer.setBackgroundColor(Color.TRANSPARENT);
         });
 
         VideoOptions videoOptions = new VideoOptions.Builder().setStartMuted(true).build();
@@ -98,13 +104,14 @@ public class Task_NativeAdUtil {
         }).build();
 
         adLoader.loadAd(new AdRequest.Builder().build());
-
     }
 
     public void fillAdXNativeAd(final RelativeLayout nativeAdContainer) {
-
-        AdLoader.Builder builder = new AdLoader.Builder(context, taskPreferenceClass.getAdsId("AdxNativeUnitID") /*"ca-app-pub-5706123402805812/8186296336"*/);
-        Log.e("TAG%%Native", "AdxNativeUnitID: " + taskPreferenceClass.getAdsId("AdxNativeUnitID"));
+        String adxId = taskPreferenceClass.getAdsId("AdxNativeUnitID");
+        if (adxId == null || adxId.isEmpty()) {
+            adxId = "ca-app-pub-3940256099942544/2247696110";
+        }
+        AdLoader.Builder builder = new AdLoader.Builder(context, adxId);
 
         builder.forNativeAd(nativeAd -> {
             if (this.nativeAd != null) {
@@ -115,17 +122,11 @@ public class Task_NativeAdUtil {
             populateUnifiedNativeAdView(nativeAd, adView);
             nativeAdContainer.removeAllViews();
             nativeAdContainer.addView(adView);
-            nativeAdContainer.setBackgroundColor(Color.parseColor("#151515"));
+            nativeAdContainer.setBackgroundColor(Color.TRANSPARENT);
         });
 
-        VideoOptions videoOptions = new VideoOptions.Builder()
-                .setStartMuted(true)
-                .build();
-
-        NativeAdOptions adOptions = new NativeAdOptions.Builder()
-                .setVideoOptions(videoOptions)
-                .build();
-
+        VideoOptions videoOptions = new VideoOptions.Builder().setStartMuted(true).build();
+        NativeAdOptions adOptions = new NativeAdOptions.Builder().setVideoOptions(videoOptions).build();
         builder.withNativeAdOptions(adOptions);
 
         AdLoader adLoader = builder.withAdListener(new AdListener() {
@@ -136,144 +137,74 @@ public class Task_NativeAdUtil {
         }).build();
 
         adLoader.loadAd(new AdRequest.Builder().build());
-
     }
 
     private void fbNativeAd(final RelativeLayout nativeAdContainer) {
-        com.facebook.ads.NativeAd nativeAd = new com.facebook.ads.NativeAd(context, taskPreferenceClass.getAdsId("FbNativeAd"));
-        Log.e("TAG%%Native", "FbNativeAd: " + taskPreferenceClass.getAdsId("FbNativeAd"));
-        Log.e("TAG", "fb fetch native ad");
+        com.facebook.ads.NativeAd fbNative = new com.facebook.ads.NativeAd(context, taskPreferenceClass.getAdsId("FbNativeAd"));
         NativeAdListener nativeAdListener = new NativeAdListener() {
             @Override
-            public void onMediaDownloaded(Ad ad) {
-                Log.e("TAG@$", "fb fetch native ad" + ad);
-            }
+            public void onMediaDownloaded(Ad ad) {}
 
             @Override
-            public void onError(Ad ad, AdError adError) {
-                Log.e("TAG@$", "onError" + adError.getErrorCode());
-                Log.e("TAG@$", "onError" + adError.getErrorMessage());
-            }
+            public void onError(Ad ad, AdError adError) {}
 
             @Override
             public void onAdLoaded(Ad ad) {
-                Log.e("TAG@$", "onAdLoaded" + ad);
-                if (nativeAd != ad) {
-                    return;
-                }
+                if (fbNative != ad) return;
                 nativeAdContainer.removeAllViews();
-                View adView = com.facebook.ads.NativeAdView.render(context, nativeAd);
+                View adView = com.facebook.ads.NativeAdView.render(context, fbNative);
                 nativeAdContainer.addView(adView);
-                nativeAdContainer.setBackgroundColor(Color.parseColor("#151515"));
-
-                // Native ad is loaded and ready to be displayed
+                nativeAdContainer.setBackgroundColor(Color.TRANSPARENT);
             }
 
             @Override
-            public void onAdClicked(Ad ad) {
-                // Native ad clicked
-            }
+            public void onAdClicked(Ad ad) {}
 
             @Override
-            public void onLoggingImpression(Ad ad) {
-                // Native ad impression
-            }
+            public void onLoggingImpression(Ad ad) {}
         };
 
-        nativeAd.loadAd(nativeAd.buildLoadAdConfig().withAdListener(nativeAdListener).build());
-
+        fbNative.loadAd(fbNative.buildLoadAdConfig().withAdListener(nativeAdListener).build());
     }
 
     public void populateUnifiedNativeAdView(NativeAd unifiedNativeAd, NativeAdView unifiedNativeAdView) {
-
-        RelativeLayout relativeLayout = unifiedNativeAdView.findViewById(R.id.parentLyt);
-
-        /*if (width != -1 && height != -1) {
-            relativeLayout.getLayoutParams().width = width;
-            relativeLayout.getLayoutParams().height = 300;
-            relativeLayout.invalidate();
-        }*/
-
-        MediaView mediaView = unifiedNativeAdView.findViewById(R.id.ad_media);
-        unifiedNativeAdView.setMediaView(mediaView);
-
-        unifiedNativeAdView.setHeadlineView(unifiedNativeAdView.findViewById(R.id.ad_headline));
-        unifiedNativeAdView.setBodyView(unifiedNativeAdView.findViewById(R.id.ad_body));
-        unifiedNativeAdView.setCallToActionView(unifiedNativeAdView.findViewById(R.id.ad_call_to_action));
-
-        ImageView imageView = unifiedNativeAdView.findViewById(R.id.unified_image_view);
-
-        populateNativeAdView(unifiedNativeAd, unifiedNativeAdView, mediaView, imageView);
-    }
-
-    private void populateNativeAdView(NativeAd unifiedNativeAd, NativeAdView unifiedNativeAdView, MediaView mediaView, ImageView imageView) {
-        int i = 0;
-       /* MediaContent mediaContent = unifiedNativeAd.getMediaContent();
-        if (mediaContent != null) {
-            boolean hasVideo = mediaContent.getVideoController().hasVideoContent();
-            if (hasVideo) {
-
-                unifiedNativeAdView.setMediaView(mediaView);
-                imageView.setVisibility(View.GONE);
-            } else {
-                unifiedNativeAdView.setImageView(imageView);
-                mediaView.setVisibility(View.GONE);
-                List<NativeAd.Image> images = unifiedNativeAd.getImages();
-                if (images.size() > 0) {
-                    while (true) {
-                        if (i >= images.size()) {
-                            break;
-                        }
-                        NativeAd.Image image = images.get(i);
-                        if (image != null) {
-                            Drawable drawable = image.getDrawable();
-                            imageView.setImageDrawable(drawable);
-                            break;
-                        }
-                        i++;
-                    }
-                }
-            }
-        } else {
-            unifiedNativeAdView.setImageView(imageView);
-            mediaView.setVisibility(View.GONE);
-            List<NativeAd.Image> images = unifiedNativeAd.getImages();
-            if (images.size() > 0) {
-                while (true) {
-                    if (i >= images.size()) {
-                        break;
-                    }
-                    NativeAd.Image image = images.get(i);
-                    if (image != null) {
-                        Drawable drawable = image.getDrawable();
-                        imageView.setImageDrawable(drawable);
-                        break;
-                    }
-                    i++;
-                }
-            }
-        }*/
-
-        TextView headlineView = (TextView) unifiedNativeAdView.getHeadlineView();
+        TextView headlineView = unifiedNativeAdView.findViewById(R.id.ad_headline);
         if (headlineView != null) {
+            unifiedNativeAdView.setHeadlineView(headlineView);
             headlineView.setText(unifiedNativeAd.getHeadline());
         }
 
-        View bodyView = unifiedNativeAdView.getBodyView();
-        if (unifiedNativeAd.getBody() == null) {
-            if (bodyView != null) {
-                bodyView.setVisibility(View.INVISIBLE);
-            }
-        } else {
-            if (bodyView != null) {
+        TextView bodyView = unifiedNativeAdView.findViewById(R.id.ad_body);
+        if (bodyView != null) {
+            unifiedNativeAdView.setBodyView(bodyView);
+            if (unifiedNativeAd.getBody() == null) {
+                bodyView.setVisibility(View.GONE);
+            } else {
                 bodyView.setVisibility(View.VISIBLE);
-                ((TextView) bodyView).setText(unifiedNativeAd.getBody());
+                bodyView.setText(unifiedNativeAd.getBody());
             }
         }
 
-        Button callToActionView = (Button) unifiedNativeAdView.getCallToActionView();
+        Button callToActionView = unifiedNativeAdView.findViewById(R.id.ad_call_to_action);
         if (callToActionView != null) {
-            callToActionView.setText(unifiedNativeAd.getCallToAction());
+            unifiedNativeAdView.setCallToActionView(callToActionView);
+            if (unifiedNativeAd.getCallToAction() == null) {
+                callToActionView.setVisibility(View.GONE);
+            } else {
+                callToActionView.setVisibility(View.VISIBLE);
+                callToActionView.setText(unifiedNativeAd.getCallToAction());
+            }
+        }
+
+        ImageView iconView = unifiedNativeAdView.findViewById(R.id.ad_app_icon);
+        if (iconView != null) {
+            unifiedNativeAdView.setIconView(iconView);
+            if (unifiedNativeAd.getIcon() == null) {
+                iconView.setVisibility(View.GONE);
+            } else {
+                iconView.setVisibility(View.VISIBLE);
+                iconView.setImageDrawable(unifiedNativeAd.getIcon().getDrawable());
+            }
         }
 
         unifiedNativeAdView.setNativeAd(unifiedNativeAd);

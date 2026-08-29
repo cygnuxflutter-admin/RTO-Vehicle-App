@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="28dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_dialog_container"
+        android:elevation="10dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingTop="32dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="32dp">
+
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@drawable/bg_loader_icon_circle"
+            android:padding="14dp">
+
+            <ProgressBar
+                android:id="@+id/pbLoading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminate="true"
+                android:indeterminateTint="#1E40AF" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvLoadingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/task_roboto_bold"
+            android:text="Fetching Data..."
+            android:textColor="#0F172A"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvLoadingSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/task_roboto_regular"
+            android:gravity="center"
+            android:lineSpacingExtra="2dp"
+            android:text="Please wait while we load your test questions"
+            android:textColor="#64748B"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+</FrameLayout>

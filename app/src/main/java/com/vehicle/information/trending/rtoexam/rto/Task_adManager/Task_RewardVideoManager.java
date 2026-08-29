@@ -33,6 +33,10 @@ public class Task_RewardVideoManager {
     public static com.facebook.ads.InterstitialAd interstitialFB;
 
     public static void showRewardVideoAd(final Activity context, OnRewardAdLoadInterface onAdLoadInterface) {
+        if (com.vehicle.information.trending.rtoexam.rto.BuildConfig.DEBUG) {
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
+            return;
+        }
         isUserEarnReward = false;
         if (taskPreferenceClass == null) {
             taskPreferenceClass = new Task_PreferenceClass(context);

@@ -1,48 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-   >
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="5dp">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_mandatory"
+        android:id="@+id/cv_state_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/_10sdp"
-        card_view:cardBackgroundColor="@color/graybluemediam_light_bg"
-        card_view:cardCornerRadius="@dimen/_10sdp"
-        card_view:contentPadding="@dimen/_6sdp">
+        android:foreground="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_clean_card_item"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="14dp">
 
-            <ImageView
-                android:id="@+id/iv_imggg"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerInParent="true"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:padding="@dimen/_5sdp"
-                android:src="@drawable/ic_location_pin1" />
+            <FrameLayout
+                android:id="@+id/fl_icon_container"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_state_pin_circle">
 
-            <TextView
-                android:id="@+id/tv_states"
+                <ImageView
+                    android:id="@+id/iv_state_pin"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_location_pin_modern" />
+            </FrameLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginHorizontal="@dimen/_5sdp"
-                android:layout_toRightOf="@+id/iv_imggg"
-                android:fontFamily="@font/task_robotoslab_regular"
-                android:gravity="start"
-                android:singleLine="true"
-                android:text="loction"
-                android:textColor="@color/purple_700"
-                android:textSize="@dimen/_16sdp" />
+                android:layout_centerVertical="true"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/iv_chevron"
+                android:layout_toEndOf="@+id/fl_icon_container"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_states"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/task_roboto_bold"
+                    android:maxLines="1"
+                    android:text="State Name"
+                    android:textColor="#0F172A"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_state_sub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/task_roboto_regular"
+                    android:text="Tap to view RTO codes &amp; offices"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/iv_chevron"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_arrow_chip">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#64748B" />
+            </FrameLayout>
+
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
-</RelativeLayout>
+</LinearLayout>

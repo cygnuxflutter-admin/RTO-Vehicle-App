@@ -4,11 +4,14 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -26,10 +29,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-
 public class Task_QuizActivity extends AppCompatActivity {
     private static final float BYTES_PER_PX = 4.0f;
-    private static final String FORMAT = "%02d";
+    private static final int TOTAL_EXAM_QUESTIONS = 15;
+    private static final int PASSING_SCORE = 9;
+
     Button btnNext;
     int curr;
     int curr1;
@@ -67,55 +71,38 @@ public class Task_QuizActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle bundle) {
-        int c = 0;
         super.onCreate(bundle);
+        getWindow().setStatusBarColor(Color.parseColor("#1E40AF"));
         setContentView(R.layout.task_activity_quizes);
-        ((ImageView) findViewById(R.id.iv_back)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Task_QuizActivity.this.onBackPressed();
-            }
-        });
+
+        ((ImageView) findViewById(R.id.iv_back)).setOnClickListener(view -> onBackPressed());
+
         this.str_language = getIntent().getStringExtra("language");
+        if (this.str_language == null || this.str_language.isEmpty()) {
+            this.str_language = "english";
+        }
         Log.d("R_Quiz", "Language is = " + this.str_language);
-        String str = this.str_language;
-        str.hashCode();
-        int hashCode = str.hashCode();
 
-        if (str.equals("english")) {
-            c = 0;
-        }
-        //  c = CharCompanionObject.MAX_VALUE;
-        else if (str.equals("gujarati")) {
-            c = 1;
-        } else if (str.equals("hindi")) {
-            c = 2;
-        }
+        this.images = this.images_english;
 
+        this.tvTimer = findViewById(R.id.tvTimer);
+        this.tvPositive = findViewById(R.id.tvPositive);
+        this.tvNegative = findViewById(R.id.tvNegative);
+        this.ivImage = findViewById(R.id.ivImage);
+        this.tvQuestion = findViewById(R.id.tvQuestion);
+        this.radioButton3 = findViewById(R.id.radioButton3);
+        this.radioButton = findViewById(R.id.radioButton);
+        this.radioButton2 = findViewById(R.id.radioButton2);
+        this.btnNext = findViewById(R.id.btnNext);
 
-        if (c == 0) {
-            this.images = this.images_english;
-        } else if (c == 1) {
-            this.images = this.images_english;
-        } else if (c == 2) {
-            this.images = this.images_english;
-        }
-        this.tvTimer = (TextView) findViewById(R.id.tvTimer);
-        this.tvPositive = (TextView) findViewById(R.id.tvPositive);
-        this.tvNegative = (TextView) findViewById(R.id.tvNegative);
-        this.ivImage = (ImageView) findViewById(R.id.ivImage);
-        this.tvQuestion = (TextView) findViewById(R.id.tvQuestion);
-        this.radioButton3 = (RadioButton) findViewById(R.id.radioButton3);
-        this.radioButton = (RadioButton) findViewById(R.id.radioButton);
-        this.radioButton2 = (RadioButton) findViewById(R.id.radioButton2);
-        this.btnNext = (Button) findViewById(R.id.btnNext);
-        if (this.str_language.equals("gujarati")) {
+        if (this.str_language.equalsIgnoreCase("gujarati")) {
             this.btnNext.setText("આગળ");
-        } else if (this.str_language.equals("hindi")) {
+        } else if (this.str_language.equalsIgnoreCase("hindi")) {
             this.btnNext.setText("आगे");
-        } else if (this.str_language.equals("english")) {
+        } else {
             this.btnNext.setText("Next");
         }
+
         this.myAnsList = new ArrayList<>();
         ArrayList<Task_QueConstructor> allQuestions2 = new Task_DBHandler(this).getAllQuestions2();
         this.quesList = allQuestions2;
@@ -125,118 +112,65 @@ public class Task_QuizActivity extends AppCompatActivity {
         curr();
         this.timer.start();
         ButtonEnable();
-        this.btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Task_QuizActivity.this.timer.cancel();
-                Task_QuizActivity.this.tvTimer.setText("");
-                Task_QuizActivity m_rtoQuizes = Task_QuizActivity.this;
-                m_rtoQuizes.rgChoice = (RadioGroup) m_rtoQuizes.findViewById(R.id.rgChoice);
-                Task_QuizActivity m_rtoQuizes2 = Task_QuizActivity.this;
-                RadioButton radioButton = (RadioButton) m_rtoQuizes2.findViewById(m_rtoQuizes2.rgChoice.getCheckedRadioButtonId());
-                if (radioButton != null) {
-                    Task_QuizActivity.this.myAnsList.add("" + ((Object) radioButton.getText()));
-                    if (Task_QuizActivity.this.currentquestion.getAnswer().equals(radioButton.getText())) {
-                        Task_QuizActivity.this.Score++;
-                        Task_QuizActivity.this.positive++;
-                        Task_QuizActivity.this.tvPositive.setText("" + Task_QuizActivity.this.positive);
-                    } else {
-                        Task_QuizActivity.this.negative++;
-                        Task_QuizActivity.this.tvNegative.setText("" + Task_QuizActivity.this.negative);
-                    }
-                    if (Task_QuizActivity.this.Score == 9) {
-                        Task_QuizActivity.this.timer.cancel();
-                        Intent intent = new Intent(Task_QuizActivity.this, Task_ResultActivity.class);
-                        Bundle bundle2 = new Bundle();
-                        bundle2.putInt("score", Task_QuizActivity.this.Score);
-                        bundle2.putStringArrayList("questionnumbers", Task_QuizActivity.this.QuestionNumbers);
-                        bundle2.putStringArrayList("myanswer", Task_QuizActivity.this.myAnsList);
-                        bundle2.putStringArrayList("Correct", Task_QuizActivity.this.Correctans);
-                        bundle2.putIntegerArrayList("Image", Task_QuizActivity.this.image);
-                        bundle2.putStringArrayList("photo", Task_QuizActivity.this.Photo);
-                        bundle2.putIntegerArrayList("Numbers", Task_QuizActivity.this.numbers);
-                        bundle2.putString("language", Task_QuizActivity.this.str_language);
-                        intent.putExtras(bundle2);
-                        Task_QuizActivity.this.startActivity(intent);
-                        Task_QuizActivity.this.finish();
-                    } else if (Task_QuizActivity.this.array.size() != 50) {
-                        Task_QuizActivity m_rtoQuizes3 = Task_QuizActivity.this;
-                        m_rtoQuizes3.currentquestion = m_rtoQuizes3.quesList.get(Task_QuizActivity.this.questionId);
-                        Task_QuizActivity.this.setQuestionsView();
-                        Task_QuizActivity.this.curr();
-                        Task_QuizActivity.this.timer.start();
-                    } else {
-                        Task_QuizActivity.this.timer.cancel();
-                        Intent intent2 = new Intent(Task_QuizActivity.this, Task_ResultActivity.class);
-                        Bundle bundle3 = new Bundle();
-                        bundle3.putStringArrayList("questionnumbers", Task_QuizActivity.this.QuestionNumbers);
-                        bundle3.putStringArrayList("myanswer", Task_QuizActivity.this.myAnsList);
-                        bundle3.putStringArrayList("Correct", Task_QuizActivity.this.Correctans);
-                        bundle3.putIntegerArrayList("Image", Task_QuizActivity.this.image);
-                        bundle3.putStringArrayList("photo", Task_QuizActivity.this.Photo);
-                        bundle3.putIntegerArrayList("Numbers", Task_QuizActivity.this.numbers);
-                        bundle3.putInt("score", Task_QuizActivity.this.Score);
-                        bundle3.putString("language", Task_QuizActivity.this.str_language);
-                        intent2.putExtras(bundle3);
-                        Task_QuizActivity.this.startActivity(intent2);
-                        Task_QuizActivity.this.finish();
-                    }
-                    Task_QuizActivity.this.rgChoice.clearCheck();
-                } else if (radioButton == null) {
-                    Task_QuizActivity.this.timer.cancel();
-                    Task_QuizActivity.this.tvTimer.setText("");
-                    if (Task_QuizActivity.this.str_language.equals("gujarati")) {
-                        Task_QuizActivity.this.myAnsList.add("તમે આ પ્રશ્નનો જવાબ આપ્યો નથી");
-                    } else if (Task_QuizActivity.this.str_language.equals("hindi")) {
-                        Task_QuizActivity.this.myAnsList.add("आपने इस प्रश्न का उत्तर नहीं दिया है");
-                    } else if (Task_QuizActivity.this.str_language.equals("english")) {
-                        Task_QuizActivity.this.myAnsList.add("You have not answered this question");
-                    }
+
+        this.btnNext.setOnClickListener(view -> {
+            Task_QuizActivity.this.timer.cancel();
+            Task_QuizActivity.this.tvTimer.setText("");
+            Task_QuizActivity m_rtoQuizes = Task_QuizActivity.this;
+            m_rtoQuizes.rgChoice = (RadioGroup) m_rtoQuizes.findViewById(R.id.rgChoice);
+            RadioButton selectedRb = (RadioButton) m_rtoQuizes.findViewById(m_rtoQuizes.rgChoice.getCheckedRadioButtonId());
+
+            if (selectedRb != null) {
+                Task_QuizActivity.this.myAnsList.add("" + selectedRb.getText());
+                if (Task_QuizActivity.this.currentquestion.getAnswer().equals(selectedRb.getText())) {
+                    Task_QuizActivity.this.Score++;
+                    Task_QuizActivity.this.positive++;
+                    Task_QuizActivity.this.tvPositive.setText("" + Task_QuizActivity.this.positive);
+                } else {
                     Task_QuizActivity.this.negative++;
                     Task_QuizActivity.this.tvNegative.setText("" + Task_QuizActivity.this.negative);
-                    if (Task_QuizActivity.this.Score == 9) {
-                        Task_QuizActivity.this.timer.cancel();
-                        Intent intent3 = new Intent(Task_QuizActivity.this, Task_ResultActivity.class);
-                        Bundle bundle4 = new Bundle();
-                        bundle4.putInt("score", Task_QuizActivity.this.Score);
-                        bundle4.putStringArrayList("questionnumbers", Task_QuizActivity.this.QuestionNumbers);
-                        bundle4.putStringArrayList("myanswer", Task_QuizActivity.this.myAnsList);
-                        bundle4.putStringArrayList("Correct", Task_QuizActivity.this.Correctans);
-                        bundle4.putIntegerArrayList("Image", Task_QuizActivity.this.image);
-                        bundle4.putIntegerArrayList("Numbers", Task_QuizActivity.this.numbers);
-                        bundle4.putStringArrayList("photo", Task_QuizActivity.this.Photo);
-                        bundle4.putString("language", Task_QuizActivity.this.str_language);
-                        intent3.putExtras(bundle4);
-                        Task_QuizActivity.this.startActivity(intent3);
-                        Task_QuizActivity.this.finish();
-                    } else if (Task_QuizActivity.this.array.size() != 50) {
-                        Task_QuizActivity m_rtoQuizes4 = Task_QuizActivity.this;
-                        m_rtoQuizes4.currentquestion = m_rtoQuizes4.quesList.get(Task_QuizActivity.this.questionId);
-                        Task_QuizActivity.this.setQuestionsView();
-                        Task_QuizActivity.this.curr();
-                        Task_QuizActivity.this.timer.start();
-                    } else {
-                        Task_QuizActivity.this.timer.cancel();
-                        Intent intent4 = new Intent(Task_QuizActivity.this, Task_ResultActivity.class);
-                        Bundle bundle5 = new Bundle();
-                        bundle5.putStringArrayList("questionnumbers", Task_QuizActivity.this.QuestionNumbers);
-                        bundle5.putStringArrayList("myanswer", Task_QuizActivity.this.myAnsList);
-                        bundle5.putStringArrayList("Correct", Task_QuizActivity.this.Correctans);
-                        bundle5.putIntegerArrayList("Image", Task_QuizActivity.this.image);
-                        bundle5.putStringArrayList("photo", Task_QuizActivity.this.Photo);
-                        bundle5.putInt("score", Task_QuizActivity.this.Score);
-                        bundle5.putIntegerArrayList("Numbers", Task_QuizActivity.this.numbers);
-                        bundle5.putString("language", Task_QuizActivity.this.str_language);
-                        intent4.putExtras(bundle5);
-                        Task_QuizActivity.this.startActivity(intent4);
-                        Task_QuizActivity.this.finish();
-                    }
                 }
-                Task_QuizActivity.this.rgChoice.clearCheck();
+            } else {
+                if (Task_QuizActivity.this.str_language.equalsIgnoreCase("gujarati")) {
+                    Task_QuizActivity.this.myAnsList.add("તમે આ પ્રશ્નનો જવાબ આપ્યો નથી");
+                } else if (Task_QuizActivity.this.str_language.equalsIgnoreCase("hindi")) {
+                    Task_QuizActivity.this.myAnsList.add("आपने इस प्रश्न का उत्तर नहीं दिया है");
+                } else {
+                    Task_QuizActivity.this.myAnsList.add("You have not answered this question");
+                }
+                Task_QuizActivity.this.negative++;
+                Task_QuizActivity.this.tvNegative.setText("" + Task_QuizActivity.this.negative);
             }
+
+            // Check if exam is finished (Score >= 9 OR reached 15 questions OR questions exhausted)
+            if (Task_QuizActivity.this.Score >= PASSING_SCORE || Task_QuizActivity.this.f16k >= TOTAL_EXAM_QUESTIONS || Task_QuizActivity.this.questionId >= Task_QuizActivity.this.quesList.size()) {
+                finishQuiz();
+            } else {
+                Task_QuizActivity.this.currentquestion = Task_QuizActivity.this.quesList.get(Task_QuizActivity.this.questionId);
+                Task_QuizActivity.this.setQuestionsView();
+                Task_QuizActivity.this.curr();
+                Task_QuizActivity.this.timer.start();
+            }
+            Task_QuizActivity.this.rgChoice.clearCheck();
         });
     }
 
+    private void finishQuiz() {
+        this.timer.cancel();
+        Intent intent = new Intent(Task_QuizActivity.this, Task_ResultActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("score", this.Score);
+        bundle.putStringArrayList("questionnumbers", this.QuestionNumbers);
+        bundle.putStringArrayList("myanswer", this.myAnsList);
+        bundle.putStringArrayList("Correct", this.Correctans);
+        bundle.putIntegerArrayList("Image", this.image);
+        bundle.putIntegerArrayList("Numbers", this.numbers);
+        bundle.putStringArrayList("photo", this.Photo);
+        bundle.putString("language", this.str_language);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
 
     public class CounterClass extends CountDownTimer {
         public CounterClass(long j, long j2) {
@@ -246,144 +180,110 @@ public class Task_QuizActivity extends AppCompatActivity {
         @Override
         public void onTick(long j) {
             TextView textView = Task_QuizActivity.this.tvTimer;
-            textView.setText("" + String.format("%02d", Long.valueOf(TimeUnit.MILLISECONDS.toSeconds(j) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(j)))));
+            textView.setText(String.format("%02ds", Long.valueOf(TimeUnit.MILLISECONDS.toSeconds(j) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(j)))));
         }
 
         @Override
         public void onFinish() {
-            if (Task_QuizActivity.this.array.size() != 50) {
+            // If already at 15th question, show Exam Over dialog and finish
+            if (Task_QuizActivity.this.f16k >= TOTAL_EXAM_QUESTIONS || Task_QuizActivity.this.questionId >= Task_QuizActivity.this.quesList.size() || Task_QuizActivity.this.Score >= PASSING_SCORE) {
+                final Dialog dialog2 = new Dialog(Task_QuizActivity.this);
+                dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog2.setContentView(R.layout.task_dialog_exam_over);
+                if (dialog2.getWindow() != null) {
+                    dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog2.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
+                dialog2.setCanceledOnTouchOutside(false);
+                dialog2.setCancelable(false);
+                dialog2.show();
+
+                TextView textView3 = dialog2.findViewById(R.id.tv_header);
+                TextView textView4 = dialog2.findViewById(R.id.tv_sub_text);
+                Button button2 = dialog2.findViewById(R.id.btn_dia_next);
+
+                if (Task_QuizActivity.this.str_language.equalsIgnoreCase("gujarati")) {
+                    textView3.setText("પરીક્ષા પૂર્ણ થઈ!");
+                    textView4.setText("તમે તમામ 15 પ્રશ્નો પૂર્ણ કરી લીધા છે.\nપરિણામ જોવા માટે નીચે ક્લિક કરો.");
+                    button2.setText("પરિણામ જુઓ");
+                } else if (Task_QuizActivity.this.str_language.equalsIgnoreCase("hindi")) {
+                    textView3.setText("परीक्षा समाप्त!");
+                    textView4.setText("आपने सभी 15 प्रश्न पूरे कर लिए हैं।\nपरिणाम देखने के लिए नीचे क्लिक करें।");
+                    button2.setText("परिणाम देखें");
+                } else {
+                    textView3.setText("Exam Completed!");
+                    textView4.setText("You have finished all 15 questions.\nTap below to view your test result.");
+                    button2.setText("View Result");
+                }
+
+                button2.setOnClickListener(view -> {
+                    String str;
+                    if (Task_QuizActivity.this.str_language.equalsIgnoreCase("gujarati")) {
+                        str = "તમે આ પ્રશ્નનો જવાબ આપ્યો નથી";
+                    } else if (Task_QuizActivity.this.str_language.equalsIgnoreCase("hindi")) {
+                        str = "आपने इस प्रश्न का उत्तर नहीं दिया है";
+                    } else {
+                        str = "You have not answered this question";
+                    }
+                    Task_QuizActivity.this.myAnsList.add(str);
+                    dialog2.cancel();
+                    finishQuiz();
+                });
+            } else {
+                // Show Time Over dialog and proceed to next question
                 final Dialog dialog = new Dialog(Task_QuizActivity.this);
-                dialog.requestWindowFeature(1);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.task_dialog_exam_time_over);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.setCancelable(false);
                 dialog.show();
-                TextView textView = (TextView) dialog.findViewById(R.id.tv_header);
-                TextView textView2 = (TextView) dialog.findViewById(R.id.tv_sub_text);
-                Button button = (Button) dialog.findViewById(R.id.btn_dia_next);
-                if (Task_QuizActivity.this.str_language.equals("gujarati")) {
-                    textView.setText("સમય પુરો!!!");
-                    textView2.setText(Task_QuizActivity.this.getResources().getString(R.string.str_30_sec_over_txt_gujarati));
-                    button.setText("આગળ");
-                } else if (Task_QuizActivity.this.str_language.equals("hindi")) {
-                    textView.setText("समय समाप्त!!!");
-                    textView2.setText(Task_QuizActivity.this.getResources().getString(R.string.str_30_sec_over_txt_hindi));
+
+                TextView textView = dialog.findViewById(R.id.tv_header);
+                TextView textView2 = dialog.findViewById(R.id.tv_sub_text);
+                Button button = dialog.findViewById(R.id.btn_dia_next);
+
+                if (Task_QuizActivity.this.str_language.equalsIgnoreCase("gujarati")) {
+                    textView.setText("સમય પુરો!");
+                    textView2.setText("આ પ્રશ્ન માટે 30 સેકન્ડ પૂર્ણ થઈ ગયા છે.\nઆગળનો પ્રશ્ન જોવા માટે નીચે ક્લિક કરો.");
+                    button.setText("આગળનો પ્રશ્ન");
+                } else if (Task_QuizActivity.this.str_language.equalsIgnoreCase("hindi")) {
+                    textView.setText("समय समाप्त!");
+                    textView2.setText("इस प्रश्न के लिए 30 सेकंड समाप्त हो गए हैं।\nअगला प्रश्न देखने के लिए नीचे क्लिक करें।");
                     button.setText("अगला सवाल");
-                } else if (Task_QuizActivity.this.str_language.equals("english")) {
-                    textView.setText("Time Over!!!");
-                    textView2.setText(Task_QuizActivity.this.getResources().getString(R.string.str_30_sec_over_txt_english));
+                } else {
+                    textView.setText("Time Over!");
+                    textView2.setText("30 seconds have passed for this question.\nTap below to proceed to the next question.");
                     button.setText("Next Question");
                 }
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String str;
-                        Task_QuizActivity.this.rgChoice = (RadioGroup) Task_QuizActivity.this.findViewById(R.id.rgChoice);
-                        RadioButton radioButton = (RadioButton) Task_QuizActivity.this.findViewById(Task_QuizActivity.this.rgChoice.getCheckedRadioButtonId());
-                        if (Task_QuizActivity.this.str_language.equals("gujarati")) {
-                            str = "તમે આ પ્રશ્નનો જવાબ આપ્યો નથી";
-                        } else if (Task_QuizActivity.this.str_language.equals("hindi")) {
-                            str = "आपने इस प्रश्न का उत्तर नहीं दिया है";
-                        } else {
-                            str = Task_QuizActivity.this.str_language.equals("english") ? "You have not answered this question" : "";
-                        }
-                        if (radioButton != null) {
-                            Task_QuizActivity.this.myAnsList.add(str);
-                            Task_QuizActivity.this.tvTimer.setText("");
-                            Task_QuizActivity.this.negative++;
-                            Task_QuizActivity.this.tvNegative.setText("" + Task_QuizActivity.this.negative);
-                            CounterClass.this.start();
-                            Task_QuizActivity.this.currentquestion = Task_QuizActivity.this.quesList.get(Task_QuizActivity.this.questionId);
-                            Task_QuizActivity.this.curr();
-                            Task_QuizActivity.this.setQuestionsView();
-                            dialog.cancel();
-                            return;
-                        }
-                        Task_QuizActivity.this.myAnsList.add(str);
-                        Task_QuizActivity.this.tvTimer.setText("");
-                        Task_QuizActivity.this.negative++;
-                        Task_QuizActivity.this.tvNegative.setText("" + Task_QuizActivity.this.negative);
+
+                button.setOnClickListener(view -> {
+                    String str;
+                    if (Task_QuizActivity.this.str_language.equalsIgnoreCase("gujarati")) {
+                        str = "તમે આ પ્રશ્નનો જવાબ આપ્યો નથી";
+                    } else if (Task_QuizActivity.this.str_language.equalsIgnoreCase("hindi")) {
+                        str = "आपने इस प्रश्न का उत्तर नहीं दिया है";
+                    } else {
+                        str = "You have not answered this question";
+                    }
+
+                    Task_QuizActivity.this.myAnsList.add(str);
+                    Task_QuizActivity.this.tvTimer.setText("");
+                    Task_QuizActivity.this.negative++;
+                    Task_QuizActivity.this.tvNegative.setText("" + Task_QuizActivity.this.negative);
+
+                    if (Task_QuizActivity.this.Score >= PASSING_SCORE || Task_QuizActivity.this.f16k >= TOTAL_EXAM_QUESTIONS || Task_QuizActivity.this.questionId >= Task_QuizActivity.this.quesList.size()) {
+                        dialog.cancel();
+                        finishQuiz();
+                    } else {
                         CounterClass.this.start();
                         Task_QuizActivity.this.currentquestion = Task_QuizActivity.this.quesList.get(Task_QuizActivity.this.questionId);
                         Task_QuizActivity.this.curr();
                         Task_QuizActivity.this.setQuestionsView();
                         dialog.cancel();
-                    }
-                });
-                Task_QuizActivity.this.rgChoice.clearCheck();
-            } else {
-                Task_QuizActivity.this.array.size();
-                final Dialog dialog2 = new Dialog(Task_QuizActivity.this);
-                dialog2.requestWindowFeature(1);
-                dialog2.setContentView(R.layout.task_dialog_exam_over);
-                dialog2.setCanceledOnTouchOutside(false);
-                dialog2.setCancelable(false);
-                dialog2.show();
-                TextView textView3 = (TextView) dialog2.findViewById(R.id.tv_header);
-                TextView textView4 = (TextView) dialog2.findViewById(R.id.tv_sub_text);
-                Button button2 = (Button) dialog2.findViewById(R.id.btn_dia_next);
-                if (Task_QuizActivity.this.str_language.equals("gujarati")) {
-                    textView3.setText("15 પ્રશ્નો સમાપ્ત થાય છે!!!");
-                    textView4.setText(Task_QuizActivity.this.getResources().getString(R.string.str_exam_over_txt_gujarati));
-                    button2.setText("");
-                } else if (Task_QuizActivity.this.str_language.equals("hindi")) {
-                    textView3.setText("15 सवाल खत्म हो चुके हो चुके है!!!");
-                    textView4.setText(Task_QuizActivity.this.getResources().getString(R.string.str_exam_over_txt_hindi));
-                    button2.setText("अगला सवाल");
-                } else if (Task_QuizActivity.this.str_language.equals("english")) {
-                    textView3.setText("15 questions are Over!!!");
-                    textView4.setText(Task_QuizActivity.this.getResources().getString(R.string.str_exam_over_txt_english));
-                    button2.setText("Next Question");
-                }
-                button2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String str;
-                        Task_QuizActivity.this.rgChoice = (RadioGroup) Task_QuizActivity.this.findViewById(R.id.rgChoice);
-                        RadioButton radioButton = (RadioButton) Task_QuizActivity.this.findViewById(Task_QuizActivity.this.rgChoice.getCheckedRadioButtonId());
-                        if (Task_QuizActivity.this.str_language.equals("gujarati")) {
-                            str = "તમે આ પ્રશ્નનો જવાબ આપ્યો નથી";
-                        } else if (Task_QuizActivity.this.str_language.equals("hindi")) {
-                            str = "आपने इस प्रश्न का उत्तर नहीं दिया है";
-                        } else {
-                            str = Task_QuizActivity.this.str_language.equals("english") ? "You have not answered this question" : "";
-                        }
-                        if (radioButton != null) {
-                            Task_QuizActivity.this.timer.cancel();
-                            Task_QuizActivity.this.myAnsList.add(str);
-                            Intent intent = new Intent(Task_QuizActivity.this, Task_ResultActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("score", Task_QuizActivity.this.Score);
-                            bundle.putStringArrayList("myanswer", Task_QuizActivity.this.myAnsList);
-                            bundle.putStringArrayList("questionnumbers", Task_QuizActivity.this.QuestionNumbers);
-                            bundle.putStringArrayList("Correct", Task_QuizActivity.this.Correctans);
-                            bundle.putIntegerArrayList("Image", Task_QuizActivity.this.image);
-                            bundle.putIntegerArrayList("Numbers", Task_QuizActivity.this.numbers);
-                            bundle.putStringArrayList("photo", Task_QuizActivity.this.Photo);
-                            bundle.putString("language", Task_QuizActivity.this.str_language);
-                            intent.putExtras(bundle);
-                            Task_QuizActivity.this.startActivity(intent);
-                            Task_QuizActivity.this.finish();
-                            dialog2.cancel();
-                            return;
-                        }
-                        Task_QuizActivity.this.timer.cancel();
-                        Task_QuizActivity.this.myAnsList.add(str);
-                        Intent intent2 = new Intent(Task_QuizActivity.this, Task_ResultActivity.class);
-                        Bundle bundle2 = new Bundle();
-                        bundle2.putInt("score", Task_QuizActivity.this.Score);
-                        bundle2.putStringArrayList("myanswer", Task_QuizActivity.this.myAnsList);
-                        bundle2.putStringArrayList("questionnumbers", Task_QuizActivity.this.QuestionNumbers);
-                        bundle2.putStringArrayList("Correct", Task_QuizActivity.this.Correctans);
-                        bundle2.putIntegerArrayList("Image", Task_QuizActivity.this.image);
-                        bundle2.putIntegerArrayList("Numbers", Task_QuizActivity.this.numbers);
-                        bundle2.putStringArrayList("photo", Task_QuizActivity.this.Photo);
-                        bundle2.putString("language", Task_QuizActivity.this.str_language);
-                        intent2.putExtras(bundle2);
-                        Task_QuizActivity.this.startActivity(intent2);
-                        Task_QuizActivity.this.finish();
-                        dialog2.cancel();
                     }
                 });
             }
@@ -398,18 +298,13 @@ public class Task_QuizActivity extends AppCompatActivity {
     }
 
     public void ButtonEnable() {
-        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.rgChoice);
+        RadioGroup radioGroup = findViewById(R.id.rgChoice);
         this.rgChoice = radioGroup;
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup2, int i) {
-                if (Task_QuizActivity.this.radioButton.isChecked()) {
-                    Task_QuizActivity.this.btnNext.setEnabled(true);
-                } else if (Task_QuizActivity.this.radioButton2.isChecked()) {
-                    Task_QuizActivity.this.btnNext.setEnabled(true);
-                } else if (Task_QuizActivity.this.radioButton3.isChecked()) {
-                    Task_QuizActivity.this.btnNext.setEnabled(true);
-                }
+        radioGroup.setOnCheckedChangeListener((radioGroup2, i) -> {
+            if (Task_QuizActivity.this.radioButton.isChecked() ||
+                Task_QuizActivity.this.radioButton2.isChecked() ||
+                Task_QuizActivity.this.radioButton3.isChecked()) {
+                Task_QuizActivity.this.btnNext.setEnabled(true);
             }
         });
     }
@@ -420,22 +315,33 @@ public class Task_QuizActivity extends AppCompatActivity {
         this.radioButton3.setChecked(false);
         this.f16k++;
         this.answeredquestno = this.questionId + 1;
-        StringBuilder sb = new StringBuilder();
-        if (this.str_language.equals("gujarati")) {
+
+        TextView tvQuestionBadge = findViewById(R.id.tv_question_badge);
+        TextView tvOptionsTitle = findViewById(R.id.tv_options_title);
+        TextView tvHeaderTitle = findViewById(R.id.tv_header_title);
+
+        if (this.str_language.equalsIgnoreCase("gujarati")) {
             this.btnNext.setText("આગળ");
-        } else if (this.str_language.equals("hindi")) {
+            if (tvHeaderTitle != null) tvHeaderTitle.setText("RTO પરીક્ષા");
+            if (tvQuestionBadge != null) tvQuestionBadge.setText("પ્રશ્ન " + this.f16k + " / " + TOTAL_EXAM_QUESTIONS);
+            if (tvOptionsTitle != null) tvOptionsTitle.setText("યોગ્ય વિકલ્પ પસંદ કરો:");
+        } else if (this.str_language.equalsIgnoreCase("hindi")) {
             this.btnNext.setText("आगे");
-        } else if (this.str_language.equals("english")) {
+            if (tvHeaderTitle != null) tvHeaderTitle.setText("RTO परीक्षा");
+            if (tvQuestionBadge != null) tvQuestionBadge.setText("प्रश्न " + this.f16k + " / " + TOTAL_EXAM_QUESTIONS);
+            if (tvOptionsTitle != null) tvOptionsTitle.setText("सही विकल्प चुनें:");
+        } else {
             this.btnNext.setText("Next");
+            if (tvHeaderTitle != null) tvHeaderTitle.setText("RTO Exam");
+            if (tvQuestionBadge != null) tvQuestionBadge.setText("QUESTION " + this.f16k + " / " + TOTAL_EXAM_QUESTIONS);
+            if (tvOptionsTitle != null) tvOptionsTitle.setText("Select one option:");
         }
-        sb.append("");
-        sb.append(this.f16k);
-        sb.append(" ");
-        sb.append(this.currentquestion.getQuestion());
-        this.tvQuestion.setText(sb.toString());
-        this.radioButton3.setText(this.currentquestion.getOption3());
+
+        this.tvQuestion.setText(this.currentquestion.getQuestion());
         this.radioButton.setText(this.currentquestion.getOption1());
         this.radioButton2.setText(this.currentquestion.getOption2());
+        this.radioButton3.setText(this.currentquestion.getOption3());
+
         this.QuestionNumbers.add("" + this.currentquestion.getQuestion());
         this.Correctans.add("" + this.currentquestion.getAnswer());
         this.Photo.add("" + this.currentquestion.getPhoto());
@@ -443,26 +349,40 @@ public class Task_QuizActivity extends AppCompatActivity {
         this.curr1 = id;
         this.image.add(Integer.valueOf(id));
         this.numbers.add(Integer.valueOf(this.f16k));
+
         if (this.photo.equals(this.currentquestion.getPhoto())) {
-            this.ivImage.setVisibility(View.VISIBLE);
             loadImage();
-        } else if (this.nophoto.equals(this.currentquestion.getPhoto())) {
+        } else {
+            View cvImageWrapper = findViewById(R.id.cv_image_wrapper);
+            if (cvImageWrapper != null) cvImageWrapper.setVisibility(View.GONE);
             this.ivImage.setVisibility(View.GONE);
         }
         this.questionId++;
     }
 
     private void loadImage() {
-        if (readBitmapInfo() > Task_MemsUtil.megabytesFree()) {
-            subSampleImage(32);
-        } else {
-            try {
-                this.ivImage.setImageResource(images_english[currentquestion.getId()]);
-            } catch (Exception e) {
-                Log.e("TAG", "loadImage: " + e.getMessage());
-                Log.e("TAG", "loadImage: ID" + currentquestion.getId());
+        View cvImageWrapper = findViewById(R.id.cv_image_wrapper);
+        try {
+            int qId = currentquestion.getId();
+            int resId = 0;
+            if (images_english != null && qId >= 0 && qId < images_english.length) {
+                resId = images_english[qId];
             }
-
+            if (resId > 1000) {
+                if (readBitmapInfo() > Task_MemsUtil.megabytesFree()) {
+                    subSampleImage(32);
+                } else {
+                    this.ivImage.setImageResource(resId);
+                }
+                this.ivImage.setVisibility(View.VISIBLE);
+                if (cvImageWrapper != null) cvImageWrapper.setVisibility(View.VISIBLE);
+            } else {
+                this.ivImage.setVisibility(View.GONE);
+                if (cvImageWrapper != null) cvImageWrapper.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            this.ivImage.setVisibility(View.GONE);
+            if (cvImageWrapper != null) cvImageWrapper.setVisibility(View.GONE);
         }
     }
 
@@ -471,7 +391,6 @@ public class Task_QuizActivity extends AppCompatActivity {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(resources, this.images[this.currentquestion.getId()], options);
-        String str = options.outMimeType;
         return ((options.outWidth * options.outHeight) * BYTES_PER_PX) / 1048576.0f;
     }
 

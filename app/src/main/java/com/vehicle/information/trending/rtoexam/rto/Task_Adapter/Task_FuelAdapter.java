@@ -65,8 +65,7 @@ public class Task_FuelAdapter extends RecyclerView.Adapter<Task_FuelAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ConstraintLayout bg;
-        ConstraintLayout bg2;
+        View bg;
         TextView currentPrice;
         TextView currently;
         TextView day;
@@ -86,8 +85,7 @@ public class Task_FuelAdapter extends RecyclerView.Adapter<Task_FuelAdapter.View
             this.currentPrice = (TextView) view.findViewById(R.id.price);
             this.previousPrice = (TextView) view.findViewById(R.id.previousPrice);
             this.scale = (ImageView) view.findViewById(R.id.PriceIndicator);
-            this.bg = (ConstraintLayout) view.findViewById(R.id.lay);
-            this.bg2 = (ConstraintLayout) view.findViewById(R.id.constraintLayout);
+            this.bg = view.findViewById(R.id.lay);
         }
     }
 }
