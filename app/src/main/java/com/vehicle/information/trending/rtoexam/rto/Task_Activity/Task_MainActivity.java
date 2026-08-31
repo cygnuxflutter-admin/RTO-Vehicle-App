@@ -73,9 +73,11 @@ public class Task_MainActivity extends AppCompatActivity {
         View cardSymbols = findViewById(R.id.card_rto_symbols);
         if (cardSymbols != null) {
             cardSymbols.setOnClickListener(v ->
-                    MyApplication.showInterstitialAd(Task_MainActivity.this, () ->
-                            Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_SymbolActivity.class))
-                    )
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, () -> {
+                        Intent intent = new Intent(Task_MainActivity.this, Task_LanguageSelectActivity.class);
+                        intent.putExtra("from", "from_symbol");
+                        Task_MainActivity.this.startActivity(intent);
+                    })
             );
         }
 

@@ -29,6 +29,7 @@
             app:tint="@color/white" />
 
         <TextView
+            android:id="@+id/tv_header_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -37,6 +38,36 @@
             android:text="RTO Symbols"
             android:textColor="@color/white"
             android:textSize="19sp" />
+
+        <!-- Language Switcher Chip in Header -->
+        <LinearLayout
+            android:id="@+id/btn_change_lang"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_lang_chip_header"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
+
+            <TextView
+                android:id="@+id/tv_current_lang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/task_roboto_bold"
+                android:text="ગુજરાતી"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/ic_arrow_drop_down"
+                app:tint="@color/white" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- Scrollable Categories -->
@@ -93,6 +124,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_mandatory_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/task_roboto_bold"
@@ -101,6 +133,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/tv_mandatory_sub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -155,6 +188,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_cautionary_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/task_roboto_bold"
@@ -163,6 +197,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/tv_cautionary_sub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -217,6 +252,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_informatory_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/task_roboto_bold"
@@ -225,6 +261,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/tv_informatory_sub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -279,6 +316,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_roadsignals_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/task_roboto_bold"
@@ -287,6 +325,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/tv_roadsignals_sub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -341,6 +380,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_drivingrules_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/task_roboto_bold"
@@ -349,6 +389,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/tv_drivingrules_sub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -403,6 +444,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_trafficpolice_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/task_roboto_bold"
@@ -411,6 +453,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/tv_trafficpolice_sub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -442,9 +485,8 @@
         <RelativeLayout
             android:id="@+id/rl_ad"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:visibility="visible" />
+            android:layout_height="wrap_content"
+            android:gravity="center" />
     </RelativeLayout>
+
 </LinearLayout>

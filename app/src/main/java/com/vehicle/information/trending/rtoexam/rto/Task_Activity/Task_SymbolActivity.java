@@ -1,11 +1,13 @@
 package com.vehicle.information.trending.rtoexam.rto.Task_Activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,11 +19,25 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 
 public class Task_SymbolActivity extends AppCompatActivity {
 
+    private String str_language = "gujarati";
+    private TextView tvHeaderTitle, tvCurrentLang;
+    private TextView tvMandatoryTitle, tvMandatorySub;
+    private TextView tvCautionaryTitle, tvCautionarySub;
+    private TextView tvInformatoryTitle, tvInformatorySub;
+    private TextView tvRoadSignalsTitle, tvRoadSignalsSub;
+    private TextView tvDrivingRulesTitle, tvDrivingRulesSub;
+    private TextView tvTrafficPoliceTitle, tvTrafficPoliceSub;
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         getWindow().setStatusBarColor(Color.parseColor("#1E40AF"));
         setContentView(R.layout.task_activity_symbol);
+
+        String langExtra = getIntent().getStringExtra("language");
+        if (langExtra != null && !langExtra.isEmpty()) {
+            this.str_language = langExtra;
+        }
 
         RelativeLayout rl_ad = this.findViewById(R.id.rl_ad);
         if (Task_NetworkUtils.isNetworkAvailable(this)) {
@@ -40,59 +56,130 @@ public class Task_SymbolActivity extends AppCompatActivity {
             ivBack.setOnClickListener(view -> onBackPressed());
         }
 
+        tvHeaderTitle = findViewById(R.id.tv_header_title);
+        tvCurrentLang = findViewById(R.id.tv_current_lang);
+        tvMandatoryTitle = findViewById(R.id.tv_mandatory_title);
+        tvMandatorySub = findViewById(R.id.tv_mandatory_sub);
+        tvCautionaryTitle = findViewById(R.id.tv_cautionary_title);
+        tvCautionarySub = findViewById(R.id.tv_cautionary_sub);
+        tvInformatoryTitle = findViewById(R.id.tv_informatory_title);
+        tvInformatorySub = findViewById(R.id.tv_informatory_sub);
+        tvRoadSignalsTitle = findViewById(R.id.tv_roadsignals_title);
+        tvRoadSignalsSub = findViewById(R.id.tv_roadsignals_sub);
+        tvDrivingRulesTitle = findViewById(R.id.tv_drivingrules_title);
+        tvDrivingRulesSub = findViewById(R.id.tv_drivingrules_sub);
+        tvTrafficPoliceTitle = findViewById(R.id.tv_trafficpolice_title);
+        tvTrafficPoliceSub = findViewById(R.id.tv_trafficpolice_sub);
+
+        View btnChangeLang = findViewById(R.id.btn_change_lang);
+        if (btnChangeLang != null) {
+            btnChangeLang.setOnClickListener(v -> showLanguageDialog());
+        }
+
+        updateUiLanguage();
+
         View cvMandatory = findViewById(R.id.cv_mandatory);
         if (cvMandatory != null) {
-            cvMandatory.setOnClickListener(view -> {
-                Intent intent = new Intent(Task_SymbolActivity.this, Task_SymbolDetailActivity.class);
-                intent.putExtra("passvalue", "Mandatory");
-                MyApplication.showInterstitialAd(Task_SymbolActivity.this, () -> Task_SymbolActivity.this.startActivity(intent));
-            });
+            cvMandatory.setOnClickListener(view -> openDetail("Mandatory"));
         }
 
         View cvCautionary = findViewById(R.id.cv_cautionary);
         if (cvCautionary != null) {
-            cvCautionary.setOnClickListener(view -> {
-                Intent intent = new Intent(Task_SymbolActivity.this, Task_SymbolDetailActivity.class);
-                intent.putExtra("passvalue", "Cautionary");
-                MyApplication.showInterstitialAd(Task_SymbolActivity.this, () -> Task_SymbolActivity.this.startActivity(intent));
-            });
+            cvCautionary.setOnClickListener(view -> openDetail("Cautionary"));
         }
 
         View cvInformatory = findViewById(R.id.cv_informatory);
         if (cvInformatory != null) {
-            cvInformatory.setOnClickListener(view -> {
-                Intent intent = new Intent(Task_SymbolActivity.this, Task_SymbolDetailActivity.class);
-                intent.putExtra("passvalue", "Informatory");
-                MyApplication.showInterstitialAd(Task_SymbolActivity.this, () -> Task_SymbolActivity.this.startActivity(intent));
-            });
+            cvInformatory.setOnClickListener(view -> openDetail("Informatory"));
         }
 
         View cvRoadSignals = findViewById(R.id.cv_roadsignals);
         if (cvRoadSignals != null) {
-            cvRoadSignals.setOnClickListener(view -> {
-                Intent intent = new Intent(Task_SymbolActivity.this, Task_SymbolDetailActivity.class);
-                intent.putExtra("passvalue", "Road & Signals");
-                MyApplication.showInterstitialAd(Task_SymbolActivity.this, () -> Task_SymbolActivity.this.startActivity(intent));
-            });
+            cvRoadSignals.setOnClickListener(view -> openDetail("Road & Signals"));
         }
 
         View cvDrivingRules = findViewById(R.id.cv_drivingrules);
         if (cvDrivingRules != null) {
-            cvDrivingRules.setOnClickListener(view -> {
-                Intent intent = new Intent(Task_SymbolActivity.this, Task_SymbolDetailActivity.class);
-                intent.putExtra("passvalue", "Driving Rules");
-                MyApplication.showInterstitialAd(Task_SymbolActivity.this, () -> Task_SymbolActivity.this.startActivity(intent));
-            });
+            cvDrivingRules.setOnClickListener(view -> openDetail("Driving Rules"));
         }
 
         View cvTrafficPolice = findViewById(R.id.cv_trafficpolice_signals);
         if (cvTrafficPolice != null) {
-            cvTrafficPolice.setOnClickListener(view -> {
-                Intent intent = new Intent(Task_SymbolActivity.this, Task_SymbolDetailActivity.class);
-                intent.putExtra("passvalue", "Traffic Police Signals");
-                MyApplication.showInterstitialAd(Task_SymbolActivity.this, () -> Task_SymbolActivity.this.startActivity(intent));
-            });
+            cvTrafficPolice.setOnClickListener(view -> openDetail("Traffic Police Signals"));
         }
+    }
+
+    private void showLanguageDialog() {
+        String[] options = {"ગુજરાતી (Gujarati)", "हिन्दी (Hindi)", "English"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(str_language.equals("gujarati") ? "ભાષા પસંદ કરો" : str_language.equals("hindi") ? "भाषा चुनें" : "Select Language");
+        builder.setItems(options, (dialog, which) -> {
+            if (which == 0) {
+                str_language = "gujarati";
+            } else if (which == 1) {
+                str_language = "hindi";
+            } else {
+                str_language = "english";
+            }
+            updateUiLanguage();
+        });
+        builder.show();
+    }
+
+    private void updateUiLanguage() {
+        if ("gujarati".equalsIgnoreCase(str_language)) {
+            if (tvHeaderTitle != null) tvHeaderTitle.setText("RTO સંકેતો / ચિહ્નો");
+            if (tvCurrentLang != null) tvCurrentLang.setText("ગુજરાતી");
+            if (tvMandatoryTitle != null) tvMandatoryTitle.setText("ફરજિયાત સંકેતો");
+            if (tvMandatorySub != null) tvMandatorySub.setText("ફરજિયાત પાલન કરવાના ટ્રાફિક ચિહ્નો");
+            if (tvCautionaryTitle != null) tvCautionaryTitle.setText("ચેતવણી સંકેતો");
+            if (tvCautionarySub != null) tvCautionarySub.setText("સાવચેતી અને ચેતવણી આપતા ચિહ્નો");
+            if (tvInformatoryTitle != null) tvInformatoryTitle.setText("માહિતીદર્શક સંકેતો");
+            if (tvInformatorySub != null) tvInformatorySub.setText("દિશા, પાર્કિંગ અને જાહેર સુવિધાઓ");
+            if (tvRoadSignalsTitle != null) tvRoadSignalsTitle.setText("રોડ માર્કિંગ અને સિગ્નલ");
+            if (tvRoadSignalsSub != null) tvRoadSignalsSub.setText("લેન માર્કિંગ અને ટ્રાફિક સિગ્નલ");
+            if (tvDrivingRulesTitle != null) tvDrivingRulesTitle.setText("ડ્રાઇવિંગના નિયમો");
+            if (tvDrivingRulesSub != null) tvDrivingRulesSub.setText("ડ્રાઇવરના હાથના સંકેતો અને નિયમો");
+            if (tvTrafficPoliceTitle != null) tvTrafficPoliceTitle.setText("ટ્રાફિક પોલીસના સંકેતો");
+            if (tvTrafficPoliceSub != null) tvTrafficPoliceSub.setText("હાથ વડે ટ્રાફિક નિયંત્રણના સંકેતો");
+        } else if ("hindi".equalsIgnoreCase(str_language)) {
+            if (tvHeaderTitle != null) tvHeaderTitle.setText("RTO संकेत और चिन्ह");
+            if (tvCurrentLang != null) tvCurrentLang.setText("हिन्दी");
+            if (tvMandatoryTitle != null) tvMandatoryTitle.setText("अनिवार्य संकेत");
+            if (tvMandatorySub != null) tvMandatorySub.setText("अनिवार्य ट्रैफिक नियम और संकेत");
+            if (tvCautionaryTitle != null) tvCautionaryTitle.setText("चेतावनी संकेत");
+            if (tvCautionarySub != null) tvCautionarySub.setText("सावधानी और चेतावनी देने वाले संकेत");
+            if (tvInformatoryTitle != null) tvInformatoryTitle.setText("सूचनात्मक संकेत");
+            if (tvInformatorySub != null) tvInformatorySub.setText("दिशा, पार्किंग और सार्वजनिक सुविधाएं");
+            if (tvRoadSignalsTitle != null) tvRoadSignalsTitle.setText("सड़क और सिग्नल");
+            if (tvRoadSignalsSub != null) tvRoadSignalsSub.setText("लेन मार्किंग और ट्रैफिक सिग्नल");
+            if (tvDrivingRulesTitle != null) tvDrivingRulesTitle.setText("ड्राइविंग के नियम");
+            if (tvDrivingRulesSub != null) tvDrivingRulesSub.setText("चालक के हाथ के संकेत और सुरक्षा नियम");
+            if (tvTrafficPoliceTitle != null) tvTrafficPoliceTitle.setText("ट्रैफिक पुलिस के संकेत");
+            if (tvTrafficPoliceSub != null) tvTrafficPoliceSub.setText("हाथ द्वारा यातायात नियंत्रण के संकेत");
+        } else {
+            if (tvHeaderTitle != null) tvHeaderTitle.setText("RTO Symbols");
+            if (tvCurrentLang != null) tvCurrentLang.setText("English");
+            if (tvMandatoryTitle != null) tvMandatoryTitle.setText("Mandatory");
+            if (tvMandatorySub != null) tvMandatorySub.setText("Compulsory traffic signs");
+            if (tvCautionaryTitle != null) tvCautionaryTitle.setText("Cautionary");
+            if (tvCautionarySub != null) tvCautionarySub.setText("Warning & caution alerts");
+            if (tvInformatoryTitle != null) tvInformatoryTitle.setText("Informatory");
+            if (tvInformatorySub != null) tvInformatorySub.setText("Directions, parking & facilities");
+            if (tvRoadSignalsTitle != null) tvRoadSignalsTitle.setText("Road & Signals");
+            if (tvRoadSignalsSub != null) tvRoadSignalsSub.setText("Lane markings & traffic signals");
+            if (tvDrivingRulesTitle != null) tvDrivingRulesTitle.setText("Driving Rules");
+            if (tvDrivingRulesSub != null) tvDrivingRulesSub.setText("Driver hand signals & safety rules");
+            if (tvTrafficPoliceTitle != null) tvTrafficPoliceTitle.setText("Traffic Police Signals");
+            if (tvTrafficPoliceSub != null) tvTrafficPoliceSub.setText("Manual traffic control gestures");
+        }
+    }
+
+    private void openDetail(String passValue) {
+        Intent intent = new Intent(Task_SymbolActivity.this, Task_SymbolDetailActivity.class);
+        intent.putExtra("passvalue", passValue);
+        intent.putExtra("language", str_language);
+        MyApplication.showInterstitialAd(Task_SymbolActivity.this, () -> Task_SymbolActivity.this.startActivity(intent));
     }
 
     @Override

@@ -814,6 +814,10 @@ public class Task_LanguageSelectActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(Task_LanguageSelectActivity.this, Task_SelectExamsPrepareActivity.class);
                 intent2.putExtra("language", "hindi");
                 Task_LanguageSelectActivity.this.startActivity(intent2);
+            } else if (this.str_value.equals("from_symbol")) {
+                Intent intent3 = new Intent(Task_LanguageSelectActivity.this, Task_SymbolActivity.class);
+                intent3.putExtra("language", "hindi");
+                Task_LanguageSelectActivity.this.startActivity(intent3);
                /* AdsManager.getInstance().showInterstitialAd(Task_LanguageSelectActivity.this, new AdsManager.AdCloseListener() {
                     @Override
                     public void onAdClosed() {
@@ -2024,6 +2028,10 @@ public class Task_LanguageSelectActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(Task_LanguageSelectActivity.this, Task_SelectExamsPrepareActivity.class);
                 intent2.putExtra("language", "english");
                 Task_LanguageSelectActivity.this.startActivity(intent2);
+            } else if (this.str_value.equals("from_symbol")) {
+                Intent intent3 = new Intent(Task_LanguageSelectActivity.this, Task_SymbolActivity.class);
+                intent3.putExtra("language", "english");
+                Task_LanguageSelectActivity.this.startActivity(intent3);
                /* AdsManager.getInstance().showInterstitialAd(Task_LanguageSelectActivity.this, new AdsManager.AdCloseListener() {
                     @Override
                     public void onAdClosed() {
