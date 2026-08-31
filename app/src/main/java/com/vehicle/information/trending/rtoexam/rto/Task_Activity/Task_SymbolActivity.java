@@ -1,6 +1,5 @@
 package com.vehicle.information.trending.rtoexam.rto.Task_Activity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,7 +19,8 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 public class Task_SymbolActivity extends AppCompatActivity {
 
     private String str_language = "gujarati";
-    private TextView tvHeaderTitle, tvCurrentLang;
+    private TextView tvHeaderTitle;
+    private TextView tabGujarati, tabHindi, tabEnglish;
     private TextView tvMandatoryTitle, tvMandatorySub;
     private TextView tvCautionaryTitle, tvCautionarySub;
     private TextView tvInformatoryTitle, tvInformatorySub;
@@ -57,7 +57,10 @@ public class Task_SymbolActivity extends AppCompatActivity {
         }
 
         tvHeaderTitle = findViewById(R.id.tv_header_title);
-        tvCurrentLang = findViewById(R.id.tv_current_lang);
+        tabGujarati = findViewById(R.id.tab_gujarati);
+        tabHindi = findViewById(R.id.tab_hindi);
+        tabEnglish = findViewById(R.id.tab_english);
+
         tvMandatoryTitle = findViewById(R.id.tv_mandatory_title);
         tvMandatorySub = findViewById(R.id.tv_mandatory_sub);
         tvCautionaryTitle = findViewById(R.id.tv_cautionary_title);
@@ -71,9 +74,14 @@ public class Task_SymbolActivity extends AppCompatActivity {
         tvTrafficPoliceTitle = findViewById(R.id.tv_trafficpolice_title);
         tvTrafficPoliceSub = findViewById(R.id.tv_trafficpolice_sub);
 
-        View btnChangeLang = findViewById(R.id.btn_change_lang);
-        if (btnChangeLang != null) {
-            btnChangeLang.setOnClickListener(v -> showLanguageDialog());
+        if (tabGujarati != null) {
+            tabGujarati.setOnClickListener(v -> setLanguage("gujarati"));
+        }
+        if (tabHindi != null) {
+            tabHindi.setOnClickListener(v -> setLanguage("hindi"));
+        }
+        if (tabEnglish != null) {
+            tabEnglish.setOnClickListener(v -> setLanguage("english"));
         }
 
         updateUiLanguage();
@@ -109,27 +117,40 @@ public class Task_SymbolActivity extends AppCompatActivity {
         }
     }
 
-    private void showLanguageDialog() {
-        String[] options = {"ગુજરાતી (Gujarati)", "हिन्दी (Hindi)", "English"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(str_language.equals("gujarati") ? "ભાષા પસંદ કરો" : str_language.equals("hindi") ? "भाषा चुनें" : "Select Language");
-        builder.setItems(options, (dialog, which) -> {
-            if (which == 0) {
-                str_language = "gujarati";
-            } else if (which == 1) {
-                str_language = "hindi";
-            } else {
-                str_language = "english";
-            }
-            updateUiLanguage();
-        });
-        builder.show();
+    public void setLanguage(String lang) {
+        this.str_language = lang;
+        updateUiLanguage();
     }
 
     private void updateUiLanguage() {
+        // Update Segmented Tabs styling
+        if (tabGujarati != null && tabHindi != null && tabEnglish != null) {
+            if ("hindi".equalsIgnoreCase(str_language)) {
+                tabHindi.setBackgroundResource(R.drawable.bg_tab_active);
+                tabHindi.setTextColor(Color.parseColor("#1E40AF"));
+                tabGujarati.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabGujarati.setTextColor(Color.parseColor("#64748B"));
+                tabEnglish.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabEnglish.setTextColor(Color.parseColor("#64748B"));
+            } else if ("english".equalsIgnoreCase(str_language)) {
+                tabEnglish.setBackgroundResource(R.drawable.bg_tab_active);
+                tabEnglish.setTextColor(Color.parseColor("#1E40AF"));
+                tabGujarati.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabGujarati.setTextColor(Color.parseColor("#64748B"));
+                tabHindi.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabHindi.setTextColor(Color.parseColor("#64748B"));
+            } else {
+                tabGujarati.setBackgroundResource(R.drawable.bg_tab_active);
+                tabGujarati.setTextColor(Color.parseColor("#1E40AF"));
+                tabHindi.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabHindi.setTextColor(Color.parseColor("#64748B"));
+                tabEnglish.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabEnglish.setTextColor(Color.parseColor("#64748B"));
+            }
+        }
+
         if ("gujarati".equalsIgnoreCase(str_language)) {
             if (tvHeaderTitle != null) tvHeaderTitle.setText("RTO સંકેતો / ચિહ્નો");
-            if (tvCurrentLang != null) tvCurrentLang.setText("ગુજરાતી");
             if (tvMandatoryTitle != null) tvMandatoryTitle.setText("ફરજિયાત સંકેતો");
             if (tvMandatorySub != null) tvMandatorySub.setText("ફરજિયાત પાલન કરવાના ટ્રાફિક ચિહ્નો");
             if (tvCautionaryTitle != null) tvCautionaryTitle.setText("ચેતવણી સંકેતો");
@@ -144,7 +165,6 @@ public class Task_SymbolActivity extends AppCompatActivity {
             if (tvTrafficPoliceSub != null) tvTrafficPoliceSub.setText("હાથ વડે ટ્રાફિક નિયંત્રણના સંકેતો");
         } else if ("hindi".equalsIgnoreCase(str_language)) {
             if (tvHeaderTitle != null) tvHeaderTitle.setText("RTO संकेत और चिन्ह");
-            if (tvCurrentLang != null) tvCurrentLang.setText("हिन्दी");
             if (tvMandatoryTitle != null) tvMandatoryTitle.setText("अनिवार्य संकेत");
             if (tvMandatorySub != null) tvMandatorySub.setText("अनिवार्य ट्रैफिक नियम और संकेत");
             if (tvCautionaryTitle != null) tvCautionaryTitle.setText("चेतावनी संकेत");
@@ -159,7 +179,6 @@ public class Task_SymbolActivity extends AppCompatActivity {
             if (tvTrafficPoliceSub != null) tvTrafficPoliceSub.setText("हाथ द्वारा यातायात नियंत्रण के संकेत");
         } else {
             if (tvHeaderTitle != null) tvHeaderTitle.setText("RTO Symbols");
-            if (tvCurrentLang != null) tvCurrentLang.setText("English");
             if (tvMandatoryTitle != null) tvMandatoryTitle.setText("Mandatory");
             if (tvMandatorySub != null) tvMandatorySub.setText("Compulsory traffic signs");
             if (tvCautionaryTitle != null) tvCautionaryTitle.setText("Cautionary");

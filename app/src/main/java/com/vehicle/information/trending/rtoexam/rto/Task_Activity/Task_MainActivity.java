@@ -105,15 +105,7 @@ public class Task_MainActivity extends AppCompatActivity {
             );
         }
 
-        // 6. e-Challan Official Status
-        View cardChallan = findViewById(R.id.card_challan_status);
-        if (cardChallan != null) {
-            cardChallan.setOnClickListener(v ->
-                    MyApplication.showInterstitialAd(Task_MainActivity.this, () ->
-                            Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_ChallanSearchActivity.class))
-                    )
-            );
-        }
+
 
         // 7. Vehicle Loan & EMI Calculator
         View cardLoanEmi = findViewById(R.id.card_loan_emi);

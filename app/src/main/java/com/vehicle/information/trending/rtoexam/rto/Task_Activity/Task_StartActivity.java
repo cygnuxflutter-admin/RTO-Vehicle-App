@@ -115,6 +115,7 @@ public class Task_StartActivity extends AppCompatActivity implements GlobalRefer
         if (privacyBtn != null) {
             privacyBtn.setOnClickListener(this::onClick);
         }
+
         this.FuelList = new ArrayList<>();
         textView8 = findViewById(R.id.textView8);
         textView9 = findViewById(R.id.textView9);
@@ -129,12 +130,14 @@ public class Task_StartActivity extends AppCompatActivity implements GlobalRefer
         }
         loadFuelData();
 
-        this.textView9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyApplication.showInterstitialAd(Task_StartActivity.this, () -> Next_FuelCityActivity() );
-            }
-        });
+        if (this.textView9 != null) {
+            this.textView9.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MyApplication.showInterstitialAd(Task_StartActivity.this, () -> Next_FuelCityActivity());
+                }
+            });
+        }
 
         OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
         OneSignal.initWithContext(Task_StartActivity.this);
@@ -173,7 +176,6 @@ public class Task_StartActivity extends AppCompatActivity implements GlobalRefer
     private void Next_FuelCityActivity() {
         startActivity(new Intent(Task_StartActivity.this, Task_FuelCityActivity.class));
     }
-
     @Override
     public void onConfigLoaded() {
 

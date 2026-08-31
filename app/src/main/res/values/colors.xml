@@ -27,9 +27,9 @@
     <color name="grayblue_light_bg">#EAEAEC</color>
     <color name="medium_gray_bg">#dfdfdf</color>
 
-    <color name="colorAccent">#F52927</color>
-    <color name="colorPrimary">@color/purple_200</color>
-    <color name="colorPrimaryDark">@color/purple_500</color>
+    <color name="colorAccent">@color/theme_accent_blue</color>
+    <color name="colorPrimary">@color/theme_primary</color>
+    <color name="colorPrimaryDark">@color/theme_primary</color>
 
     <color name="colorRed">#F52927</color>
     <color name="colorYellow">#FFC107</color>

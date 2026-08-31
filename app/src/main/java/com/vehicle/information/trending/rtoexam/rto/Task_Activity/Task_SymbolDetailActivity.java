@@ -22,8 +22,11 @@ public class Task_SymbolDetailActivity extends AppCompatActivity {
 
     Task_SymbolAdpter rtoSymbolDet_rcyAdp;
     RecyclerView rto_list_recycler;
-    String str_pass_value;
+    String str_pass_value = "Mandatory";
     String str_language = "gujarati";
+
+    TextView tvHeaderTitle;
+    TextView tabGujarati, tabHindi, tabEnglish;
 
     // 1. Cautionary
     int[] cautionary_img_ary = {
@@ -279,7 +282,65 @@ public class Task_SymbolDetailActivity extends AppCompatActivity {
             this.str_language = lang;
         }
 
-        TextView tvHeaderTitle = findViewById(R.id.tv_header_title);
+        tvHeaderTitle = findViewById(R.id.tv_header_title);
+        tabGujarati = findViewById(R.id.tab_gujarati);
+        tabHindi = findViewById(R.id.tab_hindi);
+        tabEnglish = findViewById(R.id.tab_english);
+
+        if (tabGujarati != null) {
+            tabGujarati.setOnClickListener(v -> {
+                this.str_language = "gujarati";
+                loadSymbolData();
+            });
+        }
+        if (tabHindi != null) {
+            tabHindi.setOnClickListener(v -> {
+                this.str_language = "hindi";
+                loadSymbolData();
+            });
+        }
+        if (tabEnglish != null) {
+            tabEnglish.setOnClickListener(v -> {
+                this.str_language = "english";
+                loadSymbolData();
+            });
+        }
+
+        this.rto_list_recycler = findViewById(R.id.rto_list_recycler);
+        this.rto_list_recycler.setHasFixedSize(true);
+        this.rto_list_recycler.setLayoutManager(new LinearLayoutManager(this));
+        this.rto_list_recycler.setItemAnimator(new DefaultItemAnimator());
+
+        loadSymbolData();
+    }
+
+    private void loadSymbolData() {
+        // Update Tabs Styling
+        if (tabGujarati != null && tabHindi != null && tabEnglish != null) {
+            if ("hindi".equalsIgnoreCase(str_language)) {
+                tabHindi.setBackgroundResource(R.drawable.bg_tab_active);
+                tabHindi.setTextColor(Color.parseColor("#1E40AF"));
+                tabGujarati.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabGujarati.setTextColor(Color.parseColor("#64748B"));
+                tabEnglish.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabEnglish.setTextColor(Color.parseColor("#64748B"));
+            } else if ("english".equalsIgnoreCase(str_language)) {
+                tabEnglish.setBackgroundResource(R.drawable.bg_tab_active);
+                tabEnglish.setTextColor(Color.parseColor("#1E40AF"));
+                tabGujarati.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabGujarati.setTextColor(Color.parseColor("#64748B"));
+                tabHindi.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabHindi.setTextColor(Color.parseColor("#64748B"));
+            } else {
+                tabGujarati.setBackgroundResource(R.drawable.bg_tab_active);
+                tabGujarati.setTextColor(Color.parseColor("#1E40AF"));
+                tabHindi.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabHindi.setTextColor(Color.parseColor("#64748B"));
+                tabEnglish.setBackgroundResource(R.drawable.bg_tab_inactive);
+                tabEnglish.setTextColor(Color.parseColor("#64748B"));
+            }
+        }
+
         if (tvHeaderTitle != null) {
             tvHeaderTitle.setText(getHeaderTitleText(this.str_pass_value, this.str_language));
         }
@@ -347,11 +408,6 @@ public class Task_SymbolDetailActivity extends AppCompatActivity {
         }
 
         this.rtoSymbolDet_rcyAdp = new Task_SymbolAdpter(selectedTextArray, selectedImageArray);
-
-        this.rto_list_recycler = findViewById(R.id.rto_list_recycler);
-        this.rto_list_recycler.setHasFixedSize(true);
-        this.rto_list_recycler.setLayoutManager(new LinearLayoutManager(this));
-        this.rto_list_recycler.setItemAnimator(new DefaultItemAnimator());
         this.rto_list_recycler.setAdapter(this.rtoSymbolDet_rcyAdp);
     }
 
