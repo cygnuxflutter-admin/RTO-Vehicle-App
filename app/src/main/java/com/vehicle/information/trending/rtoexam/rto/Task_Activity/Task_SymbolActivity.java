@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.vehicle.information.trending.rtoexam.rto.MyApplication;
 import com.vehicle.information.trending.rtoexam.rto.R;
 import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_LoadAds;
+import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_NativeAdUtil;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_NetworkUtils;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
 
@@ -48,6 +49,11 @@ public class Task_SymbolActivity extends AppCompatActivity {
                 if (rl_ad != null) rl_ad.setVisibility(View.GONE);
                 View rlBanner = findViewById(R.id.rlBanner);
                 if (rlBanner != null) rlBanner.setVisibility(View.GONE);
+            }
+
+            RelativeLayout nativeAdContainer = findViewById(R.id.native_ad_container_symbols);
+            if (taskPreferenceClass.getInt("NativeAdShow", 1) == 1) {
+                Task_NativeAdUtil.loadNativeAd(nativeAdContainer, this);
             }
         }
 

@@ -33,7 +33,7 @@ public class Task_ExamsActivity extends AppCompatActivity {
         RelativeLayout rl_ad = this.findViewById(R.id.rl_ad);
         if (Task_NetworkUtils.isNetworkAvailable(this)) {
             Task_PreferenceClass taskPreferenceClass = new Task_PreferenceClass(this);
-            if (taskPreferenceClass.getInt("BannerAdShow") == 1){
+            if (taskPreferenceClass.getInt("BannerAdShow", 1) == 1){
                 Task_LoadAds.loadAdmobBannerAd(this, rl_ad);
             } else {
                 rl_ad.setVisibility(View.GONE);

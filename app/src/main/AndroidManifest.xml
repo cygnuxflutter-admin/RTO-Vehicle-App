@@ -18,11 +18,11 @@
         android:allowBackup="false"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher1"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher1"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
@@ -41,7 +41,7 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_StartActivity"
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_SplashScreenActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -49,6 +49,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_StartActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_PrivacyPolicyActivity"
             android:exported="true"
@@ -139,6 +143,78 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_DocumentVaultActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_QuizActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_ResultActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_ResultCardsActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_SelectExamsPrepareActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_EnterInformationActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_ExpiryReminderActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_ChallanSearchActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_CityActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.ChallanDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.DLActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.DLDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.DLErrorActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.FinanceDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.InsuranceDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.SearchResultLoaderActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.SearchVehicleActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.SearchVehicleDetailsLoaderActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.VehicleDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 

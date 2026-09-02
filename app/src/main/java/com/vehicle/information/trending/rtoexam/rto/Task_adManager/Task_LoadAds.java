@@ -32,7 +32,22 @@ public class Task_LoadAds {
     public static ShimmerFrameLayout shimmerFrameLayout;
 
     public static void loadAdmobBannerAd(Activity activity, RelativeLayout mainLayout) {
-        // Test ads allowed in DEBUG
+        if (activity == null || mainLayout == null) return;
+        Task_PreferenceClass taskPreferenceClass = new Task_PreferenceClass(activity);
+        if (taskPreferenceClass.getInt("BannerAdShow", 0) == 0) {
+            Log.e("FIREBASE_ADS", "🔴 [BANNER_AD] Banner Ads are DISABLED via Firebase (BannerAdShow=0)");
+            mainLayout.setVisibility(View.GONE);
+            mainLayout.removeAllViews();
+            return;
+        }
+
+        String bannerAdunitID = taskPreferenceClass.getAdsId("GoogleBannerAd"); 
+        if (bannerAdunitID == null || bannerAdunitID.trim().isEmpty()) { 
+            Log.e("FIREBASE_ADS", "🔴 [BANNER_AD] No GoogleBannerAd ID in Firebase -> Checking ADX or Hiding");
+            loadADXBannerAd(activity, mainLayout);
+            return;
+        }
+        mainLayout.setVisibility(View.VISIBLE);
         mainLayout.removeAllViews();
         RelativeLayout.LayoutParams bannerParameters =
                 new RelativeLayout.LayoutParams(
@@ -40,12 +55,9 @@ public class Task_LoadAds {
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
         bannerParameters.addRule(RelativeLayout.CENTER_IN_PARENT);
         mainLayout.addView(getBannerView(activity));
+        Log.e("FIREBASE_ADS", "🟢 [BANNER_AD] Loading Banner Ad with ID: " + bannerAdunitID);
 
-        String bannerAdunitID = new Task_PreferenceClass(activity).getAdsId("GoogleBannerAd"); if (bannerAdunitID == null || bannerAdunitID.isEmpty()) { bannerAdunitID = "ca-app-pub-3940256099942544/6300978111"; }
-        Log.e("TAG%%Banner", "GoogleBannerAd: " + bannerAdunitID);
-
-        if (bannerAdunitID != null) {
-            AdView adView = new AdView(activity);
+        AdView adView = new AdView(activity);
             AdSize adSize = getAdSize(activity);
             adView.setAdSize(adSize);
             adView.setAdUnitId(bannerAdunitID);
@@ -57,69 +69,82 @@ public class Task_LoadAds {
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                     super.onAdFailedToLoad(loadAdError);
+                    Log.e("FIREBASE_ADS", "❌ [BANNER_AD] AdMob Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
                     loadADXBannerAd(activity, mainLayout);
                 }
 
                 @Override
                 public void onAdLoaded() {
                     super.onAdLoaded();
-
+                    Log.e("FIREBASE_ADS", "🎉 [BANNER_AD] AdMob Banner Loaded Successfully!");
                     mainLayout.removeAllViews();
                     mainLayout.addView(adView, bannerParameters);
                 }
             });
 
         }
-    }
     private static void loadADXBannerAd(Activity activity, RelativeLayout mainLayout) {
-        mainLayout.removeAllViews();
         String AdxBannerAdunitID = new Task_PreferenceClass(activity).getAdsId("AdxBannerAdunitID");
-        Log.e("TAG%%Banner", "adXInterstitialAdId: " + AdxBannerAdunitID);
-
-        if (AdxBannerAdunitID != null) {
-            AdView adView = new AdView(activity);
-            AdSize adSize = getAdSize(activity);
-            adView.setAdSize(adSize);
-            adView.setAdUnitId(AdxBannerAdunitID);
-
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
-
-            RelativeLayout.LayoutParams bannerParameters =
-                    new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.WRAP_CONTENT,
-                            RelativeLayout.LayoutParams.WRAP_CONTENT);
-            bannerParameters.addRule(RelativeLayout.CENTER_IN_PARENT);
-
-            adView.setAdListener(new AdListener() {
-                @Override
-                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                    super.onAdFailedToLoad(loadAdError);
-                    loadFBBannerAd(activity, mainLayout);
-                }
-
-                @Override
-                public void onAdLoaded() {
-                    super.onAdLoaded();
-                    mainLayout.removeAllViews();
-                    mainLayout.addView(adView, bannerParameters);
-                }
-            });
+        if (AdxBannerAdunitID == null || AdxBannerAdunitID.trim().isEmpty()) {
+            loadFBBannerAd(activity, mainLayout);
+            return;
         }
+
+        AdView adView = new AdView(activity);
+        AdSize adSize = getAdSize(activity);
+        adView.setAdSize(adSize);
+        adView.setAdUnitId(AdxBannerAdunitID);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        RelativeLayout.LayoutParams bannerParameters =
+                new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+        bannerParameters.addRule(RelativeLayout.CENTER_IN_PARENT);
+
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                Log.e("FIREBASE_ADS", "❌ [BANNER_AD] AdMob Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
+                loadFBBannerAd(activity, mainLayout);
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                Log.e("FIREBASE_ADS", "🎉 [BANNER_AD] AdMob Banner Loaded Successfully!");
+                mainLayout.setVisibility(View.VISIBLE);
+                mainLayout.removeAllViews();
+                mainLayout.addView(adView, bannerParameters);
+            }
+        });
     }
+
     private static void loadFBBannerAd(Activity activity, RelativeLayout mainLayout) {
         String fbBannerAdunitID = new Task_PreferenceClass(activity).getAdsId("FbBannerAd");
-        Log.e("TAG%%Banner", "FbBannerAd: " + fbBannerAdunitID);
+        if (fbBannerAdunitID == null || fbBannerAdunitID.trim().isEmpty()) {
+            Log.e("FIREBASE_ADS", "🔴 [BANNER_AD] No banner ads available from Firebase -> Hiding container");
+            mainLayout.removeAllViews();
+            mainLayout.setVisibility(View.GONE);
+            return;
+        }
         com.facebook.ads.AdView fbBannerView = new com.facebook.ads.AdView(activity, fbBannerAdunitID, com.facebook.ads.AdSize.BANNER_HEIGHT_50);
         mainLayout.setGravity(Gravity.BOTTOM);
 
         com.facebook.ads.AdListener adListener = new com.facebook.ads.AdListener() {
             @Override
             public void onError(Ad ad, AdError adError) {
+                Log.e("FIREBASE_ADS", "🔴 [BANNER_AD] All banner sources failed -> Hiding ad container");
+                mainLayout.removeAllViews();
+                mainLayout.setVisibility(View.GONE);
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
+                mainLayout.setVisibility(View.VISIBLE);
                 mainLayout.removeAllViews();
                 mainLayout.addView(fbBannerView);
             }
@@ -158,61 +183,74 @@ public class Task_LoadAds {
     }
 
 
-    public static void loadCollapsibleBanner(Activity activity, String str,FrameLayout mainLayout, RelativeLayout relativeLayout,ShimmerFrameLayout shimmer_view_container) {
-        if (com.vehicle.information.trending.rtoexam.rto.BuildConfig.DEBUG) {
+    public static void loadCollapsibleBanner(Activity activity, String str, FrameLayout mainLayout, RelativeLayout relativeLayout, ShimmerFrameLayout shimmer_view_container) {
+        if (activity == null || mainLayout == null) return;
+        Task_PreferenceClass taskPreferenceClass = new Task_PreferenceClass(activity);
+        if (taskPreferenceClass.getInt("BannerAdShow", 1) == 0) {
+            Log.e("FIREBASE_ADS", "🔴 [COLLAPSIBLE_BANNER] Banner Ads are DISABLED via Firebase (BannerAdShow=0)");
+            if (relativeLayout != null) relativeLayout.setVisibility(View.GONE);
             mainLayout.setVisibility(View.GONE);
-            if (shimmer_view_container != null) {
-                shimmer_view_container.stopShimmer();
-                shimmer_view_container.setVisibility(View.GONE);
-            }
             return;
         }
 
-        String CollapsiblebannerID = new Task_PreferenceClass(activity).getAdsId("CollapsibleBannerID");
+        String CollapsiblebannerID = taskPreferenceClass.getAdsId("CollapsibleBannerID");
+        if (taskPreferenceClass == null) {
+            taskPreferenceClass = new Task_PreferenceClass(activity);
+        }
+        CollapsiblebannerID = taskPreferenceClass.getAdsId("CollapsibleBannerID");
+        if (CollapsiblebannerID == null || CollapsiblebannerID.trim().isEmpty()) {
+            CollapsiblebannerID = taskPreferenceClass.getAdsId("GoogleBannerAd");
+        }
+        if (CollapsiblebannerID == null || CollapsiblebannerID.trim().isEmpty()) {
+            CollapsiblebannerID = taskPreferenceClass.getAdsId("AdxBannerAdunitID");
+        }
+        if (CollapsiblebannerID == null || CollapsiblebannerID.trim().isEmpty()) {
+            return;
+        }
+        Log.e("FIREBASE_ADS", "🟢 [COLLAPSIBLE_BANNER] Loading Collapsible Banner with ID: " + CollapsiblebannerID);
 
         shimmerFrameLayout = shimmer_view_container;
         mainLayout.removeAllViews();
-        String bannerAdunitID = CollapsiblebannerID ;
-        if (bannerAdunitID != null) {
-            AdView adView = new AdView(activity);
-            AdSize adSize = getAdSize(activity,mainLayout);
-            adView.setAdSize(adSize);
-            adView.setAdUnitId(bannerAdunitID);
-            Bundle extras = new Bundle();
-            extras.putString("collapsible", str);
-            extras.putString("collapsible_request_id", UUID.randomUUID().toString());
-            AdRequest adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
-            mainLayout.setVisibility(View.VISIBLE);
-            try {
-                adView.loadAd(adRequest);
-            } catch (Exception e) {
-                Log.e("TAG", "loadCollapsibleBanner: Catch"+ e.getMessage() );
-            }
+        if (relativeLayout != null) relativeLayout.setVisibility(View.VISIBLE);
+        mainLayout.setVisibility(View.VISIBLE);
 
+        AdView adView = new AdView(activity);
+        AdSize adSize = getAdSize(activity, mainLayout);
+        adView.setAdSize(adSize);
+        adView.setAdUnitId(CollapsiblebannerID);
+        Bundle extras = new Bundle();
+        extras.putString("collapsible", str != null ? str : "top");
+        extras.putString("collapsible_request_id", UUID.randomUUID().toString());
+        AdRequest adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
 
-            adView.setAdListener(new AdListener() {
-                @Override
-                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                    super.onAdFailedToLoad(loadAdError);
-                    mainLayout.setVisibility(View.GONE);
-//                    loadADXBannerAd(activity, relativeLayout);
-                    Log.e("TAG", "onAdFailedToLoad: Collapse Fail="+ loadAdError.getMessage() );
-                }
-                @Override
-                public void onAdLoaded() {
-                    super.onAdLoaded();
-                    if (shimmerFrameLayout!= null) {
-                        shimmerFrameLayout.stopShimmer();
-                        shimmerFrameLayout.setVisibility(View.GONE);
-                        shimmerFrameLayout.hideShimmer();
-                    }
-                }
-
-            });
-
-            mainLayout.addView(adView);
+        try {
+            adView.loadAd(adRequest);
+        } catch (Exception e) {
+            Log.e("FIREBASE_ADS", "❌ [COLLAPSIBLE_BANNER] Error: " + e.getMessage());
         }
 
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                Log.e("FIREBASE_ADS", "❌ [COLLAPSIBLE_BANNER] Failed to load: " + loadAdError.getMessage());
+                if (relativeLayout != null) relativeLayout.setVisibility(View.GONE);
+                mainLayout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                Log.e("FIREBASE_ADS", "🎉 [COLLAPSIBLE_BANNER] Collapsible Banner Loaded Successfully!");
+                if (shimmer_view_container != null) {
+                    shimmer_view_container.stopShimmer();
+                    shimmer_view_container.setVisibility(View.GONE);
+                    shimmer_view_container.hideShimmer();
+                }
+            }
+        });
+
+        mainLayout.addView(adView);
     }
 
     private static AdSize getAdSize(Activity activity, FrameLayout mainLayout) {

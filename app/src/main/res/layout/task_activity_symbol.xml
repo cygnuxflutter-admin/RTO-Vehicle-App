@@ -439,6 +439,14 @@
                     app:tint="#64748B" />
             </LinearLayout>
 
+            <!-- Native Ad Container after 5 items -->
+            <RelativeLayout
+                android:id="@+id/native_ad_container_symbols"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone" />
+
             <!-- 6. Traffic Police Signals -->
             <LinearLayout
                 android:id="@+id/cv_trafficpolice_signals"

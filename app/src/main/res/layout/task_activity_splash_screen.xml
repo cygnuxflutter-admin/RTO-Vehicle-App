@@ -3,27 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_splash_gradient">
+    android:background="@color/white">
 
-    <!-- Center RTO Hero Content -->
+    <!-- Center Hero Branding Container -->
     <LinearLayout
         android:id="@+id/brand_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingStart="24dp"
-        android:paddingEnd="24dp">
+        android:paddingEnd="24dp"
+        android:layout_marginTop="-20dp">
 
-        <!-- 3D Driving License Smart Card Emblem (Transparent) -->
+        <!-- Custom 3D RTO Curved Emblem Logo -->
         <ImageView
             android:id="@+id/iv_splash_logo"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="165dp"
+            android:layout_height="165dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/img_3d_rto_license_emblem" />
+            android:src="@drawable/app_splash_logo" />
 
         <!-- App Title -->
         <TextView
@@ -34,19 +35,19 @@
             android:fontFamily="@font/task_roboto_bold"
             android:letterSpacing="0.02"
             android:text="RTO Exam &amp; Vehicle Guide"
-            android:textColor="@color/white"
-            android:textSize="22sp" />
+            android:textColor="#0F172A"
+            android:textSize="23sp" />
 
         <!-- App Subtitle -->
         <TextView
             android:id="@+id/tv_app_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:fontFamily="@font/task_roboto_regular"
             android:text="Driving License, Traffic Signs &amp; Services"
-            android:textColor="#BFDBFE"
-            android:textSize="13sp" />
+            android:textColor="#64748B"
+            android:textSize="13.5sp" />
 
         <!-- Clean Lightweight Loader Indicator -->
         <LinearLayout
@@ -58,19 +59,19 @@
 
             <ProgressBar
                 android:id="@+id/splash_progress"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:indeterminate="true"
-                android:indeterminateTint="@color/white" />
+                android:indeterminateTint="#2563EB" />
 
             <TextView
                 android:id="@+id/tv_splash_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
                 android:fontFamily="@font/task_roboto_regular"
-                android:text="Loading RTO questions &amp; rules..."
-                android:textColor="#E0F2FE"
+                android:text="Loading RTO exam questions..."
+                android:textColor="#64748B"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
@@ -82,28 +83,28 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="28dp"
         android:background="@drawable/bg_splash_track"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="14dp"
-        android:paddingTop="6dp"
-        android:paddingEnd="14dp"
-        android:paddingBottom="6dp">
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp">
 
         <ImageView
-            android:layout_width="14dp"
-            android:layout_height="14dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:src="@drawable/ic_btn_privacy"
-            app:tint="#93C5FD" />
+            app:tint="#2563EB" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="8dp"
             android:fontFamily="@font/task_roboto_regular"
             android:text="Official RTO Guide • 100% Free &amp; Secure"
-            android:textColor="#BAE6FD"
-            android:textSize="11sp" />
+            android:textColor="#1E40AF"
+            android:textSize="12sp" />
     </LinearLayout>
 </RelativeLayout>

@@ -58,6 +58,7 @@
         <item name="colorPrimary">@color/theme_primary</item>
         <item name="colorPrimaryDark">@color/theme_primary</item>
         <item name="android:statusBarColor">@color/theme_primary</item>
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 
     <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">

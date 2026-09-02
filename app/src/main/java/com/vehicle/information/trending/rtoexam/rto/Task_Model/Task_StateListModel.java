@@ -1,12 +1,23 @@
 package com.vehicle.information.trending.rtoexam.rto.Task_Model;
 
 public class Task_StateListModel {
-    String id;
-    String stateName;
+    private String id;
+    private String stateName;
+    private String subtitle;
+    private boolean isState;
 
-    public Task_StateListModel(String str, String str2) {
-        this.stateName = str;
-        this.id = str2;
+    public Task_StateListModel(String name, String id) {
+        this.stateName = name;
+        this.id = id;
+        this.subtitle = "";
+        this.isState = "STATE".equalsIgnoreCase(id) || "null".equalsIgnoreCase(id);
+    }
+
+    public Task_StateListModel(String name, String id, String subtitle, boolean isState) {
+        this.stateName = name;
+        this.id = id;
+        this.subtitle = subtitle;
+        this.isState = isState;
     }
 
     public String getStateName() {
@@ -23,5 +34,21 @@ public class Task_StateListModel {
 
     public void setId(String str) {
         this.id = str;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public boolean isState() {
+        return isState;
+    }
+
+    public void setState(boolean state) {
+        isState = state;
     }
 }

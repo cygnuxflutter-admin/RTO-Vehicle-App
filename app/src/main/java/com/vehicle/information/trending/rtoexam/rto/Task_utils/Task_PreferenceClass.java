@@ -44,22 +44,6 @@ public class Task_PreferenceClass {
                 return val;
             }
         }
-        // Fallback official Google AdMob test IDs
-        if ("GoogleBannerAd".equals(type) || "AdxBannerAdunitID".equals(type)) {
-            return "ca-app-pub-3940256099942544/6300978111";
-        } else if ("GoogleNativeAd".equals(type) || "AdxNativeUnitID".equals(type)) {
-            return "ca-app-pub-3940256099942544/2247696110";
-        } else if ("GoogleInterstitialAd".equals(type) || "AdxInterstitalAdunitID".equals(type)) {
-            return "ca-app-pub-3940256099942544/1033173712";
-        } else if ("GoogleAppopenAd".equals(type) || "AdxAppOpenID".equals(type)) {
-            return "ca-app-pub-3940256099942544/9257395921";
-        } else if ("GoogleRewardedAd".equals(type) || "AdxRewardVideoUnitID".equals(type)) {
-            return "ca-app-pub-3940256099942544/5224354917";
-        } else if ("GoogleInterstialRewardAd".equals(type)) {
-            return "ca-app-pub-3940256099942544/5354046379";
-        } else if ("CollapsibleBannerID".equals(type)) {
-            return "ca-app-pub-3940256099942544/9214589741";
-        }
         return "";
     }
 
@@ -79,6 +63,18 @@ public class Task_PreferenceClass {
     }
 
     public int getAdsStatus(String type) {
+        if ("InerstialClickCount".equals(type) || "EditScreenAdCount".equals(type)) {
+            return prefs.getInt(type, 3);
+        }
+        if ("NativeAdIntervalCount".equals(type)) {
+            return prefs.getInt(type, 10);
+        }
+        if ("FreeQuestionsCount".equals(type)) {
+            return prefs.getInt(type, 20);
+        }
+        if ("RewardUnlockEnabled".equals(type)) {
+            return prefs.getInt(type, 1);
+        }
         return prefs.getInt(type, 1);
     }
 

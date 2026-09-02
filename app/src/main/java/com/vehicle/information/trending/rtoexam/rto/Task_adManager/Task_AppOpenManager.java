@@ -49,7 +49,11 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
      * Request an ad
      */
     public void fetchAd() {
-        if (AppOpenAdShow != null && AppOpenAdShow == 0) {
+        if (taskPreferenceClass == null) {
+            taskPreferenceClass = new Task_PreferenceClass(myApplication);
+        }
+        int splashPref = taskPreferenceClass.getInt("splashscreen", 1);
+        if ((AppOpenAdShow == null || AppOpenAdShow == 0) && splashPref != 1) {
             return;
         }
         // Have unused ad, no need to fetch another.
@@ -76,11 +80,13 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
             taskPreferenceClass = new Task_PreferenceClass(myApplication);
         }
         AD_UNIT_ID1 = taskPreferenceClass.getAdsId("GoogleAppopenAd");
-        if (AD_UNIT_ID1 == null || AD_UNIT_ID1.isEmpty()) {
-            AD_UNIT_ID1 = "ca-app-pub-3940256099942544/9257395921";
+        if (AD_UNIT_ID1 == null || AD_UNIT_ID1.trim().isEmpty()) {
+            fetchAdX();
+            return;
         }
         AD_UNIT_ID2 = taskPreferenceClass.getAdsId("AdxAppOpenID");
         AdRequest request = getAdRequest();
+        Log.e("FIREBASE_ADS", "🟢 [APP_OPEN_AD] Loading AdMob AppOpen with ID: " + AD_UNIT_ID1);
         AppOpenAd.load(myApplication, AD_UNIT_ID1, request, AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback);
     }
 
@@ -238,8 +244,8 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
                 taskPreferenceClass = new Task_PreferenceClass(myApplication);
             }
             AD_UNIT_ID1 = taskPreferenceClass.getAdsId("GoogleAppopenAd");
-            if (AD_UNIT_ID1 == null || AD_UNIT_ID1.isEmpty()) {
-                AD_UNIT_ID1 = "ca-app-pub-3940256099942544/9257395921";
+            if (AD_UNIT_ID1 == null || AD_UNIT_ID1.trim().isEmpty()) {
+                return;
             }
             AdRequest request = getAdRequest();
             AppOpenAd.load(myApplication, AD_UNIT_ID1, request, AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback);

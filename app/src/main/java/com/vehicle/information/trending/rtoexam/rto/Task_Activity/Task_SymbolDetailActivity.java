@@ -407,7 +407,7 @@ public class Task_SymbolDetailActivity extends AppCompatActivity {
             selectedTextArray = "gujarati".equalsIgnoreCase(str_language) ? this.mandatory_text_ary_gu : this.mandatory_text_ary_en;
         }
 
-        this.rtoSymbolDet_rcyAdp = new Task_SymbolAdpter(selectedTextArray, selectedImageArray);
+        this.rtoSymbolDet_rcyAdp = new Task_SymbolAdpter(this, selectedTextArray, selectedImageArray);
         this.rto_list_recycler.setAdapter(this.rtoSymbolDet_rcyAdp);
     }
 

@@ -150,14 +150,18 @@ public class Task_DBHandler extends SQLiteOpenHelper {
     }
 
     public ArrayList<Task_QueConstructor> getAllQuestions2() {
-        Cursor query = this.db.query("QuesImg", null, null, null, null, null, null);
-        query.moveToFirst();
-        if (query.getCount() <= 0) {
-            return this.quesList;
+        if (this.db == null || !this.db.isOpen()) {
+            this.db = getWritableDatabase();
         }
-        do {
-            this.quesList.add(new Task_QueConstructor(query.getInt(0), fixMojibake(query.getString(1)), fixMojibake(query.getString(2)), fixMojibake(query.getString(3)), fixMojibake(query.getString(4)), fixMojibake(query.getString(5)), query.getString(6)));
-        } while (query.moveToNext());
+        Cursor query = this.db.query("QuesImg", null, null, null, null, null, null);
+        if (query != null) {
+            if (query.moveToFirst()) {
+                do {
+                    this.quesList.add(new Task_QueConstructor(query.getInt(0), fixMojibake(query.getString(1)), fixMojibake(query.getString(2)), fixMojibake(query.getString(3)), fixMojibake(query.getString(4)), fixMojibake(query.getString(5)), query.getString(6)));
+                } while (query.moveToNext());
+            }
+            query.close();
+        }
         return this.quesList;
     }
 

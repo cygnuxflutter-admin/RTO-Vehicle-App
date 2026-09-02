@@ -16,6 +16,7 @@ import com.vehicle.information.trending.rtoexam.rto.R;
 import com.vehicle.information.trending.rtoexam.rto.Task_Adapter.Task_ResultLstAdpter;
 import com.vehicle.information.trending.rtoexam.rto.Task_DataBase.Task_DBHandler;
 import com.vehicle.information.trending.rtoexam.rto.Task_Extra.Task_QueConstructor;
+import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_RewardVideoManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,17 +64,29 @@ public class Task_ResultCardsActivity extends AppCompatActivity {
 
         if (extras != null) {
             ArrayList<String> t1 = extras.getStringArrayList("myanswerlist");
+            if (t1 == null) t1 = extras.getStringArrayList("myanswer");
             if (t1 != null) stringArrayList = t1;
+
             ArrayList<String> t2 = extras.getStringArrayList("Questionnumbers");
+            if (t2 == null) t2 = extras.getStringArrayList("questionnumbers");
             if (t2 != null) stringArrayList2 = t2;
+
             ArrayList<String> t3 = extras.getStringArrayList("Correct");
+            if (t3 == null) t3 = extras.getStringArrayList("correct");
             if (t3 != null) stringArrayList3 = t3;
+
             ArrayList<Integer> t4 = extras.getIntegerArrayList("image");
+            if (t4 == null) t4 = extras.getIntegerArrayList("Image");
             if (t4 != null) integerArrayList = t4;
+
             ArrayList<String> t5 = extras.getStringArrayList("photo");
+            if (t5 == null) t5 = extras.getStringArrayList("Photo");
             if (t5 != null) stringArrayList4 = t5;
+
             ArrayList<Integer> t6 = extras.getIntegerArrayList("numbers");
+            if (t6 == null) t6 = extras.getIntegerArrayList("Numbers");
             if (t6 != null) integerArrayList2 = t6;
+
             this.str_language = extras.getString("language");
         }
 
@@ -97,7 +110,8 @@ public class Task_ResultCardsActivity extends AppCompatActivity {
 
         // Fallback safety if lists were empty
         if (stringArrayList2.isEmpty()) {
-            ArrayList<Task_QueConstructor> dbList = new Task_DBHandler(this).getAllQuestions2();
+            Task_DBHandler db = new Task_DBHandler(this);
+            ArrayList<Task_QueConstructor> dbList = db.getAllQuestions2();
             int limit = Math.min(15, dbList.size());
             for (int k = 0; k < limit; k++) {
                 Task_QueConstructor q = dbList.get(k);
@@ -131,10 +145,23 @@ public class Task_ResultCardsActivity extends AppCompatActivity {
         this.btnHome.setOnClickListener(view -> goHome());
 
         this.btnRetry.setOnClickListener(view -> {
-            Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
-            intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
-            Task_ResultCardsActivity.this.startActivity(intent);
-            Task_ResultCardsActivity.this.finish();
+            Task_RewardVideoManager.showRewardVideoAd(Task_ResultCardsActivity.this, new Task_RewardVideoManager.OnRewardAdLoadInterface() {
+                @Override
+                public void onAdClose(boolean isWithReward) {
+                    Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
+                    intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
+                    Task_ResultCardsActivity.this.startActivity(intent);
+                    Task_ResultCardsActivity.this.finish();
+                }
+
+                @Override
+                public void onAdFail() {
+                    Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
+                    intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
+                    Task_ResultCardsActivity.this.startActivity(intent);
+                    Task_ResultCardsActivity.this.finish();
+                }
+            });
         });
     }
 

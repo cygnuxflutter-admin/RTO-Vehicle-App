@@ -170,6 +170,12 @@ public class Task_LanguageSelectActivity extends AppCompatActivity {
             }
         });
         this.str_from = getIntent().getStringExtra("from");
+        if (this.str_from == null || this.str_from.isEmpty()) {
+            this.str_from = getIntent().getStringExtra("value");
+        }
+        if (this.str_from == null || this.str_from.isEmpty()) {
+            this.str_from = "from_exam";
+        }
         final SharedPreferences sharedPreferences = getSharedPreferences("ShaPreferencesChange", 0);
         this.sharedPreferences = sharedPreferences;
         this.editor = sharedPreferences.edit();
@@ -238,19 +244,18 @@ public class Task_LanguageSelectActivity extends AppCompatActivity {
         public void onPostExecute(Void r5) {
             super.onPostExecute(r5);
             Task_LanguageSelectActivity.this.dismissModernLoader();
-            if (this.str_value.equals("from_exam")) {
-                Intent intent = new Intent(Task_LanguageSelectActivity.this, Task_ExamsActivity.class);
-                intent.putExtra("language", "gujarati");
-                startActivity(intent);
-
-            } else if (this.str_value.equals("from_preparation")) {
+            if ("from_preparation".equals(this.str_value)) {
                 Intent intent2 = new Intent(Task_LanguageSelectActivity.this, Task_SelectExamsPrepareActivity.class);
                 intent2.putExtra("language", "gujarati");
                 startActivity(intent2);
-            } else if (this.str_value.equals("from_symbol")) {
+            } else if ("from_symbol".equals(this.str_value)) {
                 Intent intent3 = new Intent(Task_LanguageSelectActivity.this, Task_SymbolActivity.class);
                 intent3.putExtra("language", "gujarati");
                 startActivity(intent3);
+            } else {
+                Intent intent = new Intent(Task_LanguageSelectActivity.this, Task_ExamsActivity.class);
+                intent.putExtra("language", "gujarati");
+                startActivity(intent);
             }
             Task_LanguageSelectActivity.this.editor.apply();
         }
@@ -800,30 +805,18 @@ public class Task_LanguageSelectActivity extends AppCompatActivity {
         public void onPostExecute(Void r5) {
             super.onPostExecute(r5);
             Task_LanguageSelectActivity.this.dismissModernLoader();
-            if (this.str_value.equals("from_exam")) {
-                Intent intent = new Intent(Task_LanguageSelectActivity.this, Task_ExamsActivity.class);
-                intent.putExtra("language", "hindi");
-                Task_LanguageSelectActivity.this.startActivity(intent);
-               /* AdsManager.getInstance().showInterstitialAd(Task_LanguageSelectActivity.this, new AdsManager.AdCloseListener() {
-                    @Override
-                    public void onAdClosed() {
-
-                    }
-                });*/
-            } else if (this.str_value.equals("from_preparation")) {
+            if ("from_preparation".equals(this.str_value)) {
                 Intent intent2 = new Intent(Task_LanguageSelectActivity.this, Task_SelectExamsPrepareActivity.class);
                 intent2.putExtra("language", "hindi");
                 Task_LanguageSelectActivity.this.startActivity(intent2);
-            } else if (this.str_value.equals("from_symbol")) {
+            } else if ("from_symbol".equals(this.str_value)) {
                 Intent intent3 = new Intent(Task_LanguageSelectActivity.this, Task_SymbolActivity.class);
                 intent3.putExtra("language", "hindi");
                 Task_LanguageSelectActivity.this.startActivity(intent3);
-               /* AdsManager.getInstance().showInterstitialAd(Task_LanguageSelectActivity.this, new AdsManager.AdCloseListener() {
-                    @Override
-                    public void onAdClosed() {
-
-                    }
-                });*/
+            } else {
+                Intent intent = new Intent(Task_LanguageSelectActivity.this, Task_ExamsActivity.class);
+                intent.putExtra("language", "hindi");
+                Task_LanguageSelectActivity.this.startActivity(intent);
             }
             Task_LanguageSelectActivity.this.editor.apply();
         }
@@ -2013,31 +2006,18 @@ public class Task_LanguageSelectActivity extends AppCompatActivity {
         public void onPostExecute(Void r5) {
             super.onPostExecute(r5);
             Task_LanguageSelectActivity.this.dismissModernLoader();
-            if (this.str_value.equals("from_exam")) {
-                Intent intent = new Intent(Task_LanguageSelectActivity.this, Task_ExamsActivity.class);
-                intent.putExtra("language", "english");
-                Task_LanguageSelectActivity.this.startActivity(intent);
-               /* AdsManager.getInstance().showInterstitialAd(Task_LanguageSelectActivity.this, new AdsManager.AdCloseListener() {
-                    @Override
-                    public void onAdClosed() {
-
-                        Task_LanguageSelectActivity.this.startActivity(intent);
-                    }
-                });*/
-            } else if (this.str_value.equals("from_preparation")) {
+            if ("from_preparation".equals(this.str_value)) {
                 Intent intent2 = new Intent(Task_LanguageSelectActivity.this, Task_SelectExamsPrepareActivity.class);
                 intent2.putExtra("language", "english");
                 Task_LanguageSelectActivity.this.startActivity(intent2);
-            } else if (this.str_value.equals("from_symbol")) {
+            } else if ("from_symbol".equals(this.str_value)) {
                 Intent intent3 = new Intent(Task_LanguageSelectActivity.this, Task_SymbolActivity.class);
                 intent3.putExtra("language", "english");
                 Task_LanguageSelectActivity.this.startActivity(intent3);
-               /* AdsManager.getInstance().showInterstitialAd(Task_LanguageSelectActivity.this, new AdsManager.AdCloseListener() {
-                    @Override
-                    public void onAdClosed() {
-
-                    }
-                });*/
+            } else {
+                Intent intent = new Intent(Task_LanguageSelectActivity.this, Task_ExamsActivity.class);
+                intent.putExtra("language", "english");
+                Task_LanguageSelectActivity.this.startActivity(intent);
             }
             Task_LanguageSelectActivity.this.editor.apply();
         }

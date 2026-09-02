@@ -1,33 +1,34 @@
 package com.vehicle.information.trending.rtoexam.rto.Task_Adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_StartActivity;
 import com.vehicle.information.trending.rtoexam.rto.R;
-import com.vehicle.information.trending.rtoexam.rto.Task_Extra.Task_Constant;
 import com.vehicle.information.trending.rtoexam.rto.Task_Model.Task_StateListModel;
 
 import java.util.ArrayList;
 
 public class Task_FuelCityAdapter extends RecyclerView.Adapter<Task_FuelCityAdapter.ViewHolder> {
-    Context context;
-    ArrayList<Task_StateListModel> list;
+    private final Context context;
+    private ArrayList<Task_StateListModel> list;
+    private OnItemClickListener listener;
 
-    public Task_FuelCityAdapter(Context context2, ArrayList<Task_StateListModel> arrayList) {
-        this.context = context2;
+    public interface OnItemClickListener {
+        void onItemClick(Task_StateListModel item);
+    }
+
+    public Task_FuelCityAdapter(Context context, ArrayList<Task_StateListModel> arrayList, OnItemClickListener listener) {
+        this.context = context;
         this.list = arrayList;
+        this.listener = listener;
     }
 
     public void setFilteredList(ArrayList<Task_StateListModel> arrayList) {
@@ -35,72 +36,55 @@ public class Task_FuelCityAdapter extends RecyclerView.Adapter<Task_FuelCityAdap
         notifyDataSetChanged();
     }
 
-    @Override 
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.task_lay_fuel, viewGroup, false));
     }
 
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        viewHolder.setIsRecyclable(false);
-        final Task_StateListModel taskStateListModel = this.list.get(i);
-        viewHolder.txt.setText(taskStateListModel.getStateName());
-        if (taskStateListModel.getId().equalsIgnoreCase("null")) {
-            viewHolder.layout.setBackgroundResource(R.drawable.bg_state_header);
-            viewHolder.txt.setTextColor(ContextCompat.getColor(this.context, R.color.theme_primary));
-            viewHolder.txt.setTypeface(null, Typeface.BOLD);
-            viewHolder.txt.setTextSize(13.0f);
-            if (viewHolder.ivIcon != null) {
-                viewHolder.ivIcon.setVisibility(View.GONE);
-            }
-            if (viewHolder.ivArrow != null) {
-                viewHolder.ivArrow.setVisibility(View.GONE);
-            }
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        final Task_StateListModel item = this.list.get(i);
+        viewHolder.txt.setText(item.getStateName());
+
+        String subtitle = item.getSubtitle();
+        if (subtitle != null && !subtitle.trim().isEmpty()) {
+            viewHolder.tvSubtitle.setText(subtitle);
+            viewHolder.tvSubtitle.setVisibility(View.VISIBLE);
         } else {
-            viewHolder.layout.setBackgroundResource(R.drawable.bg_city_item);
-            viewHolder.txt.setTextColor(ContextCompat.getColor(this.context, R.color.theme_text_primary));
-            viewHolder.txt.setTypeface(null, Typeface.NORMAL);
-            viewHolder.txt.setTextSize(15.0f);
-            if (viewHolder.ivIcon != null) {
-                viewHolder.ivIcon.setVisibility(View.VISIBLE);
-            }
-            if (viewHolder.ivArrow != null) {
-                viewHolder.ivArrow.setVisibility(View.VISIBLE);
-            }
+            viewHolder.tvSubtitle.setVisibility(View.GONE);
         }
-        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (!taskStateListModel.getId().equalsIgnoreCase("null")) {
-                    Intent intent = new Intent(Task_FuelCityAdapter.this.context, Task_StartActivity.class);
-                    SharedPreferences.Editor edit = Task_FuelCityAdapter.this.context.getSharedPreferences(Task_Constant.MY_PREFS_NAME, 0).edit();
-                    edit.putString("cityName", taskStateListModel.getStateName());
-                    edit.putString("cityId", taskStateListModel.getId());
-                    edit.apply();
-                    Task_FuelCityAdapter.this.context.startActivity(intent);
-                    if (Task_FuelCityAdapter.this.context instanceof Activity) {
-                        ((Activity) Task_FuelCityAdapter.this.context).finish();
-                    }
-                }
+
+        viewHolder.layout.setBackgroundResource(R.drawable.bg_city_item);
+        viewHolder.ivIcon.setColorFilter(ContextCompat.getColor(context, R.color.theme_primary));
+        viewHolder.ivArrow.setVisibility(View.VISIBLE);
+
+        viewHolder.layout.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(item);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return this.list.size();
+        return this.list != null ? this.list.size() : 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         View layout;
         TextView txt;
+        TextView tvSubtitle;
         ImageView ivIcon;
         ImageView ivArrow;
 
         public ViewHolder(View view) {
             super(view);
-            this.txt = (TextView) view.findViewById(R.id.textView4);
+            this.txt = view.findViewById(R.id.textView4);
+            this.tvSubtitle = view.findViewById(R.id.tv_subtitle);
             this.layout = view.findViewById(R.id.lay);
-            this.ivIcon = (ImageView) view.findViewById(R.id.iv_icon);
-            this.ivArrow = (ImageView) view.findViewById(R.id.iv_arrow);
+            this.ivIcon = view.findViewById(R.id.iv_icon);
+            this.ivArrow = view.findViewById(R.id.iv_arrow);
         }
     }
 }

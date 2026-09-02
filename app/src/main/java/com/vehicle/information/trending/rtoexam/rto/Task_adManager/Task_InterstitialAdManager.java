@@ -33,20 +33,23 @@ public class Task_InterstitialAdManager {
     public Task_InterstitialAdManager(Context context) {
         this.context = context;
         taskPreferenceClass = new Task_PreferenceClass(this.context);
-        String rawAdmob = taskPreferenceClass.getAdsId("GoogleInterstitialAd"); if (rawAdmob == null || rawAdmob.isEmpty()) { rawAdmob = "ca-app-pub-3940256099942544/1033173712"; } admobInterstitialAdId = rawAdmob;
-        adXInterstitialAdId = taskPreferenceClass.getAdsId("AdxInterstitalAdunitID");
-        fbInterstitialAdId = taskPreferenceClass.getAdsId("FbInterstitialAd");
+        String rawAdmob = taskPreferenceClass.getAdsId("GoogleInterstitialAd");
+        admobInterstitialAdId = (rawAdmob != null) ? rawAdmob.trim() : "";
+        String rawAdX = taskPreferenceClass.getAdsId("AdxInterstitalAdunitID");
+        adXInterstitialAdId = (rawAdX != null) ? rawAdX.trim() : "";
+        String rawFb = taskPreferenceClass.getAdsId("FbInterstitialAd");
+        fbInterstitialAdId = (rawFb != null) ? rawFb.trim() : "";
 
-        Log.e("TAG%%", "admobInterstitialAdId: " + taskPreferenceClass.getAdsId("GoogleInterstitialAd"));
-        Log.e("TAG%%", "adXInterstitialAdId: " + taskPreferenceClass.getAdsId("AdxInterstitalAdunitID"));
-        Log.e("TAG%%", "fbInterstitialAdId: " + taskPreferenceClass.getAdsId("FbInterstitialAd"));
-        // Test ads allowed in DEBUG
-        fetchAdMobAd();
-//        fetchFbAd();
+        Log.e("FIREBASE_ADS", "🔹 Interstitial Config: ID=" + admobInterstitialAdId + " | Clicks=" + taskPreferenceClass.getAdsStatus("InerstialClickCount"));
+        if (!admobInterstitialAdId.isEmpty() && taskPreferenceClass.getAdsStatus("InerstialClickCount") > 0) {
+            fetchAdMobAd();
+        }
     }
 
     private void fetchFbAd() {
-
+        if (fbInterstitialAdId == null || fbInterstitialAdId.isEmpty() || taskPreferenceClass.getAdsStatus("InerstialClickCount") <= 0) {
+            return;
+        }
         fbInterstitialAd = new com.facebook.ads.InterstitialAd(context, fbInterstitialAdId);
 
         InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
@@ -91,21 +94,25 @@ public class Task_InterstitialAdManager {
     }
 
     public void fetchAdMobAd() {
+        if (admobInterstitialAdId == null || admobInterstitialAdId.trim().isEmpty() || taskPreferenceClass.getAdsStatus("InerstialClickCount") <= 0) {
+            return;
+        }
 
         if (isAdmobAdAvailable()) {
             return;
         }
 
+        Log.e("FIREBASE_ADS", "🟢 [INTERSTITIAL_AD] Loading AdMob Interstitial with ID: " + admobInterstitialAdId);
         InterstitialAdLoadCallback loadCallback = new InterstitialAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd ad) {
-
+                Log.e("FIREBASE_ADS", "🎉 [INTERSTITIAL_AD] AdMob Interstitial Loaded Successfully!");
                 admobInterstitialAd = ad;
             }
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-
+                Log.e("FIREBASE_ADS", "❌ [INTERSTITIAL_AD] AdMob Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
                 fetchAdXAd();
             }
         };
@@ -118,14 +125,22 @@ public class Task_InterstitialAdManager {
             return;
         }
 
+        if (adXInterstitialAdId == null || adXInterstitialAdId.trim().isEmpty()) {
+            fetchFbAd();
+            return;
+        }
+
+        Log.e("FIREBASE_ADS", "🟢 [INTERSTITIAL_AD] Loading AdX Interstitial with ID: " + adXInterstitialAdId);
         InterstitialAdLoadCallback loadCallback = new InterstitialAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd ad) {
+                Log.e("FIREBASE_ADS", "🎉 [INTERSTITIAL_AD] AdX Interstitial Loaded Successfully!");
                 admobInterstitialAd = ad;
             }
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                Log.e("FIREBASE_ADS", "❌ [INTERSTITIAL_AD] AdX Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
                 fetchFbAd();
             }
         };
@@ -149,83 +164,75 @@ public class Task_InterstitialAdManager {
     public void showAdIfAvailable(Activity activity, OnAdLoadInterface onAdLoadInterface) {
         this.onAdLoadInterface = onAdLoadInterface;
 
-        if (isFailed) {
-            isFailed = false;
-            fetchAdMobAd();
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-            onAdLoadInterface.onAdClose();
-            return;
-        }
-
         int interstitalAdStatus = taskPreferenceClass.getAdsStatus("InerstialClickCount");
-
-        int getClickCount = taskPreferenceClass.getInt("getClickCount");
-        if (getClickCount < interstitalAdStatus) {
-            taskPreferenceClass.setInt("getClickCount", getClickCount + 1);
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-            onAdLoadInterface.onAdClose();
+        if (interstitalAdStatus <= 0) {
+            Log.e("FIREBASE_ADS", "🔴 [INTERSTITIAL_AD] Interstitial Ads DISABLED via Firebase (InerstialClickCount=0)");
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
             return;
         }
-        progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Ad Showing...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                taskPreferenceClass.setInt("getClickCount", 0);
+        int currentClick = taskPreferenceClass.getInt("getClickCount", 0) + 1;
+        Log.e("FIREBASE_ADS", "📊 [INTERSTITIAL_COUNTER] Click " + currentClick + " / " + interstitalAdStatus + " (Firebase Target)");
 
-                if (isAdmobAdAvailable()) {
-                    FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback() {
-                        @Override
-                        public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                            super.onAdFailedToShowFullScreenContent(adError);
-                            admobInterstitialAd = null;
-                            isFailed = true;
-                            if (progressDialog != null && progressDialog.isShowing()) {
-                                progressDialog.dismiss();
-                            }
-                            onAdLoadInterface.onAdClose();
-                        }
-
-                        @Override
-                        public void onAdShowedFullScreenContent() {
-                            super.onAdShowedFullScreenContent();
-                        }
-
-                        @Override
-                        public void onAdDismissedFullScreenContent() {
-                            super.onAdDismissedFullScreenContent();
-                            admobInterstitialAd = null;
-                            fetchAdMobAd();
-                            if (progressDialog != null && progressDialog.isShowing()) {
-                                progressDialog.dismiss();
-                            }
-                            onAdLoadInterface.onAdClose();
-                        }
-
-                        @Override
-                        public void onAdImpression() {
-                            super.onAdImpression();
-                        }
-                    };
-                    admobInterstitialAd.setFullScreenContentCallback(fullScreenContentCallback);
-                    admobInterstitialAd.show(activity);
-                } else if (isFbAdAvailable()) {
-                    fbInterstitialAd.show();
-                } else {
-                    if (progressDialog != null && progressDialog.isShowing()) {
-                        progressDialog.dismiss();
-                    }
-                    onAdLoadInterface.onAdClose();
-                }
+        if (currentClick < interstitalAdStatus) {
+            taskPreferenceClass.setInt("getClickCount", currentClick);
+            if (!isAdmobAdAvailable()) {
+                fetchAdMobAd();
             }
-        }, 2000);
+            if (onAdLoadInterface != null) {
+                onAdLoadInterface.onAdClose();
+            }
+            return;
+        }
+
+        // Target reached: Reset counter and show ad
+        taskPreferenceClass.setInt("getClickCount", 0);
+
+        if (isAdmobAdAvailable()) {
+            Log.e("FIREBASE_ADS", "🟢 [INTERSTITIAL_AD] Showing Google Interstitial Ad (" + admobInterstitialAdId + ")");
+            FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback() {
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                    super.onAdFailedToShowFullScreenContent(adError);
+                    admobInterstitialAd = null;
+                    fetchAdMobAd();
+                    if (Task_InterstitialAdManager.this.onAdLoadInterface != null) {
+                        Task_InterstitialAdManager.this.onAdLoadInterface.onAdClose();
+                    }
+                }
+
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    super.onAdShowedFullScreenContent();
+                }
+
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+                    admobInterstitialAd = null;
+                    fetchAdMobAd();
+                    if (Task_InterstitialAdManager.this.onAdLoadInterface != null) {
+                        Task_InterstitialAdManager.this.onAdLoadInterface.onAdClose();
+                    }
+                }
+
+                @Override
+                public void onAdImpression() {
+                    super.onAdImpression();
+                }
+            };
+            admobInterstitialAd.setFullScreenContentCallback(fullScreenContentCallback);
+            admobInterstitialAd.show(activity);
+        } else if (isFbAdAvailable()) {
+            Log.e("FIREBASE_ADS", "🟢 [INTERSTITIAL_AD] Showing Facebook Interstitial Ad");
+            fbInterstitialAd.show();
+        } else {
+            Log.e("FIREBASE_ADS", "⚠️ [INTERSTITIAL_AD] Ad not ready yet. Pre-fetching now and proceeding.");
+            fetchAdMobAd();
+            if (onAdLoadInterface != null) {
+                onAdLoadInterface.onAdClose();
+            }
+        }
     }
 //    public void showAdIfAvailable(Activity activity, OnAdLoadInterface onAdLoadInterface) { // if google sec code implement open this method and comment above method
 //        this.onAdLoadInterface = onAdLoadInterface;
@@ -321,10 +328,6 @@ public class Task_InterstitialAdManager {
 
     public void showInterstitialAd(Activity activity, OnAdLoadInterface onAdLoadInterface) {
         this.onAdLoadInterface = onAdLoadInterface;
-        if (com.vehicle.information.trending.rtoexam.rto.BuildConfig.DEBUG) {
-            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
-            return;
-        }
 
         if (isFailed) {
             isFailed = false;
@@ -332,22 +335,30 @@ public class Task_InterstitialAdManager {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            onAdLoadInterface.onAdClose();
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
             return;
         }
-        int interstitalAdStatus = taskPreferenceClass.getAdsStatus("InerstialClickCount");
+        int interstitalAdStatus = taskPreferenceClass.getAdsStatus("InerstialClickCount"); // default 3
+        if (interstitalAdStatus <= 0) {
+            Log.e("FIREBASE_ADS", "🔴 [INTERSTITIAL_AD] Interstitial Ads are DISABLED via Firebase (InerstialClickCount=0)");
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+            return;
+        }
 
-        int getClickCount = taskPreferenceClass.getInt("getClickCount");
+        int getClickCount = taskPreferenceClass.getInt("getClickCount") + 1;
+        Log.e("FIREBASE_ADS", "📊 [INTERSTITIAL_COUNTER] Current Click: " + getClickCount + " / Firebase Target Count: " + interstitalAdStatus);
+
         if (getClickCount < interstitalAdStatus) {
-            taskPreferenceClass.setInt("getClickCount", getClickCount + 1);
+            taskPreferenceClass.setInt("getClickCount", getClickCount);
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            onAdLoadInterface.onAdClose();
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
             return;
         }
 
         taskPreferenceClass.setInt("getClickCount", 0);
+        Log.e("FIREBASE_ADS", "🟢 [INTERSTITIAL_AD] Target Click Count Reached (" + interstitalAdStatus + "). Showing Interstitial Ad: " + admobInterstitialAdId);
 
         if (isAdmobAdAvailable()) {
             FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback() {
@@ -359,7 +370,9 @@ public class Task_InterstitialAdManager {
                     if (progressDialog != null && progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    onAdLoadInterface.onAdClose();
+                    if (Task_InterstitialAdManager.this.onAdLoadInterface != null) {
+                        Task_InterstitialAdManager.this.onAdLoadInterface.onAdClose();
+                    }
                 }
 
                 @Override
@@ -375,7 +388,9 @@ public class Task_InterstitialAdManager {
                     if (progressDialog != null && progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
-                    onAdLoadInterface.onAdClose();
+                    if (Task_InterstitialAdManager.this.onAdLoadInterface != null) {
+                        Task_InterstitialAdManager.this.onAdLoadInterface.onAdClose();
+                    }
                 }
 
                 @Override
@@ -388,12 +403,12 @@ public class Task_InterstitialAdManager {
         } else if (isFbAdAvailable()) {
             fbInterstitialAd.show();
         } else {
+            fetchAdMobAd();
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            onAdLoadInterface.onAdClose();
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
         }
-
     }
 
     public void showFaceBookInterstitial(Activity activity, OnAdLoadInterface onAdLoadInterface) {
@@ -432,9 +447,9 @@ public class Task_InterstitialAdManager {
 
         int interstitalAdStatus = taskPreferenceClass.getAdsStatus("EditScreenAdCount");
 
-        int getClickCount = taskPreferenceClass.getInt("getEDitClickCount");
+        int getClickCount = taskPreferenceClass.getInt("getEDitClickCount") + 1;
         if (getClickCount < interstitalAdStatus) {
-            taskPreferenceClass.setInt("getEDitClickCount", getClickCount + 1);
+            taskPreferenceClass.setInt("getEDitClickCount", getClickCount);
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }

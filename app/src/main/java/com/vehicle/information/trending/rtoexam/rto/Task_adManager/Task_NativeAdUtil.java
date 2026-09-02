@@ -54,6 +54,21 @@ public class Task_NativeAdUtil {
 
     public static void loadNativeAd(RelativeLayout nativeAdContainer, Activity context) {
         if (nativeAdContainer == null || context == null || context.isFinishing()) return;
+        Task_PreferenceClass taskPref = new Task_PreferenceClass(context);
+        if (taskPref.getInt("NativeAdShow", 0) == 0) {
+            Log.e("FIREBASE_ADS", "🔴 [NATIVE_AD] Native Ads are DISABLED via Firebase (NativeAdShow=0)");
+            nativeAdContainer.removeAllViews();
+            nativeAdContainer.setVisibility(View.GONE);
+            return;
+        }
+
+        String nativeId = taskPref.getAdsId("GoogleNativeAd");
+        if (nativeId == null || nativeId.trim().isEmpty()) {
+            Log.e("FIREBASE_ADS", "🔴 [NATIVE_AD] No GoogleNativeAd ID in Firebase -> Checking ADX/FB or Hiding");
+            Task_NativeAdUtil taskNativeAdUtil = new Task_NativeAdUtil(context);
+            taskNativeAdUtil.fillAdXNativeAd(nativeAdContainer);
+            return;
+        }
 
         nativeAdContainer.removeAllViews();
         nativeAdContainer.addView(getLoadingView(context));
@@ -75,9 +90,11 @@ public class Task_NativeAdUtil {
 
     public void fillAdmobNativeAd(final RelativeLayout nativeAdContainer) {
         String nativeId = taskPreferenceClass.getAdsId("GoogleNativeAd");
-        if (nativeId == null || nativeId.isEmpty()) {
-            nativeId = "ca-app-pub-3940256099942544/2247696110";
+        if (nativeId == null || nativeId.trim().isEmpty()) {
+            fillAdXNativeAd(nativeAdContainer);
+            return;
         }
+        Log.e("FIREBASE_ADS", "🟢 [NATIVE_AD] Loading Native Ad with ID: " + nativeId);
         AdLoader.Builder builder = new AdLoader.Builder(context, nativeId);
 
         builder.forNativeAd(nativeAd -> {
@@ -89,6 +106,7 @@ public class Task_NativeAdUtil {
             populateUnifiedNativeAdView(nativeAd, adView);
             nativeAdContainer.removeAllViews();
             nativeAdContainer.addView(adView);
+            nativeAdContainer.setVisibility(View.VISIBLE);
             nativeAdContainer.setBackgroundColor(Color.TRANSPARENT);
         });
 
@@ -98,7 +116,13 @@ public class Task_NativeAdUtil {
 
         AdLoader adLoader = builder.withAdListener(new AdListener() {
             @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                Log.e("FIREBASE_ADS", "🎉 [NATIVE_AD] AdMob Native Ad Loaded Successfully!");
+            }
+            @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                Log.e("FIREBASE_ADS", "❌ [NATIVE_AD] AdMob Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
                 fillAdXNativeAd(nativeAdContainer);
             }
         }).build();
@@ -108,8 +132,9 @@ public class Task_NativeAdUtil {
 
     public void fillAdXNativeAd(final RelativeLayout nativeAdContainer) {
         String adxId = taskPreferenceClass.getAdsId("AdxNativeUnitID");
-        if (adxId == null || adxId.isEmpty()) {
-            adxId = "ca-app-pub-3940256099942544/2247696110";
+        if (adxId == null || adxId.trim().isEmpty()) {
+            fbNativeAd(nativeAdContainer);
+            return;
         }
         AdLoader.Builder builder = new AdLoader.Builder(context, adxId);
 
@@ -122,6 +147,7 @@ public class Task_NativeAdUtil {
             populateUnifiedNativeAdView(nativeAd, adView);
             nativeAdContainer.removeAllViews();
             nativeAdContainer.addView(adView);
+            nativeAdContainer.setVisibility(View.VISIBLE);
             nativeAdContainer.setBackgroundColor(Color.TRANSPARENT);
         });
 
@@ -140,13 +166,24 @@ public class Task_NativeAdUtil {
     }
 
     private void fbNativeAd(final RelativeLayout nativeAdContainer) {
-        com.facebook.ads.NativeAd fbNative = new com.facebook.ads.NativeAd(context, taskPreferenceClass.getAdsId("FbNativeAd"));
+        String fbId = taskPreferenceClass.getAdsId("FbNativeAd");
+        if (fbId == null || fbId.trim().isEmpty()) {
+            Log.e("FIREBASE_ADS", "🔴 [NATIVE_AD] No native ads available from Firebase -> Hiding container");
+            nativeAdContainer.removeAllViews();
+            nativeAdContainer.setVisibility(View.GONE);
+            return;
+        }
+        com.facebook.ads.NativeAd fbNative = new com.facebook.ads.NativeAd(context, fbId);
         NativeAdListener nativeAdListener = new NativeAdListener() {
             @Override
             public void onMediaDownloaded(Ad ad) {}
 
             @Override
-            public void onError(Ad ad, AdError adError) {}
+            public void onError(Ad ad, AdError adError) {
+                Log.e("FIREBASE_ADS", "🔴 [NATIVE_AD] All native ad sources failed -> Hiding container");
+                nativeAdContainer.removeAllViews();
+                nativeAdContainer.setVisibility(View.GONE);
+            }
 
             @Override
             public void onAdLoaded(Ad ad) {
@@ -154,6 +191,7 @@ public class Task_NativeAdUtil {
                 nativeAdContainer.removeAllViews();
                 View adView = com.facebook.ads.NativeAdView.render(context, fbNative);
                 nativeAdContainer.addView(adView);
+                nativeAdContainer.setVisibility(View.VISIBLE);
                 nativeAdContainer.setBackgroundColor(Color.TRANSPARENT);
             }
 

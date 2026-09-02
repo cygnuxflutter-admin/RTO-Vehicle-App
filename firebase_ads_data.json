@@ -1,0 +1,33 @@
+{
+  "Ads_data": {
+    "AdmobAppID": "ca-app-pub-3940256099942544~3347511713",
+    "GoogleBannerAd": "ca-app-pub-3940256099942544/6300978111",
+    "GoogleInterstitialAd": "ca-app-pub-3940256099942544/1033173712",
+    "GoogleNativeAd": "ca-app-pub-3940256099942544/2247696110",
+    "GoogleAppopenAd": "ca-app-pub-3940256099942544/9257395921",
+    "GoogleRewardedAd": "ca-app-pub-3940256099942544/5224354917",
+    "GoogleInterstialRewardAd": "ca-app-pub-3940256099942544/5354046379",
+    "AdxBannerUnitID": "ca-app-pub-3940256099942544/6300978111",
+    "AdxInterstialUnitID": "ca-app-pub-3940256099942544/1033173712",
+    "AdxNativeUnitID": "ca-app-pub-3940256099942544/2247696110",
+    "AdxAppOpenID": "ca-app-pub-3940256099942544/9257395921",
+    "AdxRewardVideoUnitID": "ca-app-pub-3940256099942544/5224354917",
+    "FbBannerAd": "IMG_16_9_APP_INSTALL#123456789012345_123456789012345",
+    "FbInterstitialAd": "IMG_16_9_APP_INSTALL#123456789012345_123456789012345",
+    "FbNativeAd": "IMG_16_9_APP_INSTALL#123456789012345_123456789012345",
+    "AppOpenAdShow": 1,
+    "BannerAdShow": 1,
+    "NativeAdShow": 1,
+    "InerstialClickCount": 3,
+    "NativeAdIntervalCount": 10,
+    "RewardUnlockEnabled": 1,
+    "FreeQuestionsCount": 20,
+    "SplashScreenAdsManage": 1,
+    "MainScreenAd": 2,
+    "StartScreen_AD": 2,
+    "UpdateAvailable": 0,
+    "UpdateVersionCode": 6,
+    "UpdateVersionName": "1.5",
+    "ForceUpdate": 0
+  }
+}

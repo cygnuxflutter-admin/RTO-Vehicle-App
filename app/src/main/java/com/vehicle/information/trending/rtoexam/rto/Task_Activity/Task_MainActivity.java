@@ -3,6 +3,7 @@ package com.vehicle.information.trending.rtoexam.rto.Task_Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -28,30 +29,24 @@ public class Task_MainActivity extends AppCompatActivity {
 
         RelativeLayout native_banner_ad_container = findViewById(R.id.native_banner_ad_container);
         RelativeLayout rl_ad = findViewById(R.id.rl_ad);
-        RelativeLayout rl_collapsible = findViewById(R.id.rl_collapsible);
         View adsView = findViewById(R.id.ads);
-        View rlBanner = findViewById(R.id.rlBanner);
+        View rlBottom = findViewById(R.id.rlBottom);
 
-        int mainAdPref = taskPreferenceClass.getInt("MainScreenAd");
-        if (mainAdPref == 1) {
-            if (rl_collapsible != null) rl_collapsible.setVisibility(View.VISIBLE);
-            if (adsView != null) adsView.setVisibility(View.GONE);
-            if (rlBanner != null) rlBanner.setVisibility(View.GONE);
-            Task_LoadAds.loadCollapsibleBanner(this, "bottom", findViewById(R.id.CollapsibleContainer), rl_collapsible, findViewById(R.id.shimmer_view_CollapsibleContainer));
-        } else if (mainAdPref == 2) {
-            if (rl_ad != null) Task_LoadAds.loadAdmobBannerAd(this, rl_ad);
-            if (native_banner_ad_container != null) native_banner_ad_container.setVisibility(View.GONE);
-            if (adsView != null) adsView.setVisibility(View.GONE);
-            if (rl_collapsible != null) rl_collapsible.setVisibility(View.GONE);
-        } else if (mainAdPref == 3) {
-            if (native_banner_ad_container != null) Task_NativeAdUtil.loadNativeAd(native_banner_ad_container, this);
-            if (rl_ad != null) rl_ad.setVisibility(View.GONE);
-            if (rlBanner != null) rlBanner.setVisibility(View.GONE);
-            if (rl_collapsible != null) rl_collapsible.setVisibility(View.GONE);
+        int mainAdPref = taskPreferenceClass.getInt("MainScreenAd", 2);
+        Log.e("FIREBASE_ADS", "📱 [MAIN_SCREEN_AD] Preference Mode: " + mainAdPref);
+
+        if (mainAdPref == 3) {
+            // Native Ad mode
+            if (rlBottom != null) rlBottom.setVisibility(View.GONE);
+            if (adsView != null) adsView.setVisibility(View.VISIBLE);
+            if (native_banner_ad_container != null) {
+                native_banner_ad_container.setVisibility(View.VISIBLE);
+                Task_NativeAdUtil.loadNativeAd(native_banner_ad_container, this);
+            }
         } else {
-            if (native_banner_ad_container != null) native_banner_ad_container.setVisibility(View.GONE);
+            // Default: Standard Bottom Banner (Mode 2)
             if (adsView != null) adsView.setVisibility(View.GONE);
-            if (rl_collapsible != null) rl_collapsible.setVisibility(View.GONE);
+            if (rlBottom != null) rlBottom.setVisibility(View.VISIBLE);
             if (rl_ad != null) {
                 Task_LoadAds.loadAdmobBannerAd(this, rl_ad);
             }
