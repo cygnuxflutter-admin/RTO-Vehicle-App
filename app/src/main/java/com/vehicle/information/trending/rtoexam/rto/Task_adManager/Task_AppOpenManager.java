@@ -206,6 +206,7 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
             loadCallback = new AppOpenAd.AppOpenAdLoadCallback() {
                 @Override
                 public void onAdLoaded(@NonNull AppOpenAd ad) {
+                    Log.e(LOG_TAG, "🎉 [APP_OPEN_AD] Splash AppOpen Loaded Successfully!");
                     Task_AppOpenManager.this.appOpenAd = ad;
                     Task_AppOpenManager.this.loadTime = (new Date()).getTime();
 
@@ -220,6 +221,7 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
 
                         @Override
                         public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                            Log.e(LOG_TAG, "❌ [APP_OPEN_AD] Failed to show full screen content: " + adError.getMessage());
                             Task_AppOpenManager.this.appOpenAd = null;
                             isShowingAd = false;
                             fetchAd();
@@ -237,6 +239,7 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
 
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                    Log.e(LOG_TAG, "❌ [APP_OPEN_AD] Splash AppOpen failed to load: " + loadAdError.getMessage());
                     onShowAdCompleteListener.onShowAdComplete();
                 }
             };

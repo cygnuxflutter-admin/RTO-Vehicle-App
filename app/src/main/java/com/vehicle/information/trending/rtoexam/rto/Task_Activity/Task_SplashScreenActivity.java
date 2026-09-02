@@ -113,7 +113,7 @@ public class Task_SplashScreenActivity extends AppCompatActivity {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!isFinishing() && !hasStarted) {
+                if (!isFinishing() && !hasStarted && !isUpdateDialogShowing) {
                     Log.w("FIREBASE_FETCH", "Firebase fetch timed out or taking too long -> Proceeding safely to Next Screen");
                     startToMainActivity();
                 }
@@ -128,6 +128,7 @@ public class Task_SplashScreenActivity extends AppCompatActivity {
     }
 
     private boolean hasStarted = false;
+    private boolean isUpdateDialogShowing = false;
 
     public synchronized void startToMainActivity() {
         if (hasStarted) return;
@@ -288,6 +289,7 @@ public class Task_SplashScreenActivity extends AppCompatActivity {
             if (isFinishing() || isDestroyed()) return;
             if (materialDialog != null && materialDialog.isShowing()) return;
 
+            isUpdateDialogShowing = true;
             materialDialog = new Dialog(Task_SplashScreenActivity.this);
             materialDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             materialDialog.setContentView(R.layout.task_reward_dialog);
