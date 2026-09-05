@@ -31,10 +31,12 @@
             app:tint="@color/white" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/fl_notification_main"
             android:layout_toEndOf="@id/iv_back"
             android:orientation="vertical">
 
@@ -55,6 +57,35 @@
                 android:textColor="#D1E4FF"
                 android:textSize="12sp" />
         </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_notification_main"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_header_icon_btn"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/iv_notification"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:src="@drawable/ic_notification_bell"
+                app:tint="@color/white" />
+
+            <View
+                android:id="@+id/view_badge_main"
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_badge_red_dot"
+                android:visibility="gone" />
+        </FrameLayout>
     </RelativeLayout>
 
     <!-- Main Scroll Content -->

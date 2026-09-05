@@ -31,7 +31,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 import java.util.ArrayList;
 import java.util.List;
 
-public class Task_FormsHubActivity extends AppCompatActivity {
+public class Task_FormsHubActivity extends AllBaseActivity {
 
     private EditText et_search_forms;
     private ImageView iv_clear_search;

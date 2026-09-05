@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
@@ -43,7 +44,8 @@
         <activity
             android:name="com.vehicle.information.trending.rtoexam.rto.Task_Activity.Task_SplashScreenActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -218,6 +220,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".Task_Activity.Task_NotificationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true" />
@@ -245,6 +252,9 @@
             android:name="com.squareup.picasso.PicassoProvider"
             android:authorities="com.vehicle.information.trending.rtoexam.rto.com.squareup.picasso"
             android:exported="false" />
+
+        <receiver android:name=".Task_utils.Task_AlarmReceiver" android:exported="false" />
+
     </application>
 
 </manifest>

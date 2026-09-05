@@ -24,6 +24,7 @@ public class AllBaseActivity extends AppCompatActivity {
     private static final String TAG = "AllBaseActivity";
     BroadcastReceiver h;
     boolean i = false;
+    private AlertDialog mInternetDialog;
 
     public static boolean getConnectivityStatus(Context context) {
         if (context == null) return true;
@@ -37,8 +38,24 @@ public class AllBaseActivity extends AppCompatActivity {
         }
     }
 
+    @Override // androidx.fragment.app.FragmentActivity, androidx.activity.ComponentActivity, androidx.core.app.ComponentActivity, android.app.Activity
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(getLayoutInflater().inflate(R.layout.aa_dialog_no_internet, (ViewGroup) null));
+            mInternetDialog = builder.create();
+            mInternetDialog.setCancelable(false);
+            if (mInternetDialog.getWindow() != null) {
+                mInternetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override // androidx.fragment.app.FragmentActivity, android.app.Activity
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
         if (this.i && this.h != null) {
             try {
@@ -51,26 +68,31 @@ public class AllBaseActivity extends AppCompatActivity {
     }
 
     @Override // androidx.fragment.app.FragmentActivity, android.app.Activity
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
+        
         try {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setView(getLayoutInflater().inflate(R.layout.aa_dialog_no_internet, (ViewGroup) null));
-            final AlertDialog create = builder.create();
-            create.setCancelable(false);
-            if (create.getWindow() != null) {
-                create.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            // Check immediately on resume
+            if (!getConnectivityStatus(this)) {
+                if (mInternetDialog != null && !mInternetDialog.isShowing() && !isFinishing()) {
+                    mInternetDialog.show();
+                }
+            } else {
+                if (mInternetDialog != null && mInternetDialog.isShowing()) {
+                    mInternetDialog.dismiss();
+                }
             }
-            BroadcastReceiver broadcastReceiver = new BroadcastReceiver() { // from class: com.vehicle.information.trending.rtoexam.rto.Activity.AllBaseActivity.1
-                @Override // android.content.BroadcastReceiver
+
+            BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+                @Override 
                 public void onReceive(Context context, Intent intent) {
                     try {
                         if (AllBaseActivity.getConnectivityStatus(context)) {
-                            if (create != null && create.isShowing()) {
-                                create.dismiss();
+                            if (mInternetDialog != null && mInternetDialog.isShowing()) {
+                                mInternetDialog.dismiss();
                             }
-                        } else if (create != null && !create.isShowing() && !AllBaseActivity.this.isFinishing()) {
-                            create.show();
+                        } else if (mInternetDialog != null && !mInternetDialog.isShowing() && !AllBaseActivity.this.isFinishing()) {
+                            mInternetDialog.show();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -89,18 +111,20 @@ public class AllBaseActivity extends AppCompatActivity {
         }
     }
 
-    @Override // androidx.fragment.app.FragmentActivity, androidx.activity.ComponentActivity, androidx.core.app.ComponentActivity, android.app.Activity
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-    }
-
     public void Go_ad_Page(Intent intent) {
         startActivity(intent);
     }
 
     @Override // androidx.appcompat.app.AppCompatActivity, androidx.fragment.app.FragmentActivity, android.app.Activity
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
+        if (mInternetDialog != null && mInternetDialog.isShowing()) {
+            try {
+                mInternetDialog.dismiss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         if (this.i && this.h != null) {
             try {
                 this.i = false;

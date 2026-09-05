@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-public class Task_QuizActivity extends AppCompatActivity {
+public class Task_QuizActivity extends AllBaseActivity {
     private static final float BYTES_PER_PX = 4.0f;
     private static final int TOTAL_EXAM_QUESTIONS = 15;
     private static final int PASSING_SCORE = 9;
@@ -155,11 +155,11 @@ public class Task_QuizActivity extends AppCompatActivity {
                 finishQuiz();
             } else {
                 Task_QuizActivity.this.currentquestion = Task_QuizActivity.this.quesList.get(Task_QuizActivity.this.questionId);
+                Task_QuizActivity.this.rgChoice.clearCheck();
                 Task_QuizActivity.this.setQuestionsView();
                 Task_QuizActivity.this.curr();
                 Task_QuizActivity.this.timer.start();
             }
-            Task_QuizActivity.this.rgChoice.clearCheck();
         });
     }
 
@@ -290,12 +290,12 @@ public class Task_QuizActivity extends AppCompatActivity {
                         CounterClass.this.start();
                         Task_QuizActivity.this.currentquestion = Task_QuizActivity.this.quesList.get(Task_QuizActivity.this.questionId);
                         Task_QuizActivity.this.curr();
+                        Task_QuizActivity.this.rgChoice.clearCheck();
                         Task_QuizActivity.this.setQuestionsView();
                         dialog.cancel();
                     }
                 });
             }
-            Task_QuizActivity.this.rgChoice.clearCheck();
         }
     }
 
@@ -318,9 +318,15 @@ public class Task_QuizActivity extends AppCompatActivity {
     }
 
     public void setQuestionsView() {
-        this.radioButton2.setChecked(false);
         this.radioButton.setChecked(false);
+        this.radioButton2.setChecked(false);
         this.radioButton3.setChecked(false);
+        this.radioButton.jumpDrawablesToCurrentState();
+        this.radioButton2.jumpDrawablesToCurrentState();
+        this.radioButton3.jumpDrawablesToCurrentState();
+        this.radioButton.clearFocus();
+        this.radioButton2.clearFocus();
+        this.radioButton3.clearFocus();
         this.f16k++;
         this.answeredquestno = this.questionId + 1;
 
@@ -439,3 +445,4 @@ public class Task_QuizActivity extends AppCompatActivity {
         dialog.show();
     }
 }
+

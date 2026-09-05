@@ -24,7 +24,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class Task_DetailActivity extends AppCompatActivity {
+public class Task_DetailActivity extends AllBaseActivity {
 
     private ImageView iv_back;
     private ImageView iv_share_rule;
@@ -42,10 +42,15 @@ public class Task_DetailActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.parseColor("#1E40AF"));
         setContentView(R.layout.task_activity_detail);
 
+        String titleExtra = getIntent().getStringExtra("position");
+        if (titleExtra != null && !titleExtra.isEmpty()) {
+            this.ruleTitle = titleExtra;
+        }
+
         RelativeLayout rl_ad = this.findViewById(R.id.rl_ad);
         if (Task_NetworkUtils.isNetworkAvailable(this)) {
             Task_PreferenceClass taskPreferenceClass = new Task_PreferenceClass(this);
-            if (taskPreferenceClass.getInt("BannerAdShow") == 1) {
+            if (taskPreferenceClass.getInt("BannerAdShow") == 1 && !"Privacy Policy".equals(this.ruleTitle)) {
                 Task_LoadAds.loadAdmobBannerAd(this, rl_ad);
             } else {
                 rl_ad.setVisibility(View.GONE);
@@ -67,12 +72,10 @@ public class Task_DetailActivity extends AppCompatActivity {
             }
         });
 
-        String titleExtra = getIntent().getStringExtra("position");
         String categoryExtra = getIntent().getStringExtra("category");
         String urlExtra = getIntent().getStringExtra("main_url");
 
-        if (titleExtra != null && !titleExtra.isEmpty()) {
-            this.ruleTitle = titleExtra;
+        if (this.ruleTitle != null && !this.ruleTitle.equals("Rules of RTO")) {
             txt_header.setText(this.ruleTitle);
         }
         if (categoryExtra != null && !categoryExtra.isEmpty()) {
@@ -159,7 +162,7 @@ public class Task_DetailActivity extends AppCompatActivity {
                 + ".font-bold { font-weight: 600; color: #0F172A; display: inline-block; margin-top: 10px; margin-bottom: 4px; }"
                 + "ul { margin-left: 0; padding-left: 0; list-style: none; margin-bottom: 14px; }"
                 + "li { position: relative; padding-left: 20px; margin-bottom: 9px; color: #334155; line-height: 1.55; }"
-                + "li::before { content: '•'; position: absolute; left: 4px; color: #2563EB; font-size: 20px; line-height: 1; top: -2px; }"
+                + "li::before { content: ''; position: absolute; left: 2px; top: 8px; width: 6px; height: 6px; background-color: #2563EB; border-radius: 50%; }"
                 + "div.red-color, p.red-color { background: #FFFBEB; border-left: 4px solid #F59E0B; color: #92400E; padding: 12px 14px; border-radius: 8px; margin-top: 16px; font-size: 13px; line-height: 1.5; font-weight: 500; display: block; }"
                 + "span.red-color { color: #DC2626 !important; font-weight: 700 !important; font-size: 16px !important; margin-left: 3px !important; background: transparent !important; border: none !important; padding: 0 !important; display: inline !important; box-shadow: none !important; border-radius: 0 !important; }"
                 + "table { width: 100%; border-collapse: collapse; margin: 12px 0; background: #FFFFFF; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }"
@@ -178,6 +181,9 @@ public class Task_DetailActivity extends AppCompatActivity {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         String shareBody = "RTO Rules & Procedures: " + this.ruleTitle + "\n\nCheck full guidelines and download official forms on RTO Vehicle App!";
+        if (this.ruleTitle != null && this.ruleTitle.equals("Privacy Policy")) {
+            shareBody = "Privacy Policy:\n" + getString(R.string.privacy);
+        }
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, this.ruleTitle);
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(shareIntent, "Share Rule"));
@@ -188,3 +194,5 @@ public class Task_DetailActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 }
+
+

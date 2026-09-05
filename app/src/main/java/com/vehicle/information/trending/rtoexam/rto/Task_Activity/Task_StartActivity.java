@@ -41,7 +41,7 @@ import java.util.ArrayList;
 
 import com.onesignal.OneSignal;
 
-public class Task_StartActivity extends AppCompatActivity implements GlobalReferenceEngine.Callback{
+public class Task_StartActivity extends AllBaseActivity implements GlobalReferenceEngine.Callback{
 
     private static final String TAG = "123";
     ArrayList<Task_FuelModel> FuelList;
@@ -248,7 +248,10 @@ public class Task_StartActivity extends AppCompatActivity implements GlobalRefer
         switch (view.getId()) {
 
             case R.id.privacy:
-                startActivity(new Intent("android.intent.action.VIEW", Uri.parse(getString(R.string.privacy))));
+                Intent privacyIntent = new Intent(Task_StartActivity.this, Task_DetailActivity.class);
+                privacyIntent.putExtra("position", "Privacy Policy");
+                privacyIntent.putExtra("main_url", "file:///android_asset/privacy_policy.html");
+                startActivity(privacyIntent);
                 return;
             case R.id.rate :
                 StoreLink();
@@ -324,9 +327,5 @@ public class Task_StartActivity extends AppCompatActivity implements GlobalRefer
     public void onDestroy() {
         super.onDestroy();
     }
-
-
-
-
 }
 

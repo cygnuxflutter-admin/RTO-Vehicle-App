@@ -37,11 +37,7 @@ public class Task_ReminderStorage {
             e.printStackTrace();
         }
 
-        // Add sample vehicle if empty for first time user
-        if (list.isEmpty()) {
-            list.add(new Task_VehicleDocumentModel("sample_1", "GJ 05 AB 1234", "My Honda City", "15 Dec 2026", "24 Nov 2026", "10 Jan 2027"));
-            saveVehicles(context, list);
-        }
+        
 
         return list;
     }

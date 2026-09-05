@@ -21,7 +21,7 @@ import com.vehicle.information.trending.rtoexam.rto.R;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
 import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_NativeAdUtil;
 
-public class Task_EnterInformationActivity extends AppCompatActivity {
+public class Task_EnterInformationActivity extends AllBaseActivity {
 
     private Button btnSearch;
     private EditText et_01;

@@ -229,9 +229,11 @@
                             android:background="@drawable/bg_chip_selected"
                             android:fontFamily="@font/task_roboto_bold"
                             android:gravity="center"
-                            android:text="4-Wheeler (Car)"
+                            android:text="Car (4-Wheeler)"
                             android:textColor="@color/white"
-                            android:textSize="12.5sp" />
+                            android:textSize="12.5sp"
+                            android:maxLines="1"
+                            android:ellipsize="end" />
 
                         <TextView
                             android:id="@+id/tab_type_bike"
@@ -242,9 +244,11 @@
                             android:background="@drawable/bg_chip_unselected"
                             android:fontFamily="@font/task_roboto_bold"
                             android:gravity="center"
-                            android:text="2-Wheeler (Bike/Scooter)"
+                            android:text="Bike (2-Wheeler)"
                             android:textColor="#475569"
-                            android:textSize="12.5sp" />
+                            android:textSize="12.5sp"
+                            android:maxLines="1"
+                            android:ellipsize="end" />
                     </LinearLayout>
 
                     <!-- Original Purchase Price -->
@@ -578,3 +582,6 @@
     </RelativeLayout>
 
 </RelativeLayout>
+
+
+

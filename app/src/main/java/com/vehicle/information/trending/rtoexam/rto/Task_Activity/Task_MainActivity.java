@@ -15,7 +15,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_LoadAds;
 import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_NativeAdUtil;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
 
-public class Task_MainActivity extends AppCompatActivity {
+public class Task_MainActivity extends AllBaseActivity {
     private static final String TAG = "Task_MainActivity";
 
     private Task_PreferenceClass taskPreferenceClass;
@@ -150,6 +150,30 @@ public class Task_MainActivity extends AppCompatActivity {
                             Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_ExpiryReminderActivity.class))
                     )
             );
+        }
+
+        // Header Notification Bell Icon
+        View ivNotification = findViewById(R.id.fl_notification_main != 0 ? R.id.fl_notification_main : R.id.iv_notification);
+        if (ivNotification != null) {
+            ivNotification.setOnClickListener(v ->
+                    MyApplication.showInterstitialAd(Task_MainActivity.this, () ->
+                            Task_MainActivity.this.startActivity(new Intent(Task_MainActivity.this, Task_NotificationActivity.class))
+                    )
+            );
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateNotificationBadge();
+    }
+
+    private void updateNotificationBadge() {
+        View badgeView = findViewById(R.id.view_badge_main);
+        if (badgeView != null) {
+            boolean hasUnread = com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_NotificationStorage.hasUnreadNotifications(this);
+            badgeView.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
         }
     }
 

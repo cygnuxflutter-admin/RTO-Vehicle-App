@@ -34,6 +34,7 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
     public static Integer AppOpenAdShow = 1;
     private static Task_PreferenceClass taskPreferenceClass;
     private String AD_UNIT_ID1, AD_UNIT_ID2;
+    private static boolean isLoading = false;
 
     /**
      * Constructor
@@ -57,20 +58,18 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
             return;
         }
         // Have unused ad, no need to fetch another.
-        if (isAdAvailable()) {
-            return;
-        }
+        if (isAdAvailable() || isLoading) { return; } isLoading = true;
 
         loadCallback = new AppOpenAd.AppOpenAdLoadCallback() {
             @Override
-            public void onAdLoaded(@NonNull AppOpenAd ad) {
+            public void onAdLoaded(@NonNull AppOpenAd ad) { isLoading = false;
                 Task_AppOpenManager.this.appOpenAd = ad;
                 Task_AppOpenManager.this.loadTime = (new Date()).getTime();
                 Log.d(LOG_TAG, "AppOpenAd Loaded successfully.");
             }
 
             @Override
-            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) { isLoading = false;
                 Log.e(LOG_TAG, "AppOpenAd failed to load: " + loadAdError.getMessage());
                 fetchAdX();
             }
@@ -91,18 +90,16 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
     }
 
     public void fetchAdX() {
-        if (isAdAvailable()) {
-            return;
-        }
+        if (isAdAvailable() || isLoading) { return; } isLoading = true;
         loadCallback = new AppOpenAd.AppOpenAdLoadCallback() {
             @Override
-            public void onAdLoaded(@NonNull AppOpenAd ad) {
+            public void onAdLoaded(@NonNull AppOpenAd ad) { isLoading = false;
                 Task_AppOpenManager.this.appOpenAd = ad;
                 Task_AppOpenManager.this.loadTime = new Date().getTime();
             }
 
             @Override
-            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) { isLoading = false;
                 Log.e(LOG_TAG, "AdX AppOpenAd failed to load: " + loadAdError.getMessage());
             }
         };
@@ -205,7 +202,7 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
         } else {
             loadCallback = new AppOpenAd.AppOpenAdLoadCallback() {
                 @Override
-                public void onAdLoaded(@NonNull AppOpenAd ad) {
+                public void onAdLoaded(@NonNull AppOpenAd ad) { isLoading = false;
                     Log.e(LOG_TAG, "🎉 [APP_OPEN_AD] Splash AppOpen Loaded Successfully!");
                     Task_AppOpenManager.this.appOpenAd = ad;
                     Task_AppOpenManager.this.loadTime = (new Date()).getTime();
@@ -238,7 +235,7 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
                 }
 
                 @Override
-                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) { isLoading = false;
                     Log.e(LOG_TAG, "❌ [APP_OPEN_AD] Splash AppOpen failed to load: " + loadAdError.getMessage());
                     onShowAdCompleteListener.onShowAdComplete();
                 }

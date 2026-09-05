@@ -24,7 +24,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 
 import java.util.ArrayList;
 
-public class Task_OfficeDetailsActivity extends AppCompatActivity {
+public class Task_OfficeDetailsActivity extends AllBaseActivity {
     TextView code_hero;
     TextView distinct_hero;
     TextView state_hero;

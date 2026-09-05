@@ -33,7 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Task_FuelCityActivity extends AppCompatActivity {
+public class Task_FuelCityActivity extends AllBaseActivity {
 
     private Task_FuelCityAdapter adapter;
     private EditText etSearch;

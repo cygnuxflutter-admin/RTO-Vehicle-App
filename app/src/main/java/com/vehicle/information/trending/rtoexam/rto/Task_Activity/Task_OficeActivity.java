@@ -22,7 +22,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_NetworkUtils
 import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_LoadAds;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
 
-public class Task_OficeActivity extends AppCompatActivity {
+public class Task_OficeActivity extends AllBaseActivity {
     String[] ary_states = {
             "Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh",
             "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Dadra and Nagar Haveli and Daman and Diu",

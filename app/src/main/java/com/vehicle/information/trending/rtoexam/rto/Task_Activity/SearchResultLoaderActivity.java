@@ -14,7 +14,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Utils;
 import com.vehicle.information.trending.rtoexam.rto.handlers.TaskHandler;
 
 
-public class SearchResultLoaderActivity extends AppCompatActivity {
+public class SearchResultLoaderActivity extends AllBaseActivity {
     private String actionName;
     public ChallanDetailsResponse challanDetailsResponse;
     private CustomLoaderScreen customLoaderScreen;

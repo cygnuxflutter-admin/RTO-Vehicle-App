@@ -18,7 +18,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class Task_ResaleEstimatorActivity extends AppCompatActivity {
+public class Task_ResaleEstimatorActivity extends AllBaseActivity {
 
     private TextView tab_type_car;
     private TextView tab_type_bike;

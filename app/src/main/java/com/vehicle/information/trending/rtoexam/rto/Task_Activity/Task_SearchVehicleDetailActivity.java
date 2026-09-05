@@ -14,7 +14,7 @@ import com.vehicle.information.trending.rtoexam.rto.R;
 import org.json.JSONObject;
 
 
-public class Task_SearchVehicleDetailActivity extends AppCompatActivity {
+public class Task_SearchVehicleDetailActivity extends AllBaseActivity {
     private String actionName;
     private String registrationNo;
     private String type;

@@ -57,8 +57,7 @@ public class Task_NativeAdUtil {
         Task_PreferenceClass taskPref = new Task_PreferenceClass(context);
         if (taskPref.getInt("NativeAdShow", 0) == 0) {
             Log.e("FIREBASE_ADS", "🔴 [NATIVE_AD] Native Ads are DISABLED via Firebase (NativeAdShow=0)");
-            nativeAdContainer.removeAllViews();
-            nativeAdContainer.setVisibility(View.GONE);
+            nativeAdContainer.removeAllViews(); nativeAdContainer.addView(getLoadingView(context, nativeAdContainer)); nativeAdContainer.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -71,19 +70,19 @@ public class Task_NativeAdUtil {
         }
 
         nativeAdContainer.removeAllViews();
-        nativeAdContainer.addView(getLoadingView(context));
+        nativeAdContainer.addView(getLoadingView(context, nativeAdContainer));
         nativeAdContainer.setVisibility(View.VISIBLE);
 
         Task_NativeAdUtil taskNativeAdUtil = new Task_NativeAdUtil(context);
         taskNativeAdUtil.fillAdmobNativeAd(nativeAdContainer);
     }
 
-    private static View getLoadingView(Activity context) {
-        View adView = LayoutInflater.from(context).inflate(R.layout.task_native_ad_layout_loading, null);
-        ShimmerFrameLayout shimmerLayout = adView.findViewById(R.id.shimmerLayout);
+    private static View getLoadingView(Context context, android.view.ViewGroup parent) {
+        View adView = LayoutInflater.from(context).inflate(R.layout.task_native_ad_layout_loading, parent, false);
+        com.facebook.shimmer.ShimmerFrameLayout shimmerLayout = adView.findViewById(R.id.shimmerLayout);
         if (shimmerLayout != null) {
             shimmerLayout.startShimmer();
-            shimmerLayout.setVisibility(View.VISIBLE);
+            shimmerLayout.setVisibility(android.view.View.VISIBLE);
         }
         return adView;
     }
@@ -169,8 +168,7 @@ public class Task_NativeAdUtil {
         String fbId = taskPreferenceClass.getAdsId("FbNativeAd");
         if (fbId == null || fbId.trim().isEmpty()) {
             Log.e("FIREBASE_ADS", "🔴 [NATIVE_AD] No native ads available from Firebase -> Hiding container");
-            nativeAdContainer.removeAllViews();
-            nativeAdContainer.setVisibility(View.GONE);
+            nativeAdContainer.removeAllViews(); nativeAdContainer.addView(getLoadingView(context, nativeAdContainer)); nativeAdContainer.setVisibility(View.VISIBLE);
             return;
         }
         com.facebook.ads.NativeAd fbNative = new com.facebook.ads.NativeAd(context, fbId);
@@ -181,8 +179,7 @@ public class Task_NativeAdUtil {
             @Override
             public void onError(Ad ad, AdError adError) {
                 Log.e("FIREBASE_ADS", "🔴 [NATIVE_AD] All native ad sources failed -> Hiding container");
-                nativeAdContainer.removeAllViews();
-                nativeAdContainer.setVisibility(View.GONE);
+                nativeAdContainer.removeAllViews(); nativeAdContainer.addView(getLoadingView(context, nativeAdContainer)); nativeAdContainer.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -248,3 +245,6 @@ public class Task_NativeAdUtil {
         unifiedNativeAdView.setNativeAd(unifiedNativeAd);
     }
 }
+
+
+

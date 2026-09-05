@@ -36,7 +36,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Utils;
 
 
-public class FinanceDetailsActivity extends AppCompatActivity {
+public class FinanceDetailsActivity extends AllBaseActivity {
     private String actionName;
     private Button btnAction;
     private LinearLayout contentLayout;

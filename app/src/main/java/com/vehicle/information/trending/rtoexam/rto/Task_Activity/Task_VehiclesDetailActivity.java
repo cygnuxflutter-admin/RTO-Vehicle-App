@@ -16,7 +16,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 import java.util.Calendar;
 
 
-public class Task_VehiclesDetailActivity extends AppCompatActivity {
+public class Task_VehiclesDetailActivity extends AllBaseActivity {
     int final_date;
     int final_month;
     int final_year;

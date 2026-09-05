@@ -15,7 +15,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_NetworkUtils
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
 
 
-public class DLErrorActivity extends AppCompatActivity {
+public class DLErrorActivity extends AllBaseActivity {
     public static Activity setting_activity;
     TextView h;
 

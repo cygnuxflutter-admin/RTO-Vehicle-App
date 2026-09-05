@@ -29,6 +29,7 @@ public class Task_InterstitialAdManager {
     private OnAdLoadInterface onAdLoadInterface;
     private boolean isFailed = false;
     private ProgressDialog progressDialog;
+    private boolean isLoading = false;
 
     public Task_InterstitialAdManager(Context context) {
         this.context = context;
@@ -50,12 +51,18 @@ public class Task_InterstitialAdManager {
         if (fbInterstitialAdId == null || fbInterstitialAdId.isEmpty() || taskPreferenceClass.getAdsStatus("InerstialClickCount") <= 0) {
             return;
         }
+        if (isFbAdAvailable() || isLoading) {
+            return;
+        }
+        isLoading = true;
         fbInterstitialAd = new com.facebook.ads.InterstitialAd(context, fbInterstitialAdId);
 
         InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
             @Override
             public void onInterstitialDisplayed(Ad ad) {
-
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
             }
 
             @Override
@@ -72,11 +79,17 @@ public class Task_InterstitialAdManager {
 
             @Override
             public void onError(Ad ad, com.facebook.ads.AdError adError) {
+                isLoading = false;
                 isFailed = true;
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
+                isLoading = false;
             }
 
             @Override
@@ -98,20 +111,23 @@ public class Task_InterstitialAdManager {
             return;
         }
 
-        if (isAdmobAdAvailable()) {
+        if (isAdmobAdAvailable() || isLoading) {
             return;
         }
 
+        isLoading = true;
         Log.e("FIREBASE_ADS", "🟢 [INTERSTITIAL_AD] Loading AdMob Interstitial with ID: " + admobInterstitialAdId);
         InterstitialAdLoadCallback loadCallback = new InterstitialAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd ad) {
+                isLoading = false;
                 Log.e("FIREBASE_ADS", "🎉 [INTERSTITIAL_AD] AdMob Interstitial Loaded Successfully!");
                 admobInterstitialAd = ad;
             }
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                isLoading = false;
                 Log.e("FIREBASE_ADS", "❌ [INTERSTITIAL_AD] AdMob Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
                 fetchAdXAd();
             }
@@ -121,7 +137,7 @@ public class Task_InterstitialAdManager {
     }
 
     public void fetchAdXAd() {
-        if (isAdmobAdAvailable()) {
+        if (isAdmobAdAvailable() || isLoading) {
             return;
         }
 
@@ -130,17 +146,20 @@ public class Task_InterstitialAdManager {
             return;
         }
 
-        Log.e("FIREBASE_ADS", "🟢 [INTERSTITIAL_AD] Loading AdX Interstitial with ID: " + adXInterstitialAdId);
+        isLoading = true;
+        Log.e("FIREBASE_ADS", "dYY [INTERSTITIAL_AD] Loading AdX Interstitial with ID: " + adXInterstitialAdId);
         InterstitialAdLoadCallback loadCallback = new InterstitialAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd ad) {
-                Log.e("FIREBASE_ADS", "🎉 [INTERSTITIAL_AD] AdX Interstitial Loaded Successfully!");
+                isLoading = false;
+                Log.e("FIREBASE_ADS", "dYZ% [INTERSTITIAL_AD] AdX Interstitial Loaded Successfully!");
                 admobInterstitialAd = ad;
             }
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                Log.e("FIREBASE_ADS", "❌ [INTERSTITIAL_AD] AdX Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
+                isLoading = false;
+                Log.e("FIREBASE_ADS", "?O [INTERSTITIAL_AD] AdX Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
                 fetchFbAd();
             }
         };
@@ -204,6 +223,9 @@ public class Task_InterstitialAdManager {
                 @Override
                 public void onAdShowedFullScreenContent() {
                     super.onAdShowedFullScreenContent();
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                 }
 
                 @Override
@@ -222,10 +244,10 @@ public class Task_InterstitialAdManager {
                 }
             };
             admobInterstitialAd.setFullScreenContentCallback(fullScreenContentCallback);
-            admobInterstitialAd.show(activity);
+            showAdWithLoader(activity);
         } else if (isFbAdAvailable()) {
             Log.e("FIREBASE_ADS", "🟢 [INTERSTITIAL_AD] Showing Facebook Interstitial Ad");
-            fbInterstitialAd.show();
+            showAdWithLoader(activity);
         } else {
             Log.e("FIREBASE_ADS", "⚠️ [INTERSTITIAL_AD] Ad not ready yet. Pre-fetching now and proceeding.");
             fetchAdMobAd();
@@ -269,7 +291,7 @@ public class Task_InterstitialAdManager {
 //
 //        if (timeDifference < googleAdsTime * 1000) {
 //            if (isFbAdAvailable()) {
-//                fbInterstitialAd.show();
+//                showAdWithLoader(activity);
 //            } else {
 //            if (progressDialog != null && progressDialog.isShowing()) {
 //                progressDialog.dismiss();
@@ -314,9 +336,9 @@ public class Task_InterstitialAdManager {
 //                    }
 //                };
 //                admobInterstitialAd.setFullScreenContentCallback(fullScreenContentCallback);
-//                admobInterstitialAd.show(activity);
+//                showAdWithLoader(activity);
 //            } else if (isFbAdAvailable()) {
-//                fbInterstitialAd.show();
+//                showAdWithLoader(activity);
 //            } else {
 //            if (progressDialog != null && progressDialog.isShowing()) {
 //                progressDialog.dismiss();
@@ -378,6 +400,9 @@ public class Task_InterstitialAdManager {
                 @Override
                 public void onAdShowedFullScreenContent() {
                     super.onAdShowedFullScreenContent();
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                 }
 
                 @Override
@@ -399,9 +424,9 @@ public class Task_InterstitialAdManager {
                 }
             };
             admobInterstitialAd.setFullScreenContentCallback(fullScreenContentCallback);
-            admobInterstitialAd.show(activity);
+            showAdWithLoader(activity);
         } else if (isFbAdAvailable()) {
-            fbInterstitialAd.show();
+            showAdWithLoader(activity);
         } else {
             fetchAdMobAd();
             if (progressDialog != null && progressDialog.isShowing()) {
@@ -418,7 +443,7 @@ public class Task_InterstitialAdManager {
             return;
         }
         if (isFbAdAvailable()) {
-            fbInterstitialAd.show();
+            showAdWithLoader(activity);
         } else {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
@@ -475,6 +500,9 @@ public class Task_InterstitialAdManager {
                 @Override
                 public void onAdShowedFullScreenContent() {
                     super.onAdShowedFullScreenContent();
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                 }
 
                 @Override
@@ -494,9 +522,9 @@ public class Task_InterstitialAdManager {
                 }
             };
             admobInterstitialAd.setFullScreenContentCallback(fullScreenContentCallback);
-            admobInterstitialAd.show(activity);
+            showAdWithLoader(activity);
         } else if (isFbAdAvailable()) {
-            fbInterstitialAd.show();
+            showAdWithLoader(activity);
         } else {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
@@ -510,5 +538,40 @@ public class Task_InterstitialAdManager {
         void onAdClose();
     }
 
+
+    private void showAdWithLoader(final Activity activity) {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(activity);
+            progressDialog.setMessage("Loading Ad...");
+            progressDialog.setCancelable(false);
+        }
+        progressDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isAdmobAdAvailable()) {
+                    admobInterstitialAd.show(activity);
+                } else if (isFbAdAvailable()) {
+                    fbInterstitialAd.show();
+                } else {
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                    if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+                }
+                // Safety fallback: if ad fails to show or dismiss properly within 3 seconds, unlock UI
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+                        }
+                    }
+                }, 3000);
+            }
+        }, 1200);
+    }
 }
+
 

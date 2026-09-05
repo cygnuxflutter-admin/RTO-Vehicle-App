@@ -28,7 +28,7 @@ import com.vehicle.information.trending.rtoexam.rto.handlers.TaskHandler;
 import org.json.JSONObject;
 
 
-public class SearchVehicleDetailsLoaderActivity extends AppCompatActivity {
+public class SearchVehicleDetailsLoaderActivity extends AllBaseActivity {
     private String actionName;
     private CustomLoaderScreen customLoaderScreen;
     private String registrationNo;

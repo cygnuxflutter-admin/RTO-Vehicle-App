@@ -29,7 +29,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Utils;
 
 
-public class InsuranceDetailsActivity extends AppCompatActivity {
+public class InsuranceDetailsActivity extends AllBaseActivity {
     private String actionName;
     private Button btnAction;
     private LinearLayout contentLayout;

@@ -32,7 +32,18 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class Task_ExpiryReminderActivity extends AppCompatActivity {
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import android.util.Log;
+import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_AlarmReceiver;
+
+public class Task_ExpiryReminderActivity extends AllBaseActivity {
 
     private RecyclerView rv_vehicles;
     private LinearLayout ll_empty_state;
@@ -120,6 +131,18 @@ public class Task_ExpiryReminderActivity extends AppCompatActivity {
             String id = "veh_" + System.currentTimeMillis();
             Task_VehicleDocumentModel model = new Task_VehicleDocumentModel(id, num, name.isEmpty() ? "Vehicle" : name, ins, puc, "15 Mar 2027");
             Task_ReminderStorage.addVehicle(this, model);
+            
+            // Schedule Alarms
+            if (!ins.isEmpty()) {
+                scheduleAlarm(ins, "Insurance", num, -3, "Your Insurance for vehicle " + num + " is expiring in 3 days. Please renew it soon.");
+                scheduleAlarm(ins, "Insurance", num, 0, "Your Insurance for vehicle " + num + " is expiring today. Please renew it immediately.");
+            }
+            if (!puc.isEmpty()) {
+                scheduleAlarm(puc, "PUC", num, -3, "Your PUC for vehicle " + num + " is expiring in 3 days. Please renew it soon.");
+                scheduleAlarm(puc, "PUC", num, 0, "Your PUC for vehicle " + num + " is expiring today. Please renew it immediately.");
+            }
+            
+            checkNotificationPermission();
 
             Toast.makeText(this, "Vehicle saved successfully!", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
@@ -137,5 +160,59 @@ public class Task_ExpiryReminderActivity extends AppCompatActivity {
             target.setText(dateFormat.format(selected.getTime()));
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         dpd.show();
+    }
+
+    private void checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
+    }
+
+    private void scheduleAlarm(String dateStr, String type, String vehicleNumber, int daysOffset, String message) {
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dateFormat.parse(dateStr));
+            
+            // Apply days offset (e.g., -3 for 3 days before)
+            calendar.add(Calendar.DAY_OF_YEAR, daysOffset);
+            
+            // Set time to 9:00 AM
+            calendar.set(Calendar.HOUR_OF_DAY, 9);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            
+            // If the time is already past, skip setting alarm
+            if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+                return;
+            }
+
+            Intent intent = new Intent(this, Task_AlarmReceiver.class);
+            intent.putExtra("TYPE", type);
+            intent.putExtra("VEHICLE_NUMBER", vehicleNumber);
+            intent.putExtra("MESSAGE", message);
+            
+            int reqCode = (int) System.currentTimeMillis() + type.length() + Math.abs(daysOffset);
+            
+            int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                flags |= PendingIntent.FLAG_IMMUTABLE;
+            }
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, reqCode, intent, flags);
+            
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            if (alarmManager != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                } else {
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                }
+                Log.d("EXPIRY_ALARM", "Scheduled " + type + " alarm for " + dateStr + " (offset: " + daysOffset + " days) at 9 AM");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

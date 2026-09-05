@@ -36,8 +36,7 @@ public class Task_LoadAds {
         Task_PreferenceClass taskPreferenceClass = new Task_PreferenceClass(activity);
         if (taskPreferenceClass.getInt("BannerAdShow", 0) == 0) {
             Log.e("FIREBASE_ADS", "🔴 [BANNER_AD] Banner Ads are DISABLED via Firebase (BannerAdShow=0)");
-            mainLayout.setVisibility(View.GONE);
-            mainLayout.removeAllViews();
+            mainLayout.removeAllViews(); mainLayout.addView(getBannerView(activity, mainLayout)); mainLayout.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -54,7 +53,7 @@ public class Task_LoadAds {
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
         bannerParameters.addRule(RelativeLayout.CENTER_IN_PARENT);
-        mainLayout.addView(getBannerView(activity));
+        mainLayout.addView(getBannerView(activity, mainLayout));
         Log.e("FIREBASE_ADS", "🟢 [BANNER_AD] Loading Banner Ad with ID: " + bannerAdunitID);
 
         AdView adView = new AdView(activity);
@@ -127,8 +126,7 @@ public class Task_LoadAds {
         String fbBannerAdunitID = new Task_PreferenceClass(activity).getAdsId("FbBannerAd");
         if (fbBannerAdunitID == null || fbBannerAdunitID.trim().isEmpty()) {
             Log.e("FIREBASE_ADS", "🔴 [BANNER_AD] No banner ads available from Firebase -> Hiding container");
-            mainLayout.removeAllViews();
-            mainLayout.setVisibility(View.GONE);
+            mainLayout.removeAllViews(); mainLayout.addView(getBannerView(activity, mainLayout)); mainLayout.setVisibility(View.VISIBLE);
             return;
         }
         com.facebook.ads.AdView fbBannerView = new com.facebook.ads.AdView(activity, fbBannerAdunitID, com.facebook.ads.AdSize.BANNER_HEIGHT_50);
@@ -138,8 +136,7 @@ public class Task_LoadAds {
             @Override
             public void onError(Ad ad, AdError adError) {
                 Log.e("FIREBASE_ADS", "🔴 [BANNER_AD] All banner sources failed -> Hiding ad container");
-                mainLayout.removeAllViews();
-                mainLayout.setVisibility(View.GONE);
+                mainLayout.removeAllViews(); mainLayout.addView(getBannerView(activity, mainLayout)); mainLayout.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -161,12 +158,10 @@ public class Task_LoadAds {
         fbBannerView.loadAd(fbBannerView.buildLoadAdConfig().withAdListener(adListener).build());
 
     }
-    private static View getBannerView(Activity activity) {
-        View adView =  LayoutInflater.from(activity).inflate(R.layout.task_banner_ad_layout_loading, null);
-        ShimmerFrameLayout shimmerLayout = adView.findViewById(R.id.shimmerLayout);
-
-        shimmerLayout.startShimmer(); // Start the shimmer effect
-        shimmerLayout.setVisibility(View.VISIBLE);
+    private static View getBannerView(Activity activity, android.view.ViewGroup parent) {
+        View adView =  LayoutInflater.from(activity).inflate(R.layout.task_banner_ad_layout_loading, parent, false);
+        com.facebook.shimmer.ShimmerFrameLayout shimmerLayout = adView.findViewById(R.id.shimmerLayout);
+        if (shimmerLayout != null) { shimmerLayout.startShimmer(); }
         return adView;
     }
 
@@ -188,8 +183,7 @@ public class Task_LoadAds {
         Task_PreferenceClass taskPreferenceClass = new Task_PreferenceClass(activity);
         if (taskPreferenceClass.getInt("BannerAdShow", 1) == 0) {
             Log.e("FIREBASE_ADS", "🔴 [COLLAPSIBLE_BANNER] Banner Ads are DISABLED via Firebase (BannerAdShow=0)");
-            if (relativeLayout != null) relativeLayout.setVisibility(View.GONE);
-            mainLayout.setVisibility(View.GONE);
+            if (relativeLayout != null) relativeLayout.setVisibility(View.VISIBLE); mainLayout.removeAllViews(); mainLayout.addView(getBannerView(activity, mainLayout)); mainLayout.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -234,8 +228,7 @@ public class Task_LoadAds {
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 super.onAdFailedToLoad(loadAdError);
                 Log.e("FIREBASE_ADS", "❌ [COLLAPSIBLE_BANNER] Failed to load: " + loadAdError.getMessage());
-                if (relativeLayout != null) relativeLayout.setVisibility(View.GONE);
-                mainLayout.setVisibility(View.GONE);
+                if (relativeLayout != null) relativeLayout.setVisibility(View.VISIBLE); mainLayout.removeAllViews(); mainLayout.addView(getBannerView(activity, mainLayout)); mainLayout.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -273,4 +266,9 @@ public class Task_LoadAds {
     }
 
 }
+
+
+
+
+
 

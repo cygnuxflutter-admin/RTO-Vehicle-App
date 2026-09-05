@@ -20,7 +20,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class Task_MileageCalculatorActivity extends AppCompatActivity {
+public class Task_MileageCalculatorActivity extends AllBaseActivity {
 
     private TextView tab_trip_cost;
     private TextView tab_actual_mileage;

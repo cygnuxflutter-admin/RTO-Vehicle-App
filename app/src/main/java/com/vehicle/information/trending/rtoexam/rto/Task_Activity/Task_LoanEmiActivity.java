@@ -19,7 +19,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class Task_LoanEmiActivity extends AppCompatActivity {
+public class Task_LoanEmiActivity extends AllBaseActivity {
 
     private EditText et_loan_amount;
     private EditText et_interest_rate;

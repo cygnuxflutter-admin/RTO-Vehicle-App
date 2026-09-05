@@ -20,7 +20,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 
 import java.util.ArrayList;
 
-public class Task_ResultActivity extends AppCompatActivity {
+public class Task_ResultActivity extends AllBaseActivity {
     Button btnHome;
     Button btnViewResult;
     ImageView ivSmiley;

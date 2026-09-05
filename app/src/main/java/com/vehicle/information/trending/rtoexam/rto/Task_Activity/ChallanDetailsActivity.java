@@ -28,7 +28,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Utils;
 import java.util.List;
 
 
-public class ChallanDetailsActivity extends AppCompatActivity {
+public class ChallanDetailsActivity extends AllBaseActivity {
     public String actionName;
     private CardView btnCheckVehicleDetails;
     private LinearLayout contentLayout;

@@ -33,7 +33,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Task_CityActivity extends AppCompatActivity {
+public class Task_CityActivity extends AllBaseActivity {
     public static ArrayList<Task_CitiesModel> arrlist;
     ListView lv_cities;
     Task_ListAdapter cityAdapter;

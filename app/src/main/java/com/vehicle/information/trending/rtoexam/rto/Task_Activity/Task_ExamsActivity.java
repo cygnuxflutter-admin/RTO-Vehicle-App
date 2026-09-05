@@ -15,7 +15,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_LoadAds;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_NetworkUtils;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
 
-public class Task_ExamsActivity extends AppCompatActivity {
+public class Task_ExamsActivity extends AllBaseActivity {
     Button btnStart;
     String str_language;
     TextView tv_header;

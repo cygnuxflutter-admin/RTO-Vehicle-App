@@ -46,9 +46,10 @@ import android.os.Looper;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import java.util.Objects;
+import androidx.core.splashscreen.SplashScreen;
 
 
-public class Task_SplashScreenActivity extends AppCompatActivity {
+public class Task_SplashScreenActivity extends AllBaseActivity {
     private Task_PreferenceClass taskPreferenceClass;
     public FirebaseDatabase database;
     private DatabaseReference project_data2;
@@ -60,6 +61,7 @@ public class Task_SplashScreenActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle bundle) {
+        SplashScreen.installSplashScreen(this);
         super.onCreate(bundle);
         startTime = System.currentTimeMillis();
         requestWindowFeature(1);
@@ -326,12 +328,9 @@ public class Task_SplashScreenActivity extends AppCompatActivity {
                         Toast.makeText(Task_SplashScreenActivity.this, "Unable to find Google Play Store", Toast.LENGTH_LONG).show();
                     }
                 }
-                if (!isForceUpdate) {
-                    if (materialDialog != null && materialDialog.isShowing()) {
-                        materialDialog.dismiss();
-                    }
-                    next();
-                }
+                // We do NOT dismiss the dialog or call next() here.
+                // If the user presses back from the Play Store without updating,
+                // the dialog will still be here. They can then press "Later" (if optional) to proceed.
             });
 
             if (isForceUpdate) {
@@ -348,6 +347,14 @@ public class Task_SplashScreenActivity extends AppCompatActivity {
                     });
                 }
             }
+
+            materialDialog.setOnCancelListener(dialog -> {
+                // If the user presses the BACK button or clicks outside to cancel the optional update,
+                // we treat it as "Later" and move to the next screen.
+                if (!isForceUpdate) {
+                    next();
+                }
+            });
 
             materialDialog.show();
         });
@@ -447,6 +454,7 @@ public class Task_SplashScreenActivity extends AppCompatActivity {
             ((MyApplication) getApplicationContext()).loadInterstitialAd();
             Intent intent = new Intent(getApplicationContext(), Task_StartActivity.class);
             startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         });
     }
@@ -458,6 +466,7 @@ public class Task_SplashScreenActivity extends AppCompatActivity {
 
         Intent intent = new Intent(getApplicationContext(), Task_StartActivity.class);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }
 

@@ -21,7 +21,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_RewardVi
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Task_ResultCardsActivity extends AppCompatActivity {
+public class Task_ResultCardsActivity extends AllBaseActivity {
     public static String KEY_CANS = "canswer";
     public static String KEY_Photo = "Pphoto";
     public static String KEY_QUES = "questions";

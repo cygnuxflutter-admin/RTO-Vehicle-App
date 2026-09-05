@@ -27,7 +27,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceCl
 import java.util.ArrayList;
 import java.util.List;
 
-public class Task_RulesActivity extends AppCompatActivity {
+public class Task_RulesActivity extends AllBaseActivity {
 
     private ImageView iv_back;
     private EditText et_search_rules;

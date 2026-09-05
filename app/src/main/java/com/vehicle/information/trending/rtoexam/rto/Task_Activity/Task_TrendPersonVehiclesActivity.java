@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Task_TrendPersonVehiclesActivity extends AppCompatActivity {
+public class Task_TrendPersonVehiclesActivity extends AllBaseActivity {
 
     Celebrity_Adapter adapter;
     private InterstitialAd interstitialAd;

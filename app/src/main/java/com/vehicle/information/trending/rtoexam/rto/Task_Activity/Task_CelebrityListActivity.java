@@ -14,7 +14,7 @@ import com.vehicle.information.trending.rtoexam.rto.R;
 import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_NativeAdUtil;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
 
-public class Task_CelebrityListActivity extends AppCompatActivity {
+public class Task_CelebrityListActivity extends AllBaseActivity {
 
     private Task_PreferenceClass taskPreferenceClass;
     @Override
