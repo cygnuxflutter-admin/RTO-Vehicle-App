@@ -182,11 +182,24 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
                         taskPreferenceClass.setDataType("FbBannerAd", getFirebaseString(snapshot, "FbBannerAd", ""));
 
                         // ----------------- ADX Fallback IDs (Strictly from Firebase ONLY) -----------------
-                        taskPreferenceClass.setDataType("AdxBannerAdunitID", getFirebaseString(snapshot, "AdxBannerAdunitID", ""));
-                        taskPreferenceClass.setDataType("AdxInterstitalAdunitID", getFirebaseString(snapshot, "AdxInterstitalAdunitID", ""));
-                        taskPreferenceClass.setDataType("AdxRewardVideoUnitID", getFirebaseString(snapshot, "AdxRewardVideoUnitID", ""));
-                        taskPreferenceClass.setDataType("AdxNativeUnitID", getFirebaseString(snapshot, "AdxNativeUnitID", ""));
-                        taskPreferenceClass.setDataType("AdxAppOpenID", getFirebaseString(snapshot, "AdxAppOpenID", ""));
+                        String adxBanner = getFirebaseString(snapshot, "AdxBannerAdunitID", getFirebaseString(snapshot, "AdxBannerUnitID", ""));
+                        taskPreferenceClass.setDataType("AdxBannerAdunitID", adxBanner);
+                        taskPreferenceClass.setDataType("AdxBannerUnitID", adxBanner);
+
+                        String adxInter = getFirebaseString(snapshot, "AdxInterstitalAdunitID", getFirebaseString(snapshot, "AdxInterstialUnitID", ""));
+                        taskPreferenceClass.setDataType("AdxInterstitalAdunitID", adxInter);
+                        taskPreferenceClass.setDataType("AdxInterstialUnitID", adxInter);
+
+                        String adxReward = getFirebaseString(snapshot, "AdxRewardVideoUnitID", getFirebaseString(snapshot, "AdxRewardUnitID", ""));
+                        taskPreferenceClass.setDataType("AdxRewardVideoUnitID", adxReward);
+                        taskPreferenceClass.setDataType("AdxRewardUnitID", adxReward);
+
+                        String adxNative = getFirebaseString(snapshot, "AdxNativeUnitID", getFirebaseString(snapshot, "AdxNativeAdunitID", ""));
+                        taskPreferenceClass.setDataType("AdxNativeUnitID", adxNative);
+                        taskPreferenceClass.setDataType("AdxNativeAdunitID", adxNative);
+
+                        String adxAppOpen = getFirebaseString(snapshot, "AdxAppOpenID", "");
+                        taskPreferenceClass.setDataType("AdxAppOpenID", adxAppOpen);
 
                         // ----------------- Ad Visibility & Click Controls (Strictly from Firebase ONLY) -----------------
                         taskPreferenceClass.setInt("NativeAdShow", getFirebaseInt(snapshot, "NativeAdShow", 0));

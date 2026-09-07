@@ -12,209 +12,237 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.vehicle.information.trending.rtoexam.rto.R;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
-import com.facebook.ads.Ad;
-import com.facebook.ads.InterstitialAdListener;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
 
 public class Task_RewardVideoManager {
+
+    private static final String TAG = "RewardVideoManager";
     private static Task_PreferenceClass taskPreferenceClass;
-    private static String AD_google_Rw;
+    private static RewardedAd googleRewardedAd = null;
+    private static RewardedInterstitialAd mRewardedInterstitialAd = null;
+    private static boolean isLoading = false;
+    private static boolean isUserEarnReward = false;
     private static AlertDialog alertDialog;
-    public static RewardedInterstitialAd mRewardedAd;
 
-    static boolean isUserEarnReward = false;
-    public static com.facebook.ads.InterstitialAd interstitialFB;
+    public static void preloadRewardAd(final Context context) {
+        if (context == null || isRewardAdAvailable() || isLoading) return;
+        if (taskPreferenceClass == null) {
+            taskPreferenceClass = new Task_PreferenceClass(context);
+        }
 
-    private static com.google.android.gms.ads.rewarded.RewardedAd googleRewardedAd;
+        String adUnitId = taskPreferenceClass.getAdsId("GoogleRewardedAd");
+        if (adUnitId == null || adUnitId.trim().isEmpty()) {
+            adUnitId = taskPreferenceClass.getAdsId("AdxRewardVideoUnitID");
+        }
+        if (adUnitId == null || adUnitId.trim().isEmpty()) {
+            return;
+        }
 
-    public static void showRewardVideoAd(final Activity context, OnRewardAdLoadInterface onAdLoadInterface) {
-        if (context == null || context.isFinishing()) return;
+        isLoading = true;
+        Log.d(TAG, "🟢 [REWARD_AD] Pre-loading Rewarded Ad with ID: " + adUnitId);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        RewardedAd.load(context.getApplicationContext(), adUnitId, adRequest, new RewardedAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                isLoading = false;
+                googleRewardedAd = rewardedAd;
+                Log.d(TAG, "🎉 [REWARD_AD] Rewarded Ad Pre-loaded Successfully!");
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                isLoading = false;
+                googleRewardedAd = null;
+                Log.e(TAG, "❌ [REWARD_AD] Pre-load Failed: " + loadAdError.getMessage());
+                preloadRewardedInterstitialFallback(context);
+            }
+        });
+    }
+
+    private static void preloadRewardedInterstitialFallback(final Context context) {
+        if (context == null || mRewardedInterstitialAd != null || isLoading) return;
+        String rwInterId = taskPreferenceClass.getAdsId("GoogleInterstialRewardAd");
+        if (rwInterId == null || rwInterId.trim().isEmpty()) {
+            return;
+        }
+
+        isLoading = true;
+        AdRequest adRequest = new AdRequest.Builder().build();
+        RewardedInterstitialAd.load(context.getApplicationContext(), rwInterId, adRequest, new RewardedInterstitialAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull RewardedInterstitialAd ad) {
+                isLoading = false;
+                mRewardedInterstitialAd = ad;
+                Log.d(TAG, "🎉 [REWARD_INTERSTITIAL] Pre-loaded Successfully!");
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                isLoading = false;
+                mRewardedInterstitialAd = null;
+                Log.e(TAG, "❌ [REWARD_INTERSTITIAL] Fallback load failed: " + loadAdError.getMessage());
+            }
+        });
+    }
+
+    public static boolean isRewardAdAvailable() {
+        return googleRewardedAd != null || mRewardedInterstitialAd != null;
+    }
+
+    public static void showRewardVideoAd(final Activity context, final OnRewardAdLoadInterface onAdLoadInterface) {
+        if (context == null || context.isFinishing() || context.isDestroyed()) {
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
+            return;
+        }
+
         isUserEarnReward = false;
         if (taskPreferenceClass == null) {
             taskPreferenceClass = new Task_PreferenceClass(context);
         }
-        AD_google_Rw = taskPreferenceClass.getAdsId("GoogleRewardedAd");
-        if (AD_google_Rw == null || AD_google_Rw.trim().isEmpty()) {
-            Log.e("FIREBASE_ADS", "🔴 [REWARD_AD] ID is empty -> Checking ADX/FB or hiding.");
-            // We could fall back to ADX/FB here, but for now we just won't load the ad if missing.
-            // If the user wants a reward but ad is missing, we must let them through or gracefully handle it.
-            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true); // Grant reward if no ads are set
+
+        // Case 1: Rewarded Ad already pre-loaded
+        if (googleRewardedAd != null) {
+            final RewardedAd adToShow = googleRewardedAd;
+            googleRewardedAd = null;
+
+            adToShow.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+                    preloadRewardAd(context);
+                    if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(isUserEarnReward);
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                    super.onAdFailedToShowFullScreenContent(adError);
+                    Log.e(TAG, "❌ [REWARD_AD] Failed to show: " + adError.getMessage());
+                    preloadRewardAd(context);
+                    if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
+                }
+            });
+
+            adToShow.show(context, new OnUserEarnedRewardListener() {
+                @Override
+                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                    isUserEarnReward = true;
+                }
+            });
             return;
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View dialogView = inflater.inflate(R.layout.task_lottie_anim_dialog, null);
-        dialogBuilder.setView(dialogView);
-        alertDialog = dialogBuilder.create();
-        alertDialog.setCancelable(false);
-        alertDialog.setCanceledOnTouchOutside(false);
+        // Case 2: Rewarded Interstitial Fallback available
+        if (mRewardedInterstitialAd != null) {
+            final RewardedInterstitialAd adToShow = mRewardedInterstitialAd;
+            mRewardedInterstitialAd = null;
+
+            adToShow.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+                    preloadRewardAd(context);
+                    if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(isUserEarnReward);
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                    super.onAdFailedToShowFullScreenContent(adError);
+                    preloadRewardAd(context);
+                    if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
+                }
+            });
+
+            adToShow.show(context, rewardItem -> isUserEarnReward = true);
+            return;
+        }
+
+        // Case 3: Ad not preloaded yet -> show loader and fetch
+        String adUnitId = taskPreferenceClass.getAdsId("GoogleRewardedAd");
+        if (adUnitId == null || adUnitId.trim().isEmpty()) {
+            adUnitId = taskPreferenceClass.getAdsId("AdxRewardVideoUnitID");
+        }
+        if (adUnitId == null || adUnitId.trim().isEmpty()) {
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
+            return;
+        }
+
+        showLoadingDialog(context);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        RewardedAd.load(context, adUnitId, adRequest, new RewardedAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                dismissLoadingDialog();
+                if (context.isFinishing() || context.isDestroyed()) {
+                    if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
+                    return;
+                }
+
+                rewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        super.onAdDismissedFullScreenContent();
+                        preloadRewardAd(context);
+                        if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(isUserEarnReward);
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        super.onAdFailedToShowFullScreenContent(adError);
+                        preloadRewardAd(context);
+                        if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
+                    }
+                });
+
+                rewardedAd.show(context, rewardItem -> isUserEarnReward = true);
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                dismissLoadingDialog();
+                Log.e(TAG, "❌ [REWARD_AD] Load failed: " + loadAdError.getMessage());
+                if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
+            }
+        });
+    }
+
+    private static void showLoadingDialog(Activity activity) {
+        if (activity == null || activity.isFinishing() || activity.isDestroyed()) return;
+        dismissLoadingDialog();
         try {
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View dialogView = inflater.inflate(R.layout.task_lottie_anim_dialog, null);
+            dialogBuilder.setView(dialogView);
+            alertDialog = dialogBuilder.create();
+            alertDialog.setCancelable(false);
+            alertDialog.setCanceledOnTouchOutside(false);
+            if (alertDialog.getWindow() != null) {
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            }
             alertDialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-        Log.e("FIREBASE_ADS", "🟢 [REWARD_AD] Loading AdMob Rewarded with ID: " + AD_google_Rw);
-        com.google.android.gms.ads.rewarded.RewardedAd.load(context, AD_google_Rw, adRequest, new com.google.android.gms.ads.rewarded.RewardedAdLoadCallback() {
-            @Override
-            public void onAdLoaded(@NonNull com.google.android.gms.ads.rewarded.RewardedAd rewardedAd) {
-                Log.e("FIREBASE_ADS", "🎉 [REWARD_AD] AdMob Rewarded Loaded Successfully!");
-                googleRewardedAd = rewardedAd;
-                if (alertDialog != null && alertDialog.isShowing()) {
-                    alertDialog.dismiss();
-                }
-                googleRewardedAd.show(context, new OnUserEarnedRewardListener() {
-                    @Override
-                    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                        isUserEarnReward = true;
-                    }
-                });
-                googleRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                    @Override
-                    public void onAdDismissedFullScreenContent() {
-                        super.onAdDismissedFullScreenContent();
-                        googleRewardedAd = null;
-                        if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(isUserEarnReward);
-                    }
-
-                    @Override
-                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                        super.onAdFailedToShowFullScreenContent(adError);
-                        Log.e("FIREBASE_ADS", "❌ [REWARD_AD] AdMob Failed to SHOW: " + adError.getMessage());
-                        googleRewardedAd = null;
-                        if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
-                    }
-                });
-            }
-
-            @Override
-            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                super.onAdFailedToLoad(loadAdError);
-                Log.e("FIREBASE_ADS", "❌ [REWARD_AD] AdMob Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
-                loadRewardedInterstitialFallback(context, onAdLoadInterface);
-            }
-        });
+        } catch (Exception ignored) {}
     }
 
-    private static void loadRewardedInterstitialFallback(final Activity context, final OnRewardAdLoadInterface onAdLoadInterface) {
-        String rwInterId = taskPreferenceClass.getAdsId("GoogleInterstialRewardAd");
-        if (rwInterId == null || rwInterId.trim().isEmpty()) {
-            fbInterstitial(context, onAdLoadInterface);
-            return;
+    private static void dismissLoadingDialog() {
+        if (alertDialog != null && alertDialog.isShowing()) {
+            try {
+                alertDialog.dismiss();
+            } catch (Exception ignored) {}
+            alertDialog = null;
         }
-        AdRequest adRequest = new AdRequest.Builder().build();
-        Log.e("FIREBASE_ADS", "🟢 [REWARD_INTERSTITIAL] Loading with ID: " + rwInterId);
-        RewardedInterstitialAd.load(context, rwInterId, adRequest, new RewardedInterstitialAdLoadCallback() {
-            @Override
-            public void onAdLoaded(@NonNull RewardedInterstitialAd ad) {
-                Log.e("FIREBASE_ADS", "🎉 [REWARD_INTERSTITIAL] AdMob Loaded Successfully!");
-                mRewardedAd = ad;
-                if (alertDialog != null && alertDialog.isShowing()) {
-                    alertDialog.dismiss();
-                }
-                mRewardedAd.show(context, rewardItem -> isUserEarnReward = true);
-                mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                    @Override
-                    public void onAdDismissedFullScreenContent() {
-                        super.onAdDismissedFullScreenContent();
-                        mRewardedAd = null;
-                        if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(isUserEarnReward);
-                    }
-
-                    @Override
-                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                        super.onAdFailedToShowFullScreenContent(adError);
-                        Log.e("FIREBASE_ADS", "❌ [REWARD_INTERSTITIAL] Failed to SHOW: " + adError.getMessage());
-                        mRewardedAd = null;
-                        if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
-                    }
-                });
-            }
-
-            @Override
-            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                super.onAdFailedToLoad(loadAdError);
-                Log.e("FIREBASE_ADS", "❌ [REWARD_INTERSTITIAL] Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
-                fbInterstitial(context, onAdLoadInterface);
-            }
-        });
-    }
-
-    public static void fbInterstitial(Context context, OnRewardAdLoadInterface onAdLoadInterface) {
-        interstitialFB = new com.facebook.ads.InterstitialAd(context, taskPreferenceClass.getAdsId("FbInterstitialAd"));
-        InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
-            @Override
-            public void onInterstitialDisplayed(Ad ad) {
-//                    Log.e("#1", "" + ad.toString());
-                // Interstitial ad displayed callback
-            }
-
-            @Override
-            public void onInterstitialDismissed(Ad ad) {
-//                    Log.e("#2", "" + ad.toString());
-                // Interstitial dismissed callback
-                if (alertDialog != null) {
-                    if (alertDialog.isShowing()) {
-                        alertDialog.dismiss();
-                    }
-                }
-                onAdLoadInterface.onAdClose(true);
-            }
-
-            @Override
-            public void onError(Ad ad, com.facebook.ads.AdError adError) {
-                Log.e("#3", "" + adError.getErrorMessage());
-                Log.e("#3_1", "" + adError.getErrorCode());
-                // Ad error callback
-                if (alertDialog != null) {
-                    if (alertDialog.isShowing()) {
-                        alertDialog.dismiss();
-                    }
-                }
-                onAdLoadInterface.onAdFail();
-            }
-
-            @Override
-            public void onAdLoaded(Ad ad) {
-                // Interstitial ad is loaded and ready to be displayed
-                // Show the ad
-//                    Log.e("#2", "" + ad.toString());
-                if (alertDialog != null) {
-                    if (alertDialog.isShowing()) {
-                        alertDialog.dismiss();
-                    }
-                }
-                interstitialFB.show();
-
-            }
-
-            @Override
-            public void onAdClicked(Ad ad) {
-                // Ad clicked callback
-            }
-
-            @Override
-            public void onLoggingImpression(Ad ad) {
-                // Ad impression logged callback
-            }
-        };
-        com.facebook.ads.InterstitialAd interstitialAd = interstitialFB;
-        interstitialAd.loadAd(interstitialAd.buildLoadAdConfig().withAdListener(interstitialAdListener).build());
     }
 
     public interface OnRewardAdLoadInterface {
         void onAdClose(boolean isWithReward);
-
         void onAdFail();
     }
 }
