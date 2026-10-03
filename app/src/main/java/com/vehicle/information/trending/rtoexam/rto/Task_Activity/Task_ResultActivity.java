@@ -163,7 +163,35 @@ public class Task_ResultActivity extends AllBaseActivity {
         arrayList3 = stringArrayList4;
         arrayList4 = integerArrayList2;
 
-        this.btnViewResult.setOnClickListener(view -> MyApplication.showInterstitialAd(Task_ResultActivity.this, this::Next_ResultCardsActivity));
+        this.btnViewResult.setOnClickListener(view -> {
+            com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass pref = new com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass(Task_ResultActivity.this);
+            if (pref.getAdsStatus("ViewAnswersRewardAd") == 1) {
+                new androidx.appcompat.app.AlertDialog.Builder(Task_ResultActivity.this)
+                    .setTitle("View Answers")
+                    .setMessage("Watch a short video ad to view all the correct answers.")
+                    .setCancelable(true)
+                    .setPositiveButton("Watch Ad", (dialog, which) -> {
+                        com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_RewardVideoManager.showRewardVideoAd(Task_ResultActivity.this, new com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_RewardVideoManager.OnRewardAdLoadInterface() {
+                            @Override
+                            public void onAdClose(boolean isEarn) {
+                                if (isEarn) {
+                                    Next_ResultCardsActivity();
+                                } else {
+                                    android.widget.Toast.makeText(Task_ResultActivity.this, "Video skipped. Answers not unlocked.", android.widget.Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            @Override
+                            public void onAdFail() {
+                                Next_ResultCardsActivity();
+                            }
+                        });
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+            } else {
+                MyApplication.showInterstitialAd(Task_ResultActivity.this, this::Next_ResultCardsActivity);
+            }
+        });
     }
 
     private void goHome() {

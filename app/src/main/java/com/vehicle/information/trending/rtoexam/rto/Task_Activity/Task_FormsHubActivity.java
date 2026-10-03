@@ -1,4 +1,5 @@
 package com.vehicle.information.trending.rtoexam.rto.Task_Activity;
+import com.vehicle.information.trending.rtoexam.rto.MyApplication;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -191,4 +192,13 @@ public class Task_FormsHubActivity extends AllBaseActivity {
 
         iv_clear_search.setOnClickListener(v -> et_search_forms.setText(""));
     }
+
+    @Override
+    public void onBackPressed() {
+        MyApplication.showInterstitialAd(this, () -> finish());
+    }
 }
+
+
+
+

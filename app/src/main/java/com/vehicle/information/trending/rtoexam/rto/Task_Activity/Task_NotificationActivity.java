@@ -35,10 +35,10 @@ public class Task_NotificationActivity extends AllBaseActivity {
         getWindow().setStatusBarColor(Color.parseColor("#1E40AF"));
         setContentView(R.layout.task_activity_notification);
 
-        // Load Banner Ad
+        // Banner Ad removed from Notification screen
         RelativeLayout rlAd = findViewById(R.id.rl_ad);
         if (rlAd != null) {
-            Task_LoadAds.loadAdmobBannerAd(this, rlAd);
+            rlAd.setVisibility(View.GONE);
         }
 
         findViewById(R.id.iv_back).setOnClickListener(v -> onBackPressed());

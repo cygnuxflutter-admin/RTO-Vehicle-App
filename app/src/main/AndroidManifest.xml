@@ -252,6 +252,11 @@
 
         <receiver android:name=".Task_utils.Task_AlarmReceiver" android:exported="false" />
 
+        <!-- OneSignal Background Notification Interceptor -->
+        <meta-data
+            android:name="com.onesignal.NotificationServiceExtension"
+            android:value="com.vehicle.information.trending.rtoexam.rto.OneSignalNotificationServiceExtension" />
+
     </application>
 
 </manifest>

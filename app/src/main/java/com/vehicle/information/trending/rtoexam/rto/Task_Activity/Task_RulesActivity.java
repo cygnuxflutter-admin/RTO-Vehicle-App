@@ -184,8 +184,10 @@ public class Task_RulesActivity extends AllBaseActivity {
         }
     }
 
+
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        MyApplication.showInterstitialAd(this, () -> finish());
     }
 }
+

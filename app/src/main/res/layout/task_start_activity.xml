@@ -253,7 +253,7 @@
                         android:layout_centerInParent="true"
                         android:fontFamily="@font/task_roboto_bold"
                         android:letterSpacing="0.04"
-                        android:text="START EXPLORING"
+                        android:text="START"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
 

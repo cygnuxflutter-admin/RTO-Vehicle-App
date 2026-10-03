@@ -67,29 +67,23 @@ public class Task_MainActivity extends AllBaseActivity {
         // 2. Symbols / Traffic Signs
         View cardSymbols = findViewById(R.id.card_rto_symbols);
         if (cardSymbols != null) {
-            cardSymbols.setOnClickListener(v ->
-                    MyApplication.showInterstitialAd(Task_MainActivity.this, () -> {
-                        Intent intent = new Intent(Task_MainActivity.this, Task_LanguageSelectActivity.class);
-                        intent.putExtra("from", "from_symbol");
-                        Task_MainActivity.this.startActivity(intent);
-                    })
-            );
+            cardSymbols.setOnClickListener(v -> MyApplication.showInterstitialAd(Task_MainActivity.this, () -> {
+                Intent intent = new Intent(Task_MainActivity.this, Task_LanguageSelectActivity.class);
+                intent.putExtra("from", "from_symbol");
+                Task_MainActivity.this.startActivity(intent);
+            }));
         }
 
         // 3. Exam Preparation Bank
         View cardExamPrep = findViewById(R.id.card_rto_exam_prep);
         if (cardExamPrep != null) {
-            cardExamPrep.setOnClickListener(v ->
-                    MyApplication.showInterstitialAd(Task_MainActivity.this, this::Next_LanguageSelectActivity1)
-            );
+            cardExamPrep.setOnClickListener(v -> MyApplication.showInterstitialAd(Task_MainActivity.this, this::Next_LanguageSelectActivity1));
         }
 
         // 4. RTO Mock Exam
         View cardExam = findViewById(R.id.card_rto_exam);
         if (cardExam != null) {
-            cardExam.setOnClickListener(v ->
-                    MyApplication.showInterstitialAd(Task_MainActivity.this, this::Next_LanguageSelectActivity2)
-            );
+            cardExam.setOnClickListener(v -> MyApplication.showInterstitialAd(Task_MainActivity.this, this::Next_LanguageSelectActivity2));
         }
 
         // 5. RTO Rules & Forms
@@ -179,7 +173,7 @@ public class Task_MainActivity extends AllBaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        MyApplication.showInterstitialAd(this, () -> super.onBackPressed());
     }
 
     private void Next_LanguageSelectActivity1() {

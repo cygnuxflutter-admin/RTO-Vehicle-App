@@ -74,6 +74,7 @@
                 <!-- Exit / Quit Button -->
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_confirm_exit"
+                    android:stateListAnimator="@null"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
@@ -94,6 +95,7 @@
                 <!-- Continue Exam Button -->
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_cancel_exit"
+                    android:stateListAnimator="@null"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
@@ -114,3 +116,5 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>
+
+

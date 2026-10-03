@@ -89,8 +89,12 @@ public class Task_MaterialDialogUtils {
             materialDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
 
-        if (!materialDialog.isShowing())
+        if (!materialDialog.isShowing()) {
             materialDialog.show();
+            if (materialDialog.getWindow() != null) {
+                materialDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            }
+        }
 
         TextView tv_title = materialDialog.findViewById(R.id.title);
         TextView tv_description = materialDialog.findViewById(R.id.description);

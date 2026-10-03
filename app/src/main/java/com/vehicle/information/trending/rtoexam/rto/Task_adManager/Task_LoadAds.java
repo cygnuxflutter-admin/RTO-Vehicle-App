@@ -40,7 +40,7 @@ public class Task_LoadAds {
 
         String bannerAdunitID = taskPreferenceClass.getAdsId("GoogleBannerAd");
         if (bannerAdunitID == null || bannerAdunitID.trim().isEmpty()) {
-            loadADXBannerAd(activity, mainLayout);
+            // loadADXBannerAd(activity, mainLayout);
             return;
         }
 
@@ -65,7 +65,7 @@ public class Task_LoadAds {
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 super.onAdFailedToLoad(loadAdError);
                 Log.e(TAG, "❌ [BANNER_AD] AdMob Banner Failed (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
-                loadADXBannerAd(activity, mainLayout);
+                // loadADXBannerAd(activity, mainLayout);
             }
 
             @Override
@@ -76,6 +76,12 @@ public class Task_LoadAds {
                     adView.destroy();
                     return;
                 }
+                
+                // ADD PADDING TO PREVENT ACCIDENTAL CLICKS (AdMob Policy)
+                float density = activity.getResources().getDisplayMetrics().density;
+                int paddingPx = (int)(8 * density);
+                mainLayout.setPadding(0, paddingPx, 0, paddingPx);
+                
                 mainLayout.removeAllViews();
                 mainLayout.addView(adView, bannerParameters);
                 mainLayout.setVisibility(View.VISIBLE);
@@ -94,8 +100,10 @@ public class Task_LoadAds {
             adxBannerAdunitID = taskPreferenceClass.getAdsId("AdxBannerAdunitID");
         }
         if (adxBannerAdunitID == null || adxBannerAdunitID.trim().isEmpty()) {
-            mainLayout.removeAllViews();
-            mainLayout.setVisibility(View.GONE);
+            Log.e(TAG, "🔴 [BANNER_AD] All Banner sources exhausted -> Keeping Shimmer loader.");
+            // User requested: Do NOT hide the container, let the shimmer spin forever if ad fails.
+            // mainLayout.removeAllViews();
+            // mainLayout.setVisibility(View.GONE);
             return;
         }
 
@@ -114,9 +122,10 @@ public class Task_LoadAds {
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 super.onAdFailedToLoad(loadAdError);
-                Log.e(TAG, "❌ [BANNER_AD] AdX Banner Failed (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
-                mainLayout.removeAllViews();
-                mainLayout.setVisibility(View.GONE);
+                Log.e(TAG, "❌ [BANNER_AD] AdX Banner Failed (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage() + " -> Keeping Shimmer loader.");
+                // User requested: Do NOT hide the container, let the shimmer spin forever if ad fails.
+                // mainLayout.removeAllViews();
+                // mainLayout.setVisibility(View.GONE);
             }
 
             @Override
@@ -127,6 +136,12 @@ public class Task_LoadAds {
                     adView.destroy();
                     return;
                 }
+                
+                // ADD PADDING TO PREVENT ACCIDENTAL CLICKS (AdMob Policy)
+                float density = activity.getResources().getDisplayMetrics().density;
+                int paddingPx = (int)(8 * density);
+                mainLayout.setPadding(0, paddingPx, 0, paddingPx);
+                
                 mainLayout.removeAllViews();
                 mainLayout.addView(adView, bannerParameters);
                 mainLayout.setVisibility(View.VISIBLE);
@@ -178,8 +193,10 @@ public class Task_LoadAds {
             collapsibleBannerID = taskPreferenceClass.getAdsId("AdxBannerAdunitID");
         }
         if (collapsibleBannerID == null || collapsibleBannerID.trim().isEmpty()) {
-            if (relativeLayout != null) relativeLayout.setVisibility(View.GONE);
-            mainLayout.setVisibility(View.GONE);
+            Log.e(TAG, "🔴 [COLLAPSIBLE_BANNER] All sources exhausted -> Keeping Shimmer loader.");
+            // User requested: Do NOT hide the container, let the shimmer spin forever if ad fails.
+            // if (relativeLayout != null) relativeLayout.setVisibility(View.GONE);
+            // mainLayout.setVisibility(View.GONE);
             return;
         }
 
@@ -204,7 +221,9 @@ public class Task_LoadAds {
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 super.onAdFailedToLoad(loadAdError);
-                Log.e(TAG, "❌ [COLLAPSIBLE_BANNER] Failed to load: " + loadAdError.getMessage());
+                Log.e(TAG, "❌ [COLLAPSIBLE_BANNER] Failed to load: " + loadAdError.getMessage() + " -> Keeping Shimmer loader.");
+                // User requested: Do NOT hide the container, let the shimmer spin forever if ad fails.
+                /*
                 if (shimmer_view_container != null) {
                     shimmer_view_container.stopShimmer();
                     shimmer_view_container.setVisibility(View.GONE);
@@ -212,6 +231,7 @@ public class Task_LoadAds {
                 mainLayout.removeAllViews();
                 mainLayout.setVisibility(View.GONE);
                 if (relativeLayout != null) relativeLayout.setVisibility(View.GONE);
+                */
             }
 
             @Override
@@ -250,3 +270,4 @@ public class Task_LoadAds {
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth);
     }
 }
+

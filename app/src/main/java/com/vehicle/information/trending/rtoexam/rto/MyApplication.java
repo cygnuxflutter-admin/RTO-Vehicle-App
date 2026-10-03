@@ -10,6 +10,7 @@ import com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_Intersti
 import com.facebook.ads.AudienceNetworkAds;
 import com.google.android.gms.ads.MobileAds;
 import com.vehicle.information.trending.rtoexam.rto.Task_utils.GlobalContext;
+import com.onesignal.OneSignal;
 
 
 public class MyApplication extends android.app.Application {
@@ -27,7 +28,10 @@ public class MyApplication extends android.app.Application {
             if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
             return;
         }
-        ((MyApplication) activity.getApplication()).getInterstitialAdManager().showInterstitialAd(activity, onAdLoadInterface);
+        ((MyApplication) activity.getApplication()).getInterstitialAdManager().forceShowInterstitialAd(activity, onAdLoadInterface);
+    }
+    public static void forceShowInterstitialAd(Activity activity, Task_InterstitialAdManager.OnAdLoadInterface onAdLoadInterface) {
+        ((MyApplication) activity.getApplication()).getInterstitialAdManager().forceShowInterstitialAd(activity, onAdLoadInterface);
     }
     public static void showFaceBookInterstitial(Activity activity, Task_InterstitialAdManager.OnAdLoadInterface onAdLoadInterface) {
         if (BuildConfig.DEBUG) {
@@ -62,13 +66,12 @@ public class MyApplication extends android.app.Application {
         mInstance = this;
 
         // Enable verbose OneSignal logging to debug issues if needed.
-//        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
-//
-//        // OneSignal Initialization
-//        OneSignal.initWithContext(this);
-//        OneSignal.setAppId("83d4adaf-4ae7-4f59-b91a-d0050698af6a");
-//        OneSignal.promptForPushNotifications();
-//        OneSignal.sendTag("Apps", "Text Art");
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
+
+        // OneSignal Initialization
+        OneSignal.initWithContext(this);
+        OneSignal.setAppId("954e122b-0001-46ac-beea-23b466f4f83c");
+        OneSignal.promptForPushNotifications();
 
         AudienceNetworkAds.initialize(this);
         if (BuildConfig.DEBUG) {
@@ -98,18 +101,10 @@ public class MyApplication extends android.app.Application {
     }
 
     public void showAdIfAvailable(@NonNull Activity activity, @NonNull OnShowAdCompleteListener onShowAdCompleteListener) {
-        if (BuildConfig.DEBUG) {
-            onShowAdCompleteListener.onShowAdComplete();
-            return;
-        }
         taskAppOpenManager.showAdIfSplashAvailable(activity, onShowAdCompleteListener);
     }
 
     public void showAdIfHomeAvailable(@NonNull Activity activity, @NonNull OnShowAdCompleteListener onShowAdCompleteListener) {
-        if (BuildConfig.DEBUG) {
-            onShowAdCompleteListener.onShowAdComplete();
-            return;
-        }
         taskAppOpenManager.showAdIfAvailable(activity, onShowAdCompleteListener);
     }
 
@@ -124,3 +119,5 @@ public class MyApplication extends android.app.Application {
 
 
 }
+
+

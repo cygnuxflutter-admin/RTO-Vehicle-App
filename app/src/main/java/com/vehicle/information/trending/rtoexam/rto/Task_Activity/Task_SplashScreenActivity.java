@@ -11,7 +11,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +47,7 @@ import android.animation.ValueAnimator;
 import android.os.Looper;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import java.util.Objects;
 import androidx.core.splashscreen.SplashScreen;
 
@@ -161,11 +164,17 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
                     Log.e("Firebase_Ads_data", "Snapshot received: " + snapshot);
                     try {
                         taskPreferenceClass.setInt("splashscreen", getFirebaseInt(snapshot, "SplashScreenAdsManage", 0));
+                        taskPreferenceClass.setInt("AppOpenFallbackInterstitial", getFirebaseInt(snapshot, "AppOpenFallbackInterstitial", 0));
+                        taskPreferenceClass.setInt("ForegroundAppOpenAd", getFirebaseInt(snapshot, "ForegroundAppOpenAd", 0));
                         taskPreferenceClass.setInt("UpdateAvailable", getFirebaseInt(snapshot, "UpdateAvailable", 0));
                         taskPreferenceClass.setInt("UpdateVersionCode", getFirebaseInt(snapshot, "UpdateVersionCode", BuildConfig.VERSION_CODE));
                         taskPreferenceClass.setDataType("UpdateVersionName", getFirebaseString(snapshot, "UpdateVersionName", BuildConfig.VERSION_NAME));
                         taskPreferenceClass.setInt("ForceUpdate", getFirebaseInt(snapshot, "ForceUpdate", 0));
                         taskPreferenceClass.setDataType("UpdateMessage", getFirebaseString(snapshot, "UpdateMessage", ""));
+                        taskPreferenceClass.setInt("MockTestResultRewardAd", getFirebaseInt(snapshot, "MockTestResultRewardAd", 0));
+                        taskPreferenceClass.setInt("ForceExamStartAd", getFirebaseInt(snapshot, "ForceExamStartAd", 0));
+                        taskPreferenceClass.setInt("RetryQuizRewardAd", getFirebaseInt(snapshot, "RetryQuizRewardAd", 0));
+                        taskPreferenceClass.setInt("ViewAnswersRewardAd", getFirebaseInt(snapshot, "ViewAnswersRewardAd", 0));
 
                         // ----------------- Google AdMob IDs (Strictly from Firebase ONLY) -----------------
                         taskPreferenceClass.setDataType("GoogleBannerAd", getFirebaseString(snapshot, "GoogleBannerAd", ""));
@@ -248,8 +257,7 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
                         int isForceUpdate = taskPreferenceClass.getInt("ForceUpdate", 0);
                         String updateMessage = taskPreferenceClass.getDataType("UpdateMessage", "");
 
-                        boolean isNewerVersion = (targetVersionCode > BuildConfig.VERSION_CODE) ||
-                                (!targetVersionName.equalsIgnoreCase(BuildConfig.VERSION_NAME) && !targetVersionName.trim().isEmpty());
+                        boolean isNewerVersion = (targetVersionCode > BuildConfig.VERSION_CODE);
 
                         if (updateAvailable == 1 && isNewerVersion) {
                             Log.e("FIREBASE_ADS", "🔔 TRIGGERING UPDATE DIALOG -> Version: " + targetVersionName + " (Force: " + isForceUpdate + ")");
@@ -305,14 +313,15 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
             if (materialDialog != null && materialDialog.isShowing()) return;
 
             isUpdateDialogShowing = true;
-            materialDialog = new Dialog(Task_SplashScreenActivity.this);
-            materialDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            materialDialog = new Dialog(Task_SplashScreenActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
             materialDialog.setContentView(R.layout.task_reward_dialog);
             materialDialog.setCancelable(!isForceUpdate);
             materialDialog.setCanceledOnTouchOutside(!isForceUpdate);
+
             if (materialDialog.getWindow() != null) {
-                materialDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                materialDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                Window window = materialDialog.getWindow();
+                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             }
 
             TextView tv_title = materialDialog.findViewById(R.id.title);
@@ -325,9 +334,9 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
             if (customMsg != null && !customMsg.trim().isEmpty()) {
                 tv_description.setText(customMsg);
             } else if (versionName != null && !versionName.isEmpty()) {
-                tv_description.setText("A newer version (v" + versionName + ") of RTO Vehicle App is ready with updated 2026 questions, live fuel rates, and improvements.");
+                tv_description.setText("Version v" + versionName + " is now available.");
             } else {
-                tv_description.setText("A newer version of RTO Vehicle App is ready with updated 2026 questions, live fuel rates, and improvements.");
+                tv_description.setText("A new version is now available.");
             }
 
             button2.setText("Update Now");
@@ -341,13 +350,13 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
                         Toast.makeText(Task_SplashScreenActivity.this, "Unable to find Google Play Store", Toast.LENGTH_LONG).show();
                     }
                 }
-                // We do NOT dismiss the dialog or call next() here.
-                // If the user presses back from the Play Store without updating,
-                // the dialog will still be here. They can then press "Later" (if optional) to proceed.
             });
 
             if (isForceUpdate) {
                 if (button1 != null) button1.setVisibility(View.GONE);
+                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) button2.getLayoutParams();
+                lp.setMarginStart(0);
+                button2.setLayoutParams(lp);
             } else {
                 if (button1 != null) {
                     button1.setVisibility(View.VISIBLE);
@@ -362,8 +371,6 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
             }
 
             materialDialog.setOnCancelListener(dialog -> {
-                // If the user presses the BACK button or clicks outside to cancel the optional update,
-                // we treat it as "Later" and move to the next screen.
                 if (!isForceUpdate) {
                     next();
                 }
@@ -374,88 +381,15 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
     }
 
     private void startIntent() {
-        if (BuildConfig.DEBUG) {
-            callMainActivity();
-            return;
-        }
-        int splashPref = taskPreferenceClass.getInt("splashscreen", 1);
+        
+        int splashPref = taskPreferenceClass.getInt("splashscreen", 0);
+        
         if (splashPref == 1) {
+            // Option 1: Show App Open Ad on Splash (if they ever enable it again)
             callStartActivity();
-        } else if (splashPref == 2) {
-            this.interstitialFB = new com.facebook.ads.InterstitialAd(Task_SplashScreenActivity.this, taskPreferenceClass.getAdsId("FbInterstitialAd"));
-            InterstitialAdListener interstitialAdListener = new InterstitialAdListener() {
-                @Override
-                public void onInterstitialDisplayed(Ad ad) {
-                    Log.e("TAG", "Interstitial ad displayed.");
-                }
-
-                @Override
-                public void onInterstitialDismissed(Ad ad) {
-                    callMainActivity();
-                }
-
-                @Override
-                public void onError(Ad ad, com.facebook.ads.AdError adError) {
-                    callMainActivity();
-                }
-
-                @Override
-                public void onAdLoaded(Ad ad) {
-                    if (interstitialFB != null) {
-                        interstitialFB.show();
-                    }
-                }
-
-                @Override
-                public void onAdClicked(Ad ad) {
-                }
-
-                @Override
-                public void onLoggingImpression(Ad ad) {
-                }
-            };
-
-            interstitialFB.loadAd(interstitialFB.buildLoadAdConfig().withAdListener(interstitialAdListener).build());
-
-        } else if (splashPref == 3) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            InterstitialAd.load(Task_SplashScreenActivity.this, taskPreferenceClass.getAdsId("GoogleInterstitialAd"), adRequest, new InterstitialAdLoadCallback() {
-                @Override
-                public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                    interstitial = interstitialAd;
-
-                    interstitial.setFullScreenContentCallback(new FullScreenContentCallback() {
-                        @Override
-                        public void onAdDismissedFullScreenContent() {
-                            interstitial = null;
-                            callMainActivity();
-                        }
-
-                        @Override
-                        public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                            interstitial = null;
-                            callMainActivity();
-                        }
-
-                        @Override
-                        public void onAdShowedFullScreenContent() {
-                            interstitial = null;
-                        }
-                    });
-
-                    if (interstitial != null) {
-                        interstitial.show(Task_SplashScreenActivity.this);
-                    }
-                }
-
-                @Override
-                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                    interstitial = null;
-                    callMainActivity();
-                }
-            });
         } else {
-            // 0 = Direct without any ad on Splash
+            // Option 0 (and default): Direct to main app without any ads on Splash!
+            // App Open Ads will ONLY trigger when returning from background to foreground.
             callMainActivity();
         }
     }
@@ -474,7 +408,8 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
 
     public void callMainActivity() {
         MyApplication.isAdsSplash = false;
-        ((MyApplication) getApplicationContext()).sendRequest();
+        // SMART LOAD FIX: Removed sendRequest() here to prevent fetching App Open ad on startup!
+        // It will only fetch when the user goes to the background.
         ((MyApplication) getApplicationContext()).loadInterstitialAd();
 
         Intent intent = new Intent(getApplicationContext(), Task_StartActivity.class);
@@ -484,3 +419,12 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
     }
 
 }
+
+
+
+
+
+
+
+
+

@@ -183,6 +183,12 @@ public class Task_NativeAdUtil {
         populateUnifiedNativeAdView(nativeAd, adView);
 
         container.removeAllViews();
+        
+        // ADD PADDING TO PREVENT ACCIDENTAL CLICKS (AdMob Policy)
+        float density = context.getResources().getDisplayMetrics().density;
+        int paddingPx = (int)(8 * density);
+        container.setPadding(0, paddingPx, 0, paddingPx);
+        
         container.addView(adView);
         container.setVisibility(View.VISIBLE);
         container.setBackgroundColor(Color.TRANSPARENT);
@@ -230,7 +236,7 @@ public class Task_NativeAdUtil {
             adxId = taskPreferenceClass.getAdsId("AdxNativeAdunitID");
         }
         if (adxId == null || adxId.trim().isEmpty()) {
-            fbNativeAd(nativeAdContainer);
+            // fbNativeAd(nativeAdContainer);
             return;
         }
 
@@ -255,7 +261,7 @@ public class Task_NativeAdUtil {
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 Log.e(TAG, "❌ [NATIVE_AD] AdX Failed (" + loadAdError.getCode() + ") -> Fallback to Facebook");
-                fbNativeAd(nativeAdContainer);
+                // fbNativeAd(nativeAdContainer);
             }
         }).build();
 
@@ -265,8 +271,9 @@ public class Task_NativeAdUtil {
     private void fbNativeAd(final RelativeLayout nativeAdContainer) {
         String fbId = taskPreferenceClass.getAdsId("FbNativeAd");
         if (fbId == null || fbId.trim().isEmpty()) {
-            Log.w(TAG, "🔴 [NATIVE_AD] All Native sources exhausted -> Hiding container");
-            hideContainer(nativeAdContainer);
+            Log.w(TAG, "🔴 [NATIVE_AD] All Native sources exhausted -> Keeping Shimmer loader spinning indefinitely.");
+            // User requested: Do NOT hide the container, let the shimmer spin forever if ad fails.
+            // hideContainer(nativeAdContainer);
             return;
         }
 
@@ -277,14 +284,21 @@ public class Task_NativeAdUtil {
 
             @Override
             public void onError(Ad ad, AdError adError) {
-                Log.w(TAG, "🔴 [NATIVE_AD] Facebook Native Ad failed (" + adError.getErrorMessage() + ") -> Hiding container");
-                hideContainer(nativeAdContainer);
+                Log.w(TAG, "🔴 [NATIVE_AD] Facebook Native Ad failed (" + adError.getErrorMessage() + ") -> Keeping Shimmer loader spinning indefinitely.");
+                // User requested: Do NOT hide the container, let the shimmer spin forever if ad fails.
+                // hideContainer(nativeAdContainer);
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
                 if (fbNative != ad) return;
                 nativeAdContainer.removeAllViews();
+                
+                // ADD PADDING TO PREVENT ACCIDENTAL CLICKS (Policy Safety)
+                float density = context.getResources().getDisplayMetrics().density;
+                int paddingPx = (int)(8 * density);
+                nativeAdContainer.setPadding(0, paddingPx, 0, paddingPx);
+                
                 View adView = com.facebook.ads.NativeAdView.render(context, fbNative);
                 nativeAdContainer.addView(adView);
                 nativeAdContainer.setVisibility(View.VISIBLE);
@@ -364,3 +378,5 @@ public class Task_NativeAdUtil {
         unifiedNativeAdView.setNativeAd(unifiedNativeAd);
     }
 }
+
+

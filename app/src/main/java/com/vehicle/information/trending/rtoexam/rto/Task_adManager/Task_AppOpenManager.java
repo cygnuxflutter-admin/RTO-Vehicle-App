@@ -1,6 +1,7 @@
 package com.vehicle.information.trending.rtoexam.rto.Task_adManager;
 
 import static androidx.lifecycle.Lifecycle.Event.ON_START;
+import static androidx.lifecycle.Lifecycle.Event.ON_STOP;
 
 import android.app.Activity;
 import android.app.Application;
@@ -43,7 +44,8 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
         this.myApplication = myApplication;
         this.myApplication.registerActivityLifecycleCallbacks(this);
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-        fetchAd();
+        // SMART LOAD: Do NOT preload on app start. Ad will only load when user goes to background.
+        Log.e(LOG_TAG, "🟢 [APP_OPEN_AD] Manager initialized. Ad will load ONLY when user goes to background.");
     }
 
     /**
@@ -54,24 +56,40 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
             taskPreferenceClass = new Task_PreferenceClass(myApplication);
         }
         int splashPref = taskPreferenceClass.getInt("splashscreen", 1);
-        if ((AppOpenAdShow == null || AppOpenAdShow == 0) && splashPref != 1) {
+        int isAppOpenEnabled = (AppOpenAdShow != null) ? AppOpenAdShow : 0;
+        int isForegroundEnabled = taskPreferenceClass.getInt("ForegroundAppOpenAd", 0);
+        
+        // Only load if either Splash needs App Open OR Foreground needs App Open
+        boolean splashNeedsAppOpen = (splashPref == 1 && isAppOpenEnabled == 1);
+        boolean foregroundNeedsAppOpen = (isForegroundEnabled == 1);
+        
+        if (!splashNeedsAppOpen && !foregroundNeedsAppOpen) {
+            Log.e(LOG_TAG, "🔴 [APP_OPEN_AD] Ad disabled (Splash AppOpen=" + isAppOpenEnabled + ", Foreground=" + isForegroundEnabled + "). Skipping load. NO request sent.");
             return;
         }
         // Have unused ad, no need to fetch another.
-        if (isAdAvailable() || isLoading) { return; } isLoading = true;
+        if (isAdAvailable()) {
+            Log.e(LOG_TAG, "⚡ [APP_OPEN_AD] Ad already cached and ready. No new request needed.");
+            return;
+        }
+        if (isLoading) {
+            Log.e(LOG_TAG, "⏳ [APP_OPEN_AD] Ad is already loading. Skipping duplicate request.");
+            return;
+        }
+        isLoading = true;
 
         loadCallback = new AppOpenAd.AppOpenAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull AppOpenAd ad) { isLoading = false;
                 Task_AppOpenManager.this.appOpenAd = ad;
                 Task_AppOpenManager.this.loadTime = (new Date()).getTime();
-                Log.d(LOG_TAG, "AppOpenAd Loaded successfully.");
+                Log.e(LOG_TAG, "🎉 [APP_OPEN_AD] ✅ Ad LOADED successfully! Ready to show on next foreground.");
             }
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) { isLoading = false;
-                Log.e(LOG_TAG, "AppOpenAd failed to load: " + loadAdError.getMessage());
-                fetchAdX();
+                Log.e(LOG_TAG, "❌ [APP_OPEN_AD] AdMob Failed (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage() + " -> Trying AdX...");
+                // fetchAdX();
             }
         };
 
@@ -80,12 +98,14 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
         }
         AD_UNIT_ID1 = taskPreferenceClass.getAdsId("GoogleAppopenAd");
         if (AD_UNIT_ID1 == null || AD_UNIT_ID1.trim().isEmpty()) {
-            fetchAdX();
+            isLoading = false;
+            Log.e(LOG_TAG, "⚠️ [APP_OPEN_AD] No AdMob ID found. Trying AdX...");
+            // fetchAdX();
             return;
         }
         AD_UNIT_ID2 = taskPreferenceClass.getAdsId("AdxAppOpenID");
         AdRequest request = getAdRequest();
-        Log.e("FIREBASE_ADS", "🟢 [APP_OPEN_AD] Loading AdMob AppOpen with ID: " + AD_UNIT_ID1);
+        Log.e(LOG_TAG, "📡 [APP_OPEN_AD] >>> REQUESTING Ad from AdMob (ID: " + AD_UNIT_ID1 + ")");
         AppOpenAd.load(myApplication, AD_UNIT_ID1, request, AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback);
     }
 
@@ -146,36 +166,50 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
      */
     public void showAdIfAvailable() {
         if (currentActivity == null || currentActivity.isFinishing() || currentActivity.isDestroyed()) {
+            Log.e(LOG_TAG, "?? [APP_OPEN_AD] Cannot show - Activity is null or destroyed.");
             return;
         }
+        
+        if (taskPreferenceClass == null) {
+            taskPreferenceClass = new Task_PreferenceClass(myApplication);
+        }
+
+        int isForegroundEnabled = taskPreferenceClass.getInt("ForegroundAppOpenAd", 0);
+
+        if (!MyApplication.isShowingAppOpen || isForegroundEnabled == 0) {
+            Log.e(LOG_TAG, "⚠️ [APP_OPEN_AD] Foreground: ForegroundAppOpenAd disabled or isShowingAppOpen=false. Skipping.");
+            return;
+        }
+        
         if (!isShowingAd && isAdAvailable()) {
-            if (MyApplication.isShowingAppOpen) {
-                FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback() {
-                    @Override
-                    public void onAdDismissedFullScreenContent() {
-                        Task_AppOpenManager.this.appOpenAd = null;
-                        isShowingAd = false;
-                        fetchAd();
-                    }
+            Log.e(LOG_TAG, "?? [APP_OPEN_AD] >>> SHOWING App Open Ad NOW! <<<");
+            FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    Log.e(LOG_TAG, "👋 [APP_OPEN_AD] User dismissed the Ad. Preloading next one...");
+                    Task_AppOpenManager.this.appOpenAd = null;
+                    isShowingAd = false;
+                    fetchAd();
+                }
 
-                    @Override
-                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                        Task_AppOpenManager.this.appOpenAd = null;
-                        isShowingAd = false;
-                        fetchAd();
-                    }
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                    Log.e(LOG_TAG, "❌ [APP_OPEN_AD] Failed to show: " + adError.getMessage());
+                    Task_AppOpenManager.this.appOpenAd = null;
+                    isShowingAd = false;
+                }
 
-                    @Override
-                    public void onAdShowedFullScreenContent() {
-                        isShowingAd = true;
-                    }
-                };
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    isShowingAd = true;
+                    Log.e(LOG_TAG, "? [APP_OPEN_AD] Ad is now VISIBLE on screen!");
+                }
+            };
 
-                appOpenAd.setFullScreenContentCallback(fullScreenContentCallback);
-                appOpenAd.show(currentActivity);
-            }
+            appOpenAd.setFullScreenContentCallback(fullScreenContentCallback);
+            appOpenAd.show(currentActivity);
         } else {
-            fetchAd();
+            Log.e(LOG_TAG, "?? [APP_OPEN_AD] Foreground: Ad not ready. Will load on next background.");
         }
     }
 
@@ -184,6 +218,27 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
             onShowAdCompleteListener.onShowAdComplete();
             return;
         }
+        if (taskPreferenceClass == null) {
+            taskPreferenceClass = new Task_PreferenceClass(myApplication);
+        }
+
+        int isAppOpenEnabled = (AppOpenAdShow != null) ? AppOpenAdShow : 0;
+        int isFallbackEnabled = taskPreferenceClass.getInt("AppOpenFallbackInterstitial", 0);
+
+        if (isAppOpenEnabled == 0 && isFallbackEnabled == 1) {
+            Log.e(LOG_TAG, "?? [APP_OPEN_AD] Splash: AppOpen disabled, using Interstitial Fallback immediately...");
+            MyApplication.forceShowInterstitialAd(activity, new Task_InterstitialAdManager.OnAdLoadInterface() {
+                @Override
+                public void onAdClose() { onShowAdCompleteListener.onShowAdComplete(); }
+            });
+            return;
+        }
+
+        if (isAppOpenEnabled == 0) {
+            onShowAdCompleteListener.onShowAdComplete();
+            return;
+        }
+
         if (!isShowingAd && isAdAvailable()) {
             FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback() {
                 @Override
@@ -193,15 +248,20 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
                     fetchAd();
                     onShowAdCompleteListener.onShowAdComplete();
                 }
-
                 @Override
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     Task_AppOpenManager.this.appOpenAd = null;
                     isShowingAd = false;
                     fetchAd();
-                    onShowAdCompleteListener.onShowAdComplete();
+                    if (isFallbackEnabled == 1) {
+                        MyApplication.forceShowInterstitialAd(activity, new Task_InterstitialAdManager.OnAdLoadInterface() {
+                            @Override
+                            public void onAdClose() { onShowAdCompleteListener.onShowAdComplete(); }
+                        });
+                    } else {
+                        onShowAdCompleteListener.onShowAdComplete();
+                    }
                 }
-
                 @Override
                 public void onAdShowedFullScreenContent() {
                     isShowingAd = true;
@@ -210,12 +270,16 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
             appOpenAd.setFullScreenContentCallback(fullScreenContentCallback);
             appOpenAd.show(activity);
         } else {
-            if (taskPreferenceClass == null) {
-                taskPreferenceClass = new Task_PreferenceClass(myApplication);
-            }
             AD_UNIT_ID1 = taskPreferenceClass.getAdsId("GoogleAppopenAd");
             if (AD_UNIT_ID1 == null || AD_UNIT_ID1.trim().isEmpty()) {
-                onShowAdCompleteListener.onShowAdComplete();
+                if (isFallbackEnabled == 1) {
+                    MyApplication.forceShowInterstitialAd(activity, new Task_InterstitialAdManager.OnAdLoadInterface() {
+                        @Override
+                        public void onAdClose() { onShowAdCompleteListener.onShowAdComplete(); }
+                    });
+                } else {
+                    onShowAdCompleteListener.onShowAdComplete();
+                }
                 return;
             }
 
@@ -263,10 +327,24 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                     isLoading = false;
                     Log.e(LOG_TAG, "❌ [APP_OPEN_AD] Splash AppOpen failed to load: " + loadAdError.getMessage());
-                    onShowAdCompleteListener.onShowAdComplete();
+                    if (isFallbackEnabled == 1) {
+                        Log.e(LOG_TAG, "🔄 [APP_OPEN_AD] Fallback is ON. Trying Interstitial Fallback...");
+                        MyApplication.forceShowInterstitialAd(activity, new Task_InterstitialAdManager.OnAdLoadInterface() {
+                            @Override
+                            public void onAdClose() { onShowAdCompleteListener.onShowAdComplete(); }
+                        });
+                    } else {
+                        onShowAdCompleteListener.onShowAdComplete();
+                    }
                 }
             };
             AdRequest request = getAdRequest();
+            if (isLoading) {
+                Log.e(LOG_TAG, "⏳ [APP_OPEN_AD] Splash: Already loading, skipping duplicate request.");
+                onShowAdCompleteListener.onShowAdComplete();
+                return;
+            }
+            isLoading = true;
             AppOpenAd.load(myApplication, AD_UNIT_ID1, request, AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback);
         }
     }
@@ -345,8 +423,27 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
 
     @OnLifecycleEvent(ON_START)
     public void onStart() {
+        Log.e(LOG_TAG, "🔵 [APP_OPEN_AD] ======================== FOREGROUND DETECTED ========================");
+        Log.e(LOG_TAG, "🔵 [APP_OPEN_AD] isAdsSplash=" + MyApplication.isAdsSplash + " | adAvailable=" + isAdAvailable() + " | isShowingAd=" + isShowingAd);
         if (!MyApplication.isAdsSplash) {
             showAdIfAvailable();
+        } else {
+            Log.e(LOG_TAG, "🔵 [APP_OPEN_AD] Splash screen active. Skipping App Open Ad.");
+        }
+    }
+
+    @OnLifecycleEvent(ON_STOP)
+    public void onStop() {
+        if (taskPreferenceClass == null) {
+            taskPreferenceClass = new Task_PreferenceClass(myApplication);
+        }
+        int isForegroundEnabled = taskPreferenceClass.getInt("ForegroundAppOpenAd", 0);
+        if (isForegroundEnabled == 1) {
+            Log.e(LOG_TAG, "🟠 [APP_OPEN_AD] ======================== BACKGROUND DETECTED ========================");
+            Log.e(LOG_TAG, "🟠 [APP_OPEN_AD] ForegroundAppOpenAd=1. Loading Ad for next foreground...");
+            fetchAd();
+        } else {
+            Log.e(LOG_TAG, "🟠 [APP_OPEN_AD] BACKGROUND detected but ForegroundAppOpenAd=0. NO request sent.");
         }
     }
 
@@ -359,3 +456,12 @@ public class Task_AppOpenManager implements LifecycleObserver, Application.Activ
         return (dateDifference < (numMilliSecondsPerHour * numHours));
     }
 }
+
+
+
+
+
+
+
+
+

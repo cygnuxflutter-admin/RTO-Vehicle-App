@@ -41,7 +41,7 @@ public class Task_RewardVideoManager {
 
         String adUnitId = taskPreferenceClass.getAdsId("GoogleRewardedAd");
         if (adUnitId == null || adUnitId.trim().isEmpty()) {
-            adUnitId = taskPreferenceClass.getAdsId("AdxRewardVideoUnitID");
+            // adUnitId = taskPreferenceClass.getAdsId("AdxRewardVideoUnitID");
         }
         if (adUnitId == null || adUnitId.trim().isEmpty()) {
             return;
@@ -100,6 +100,7 @@ public class Task_RewardVideoManager {
 
     public static void showRewardVideoAd(final Activity context, final OnRewardAdLoadInterface onAdLoadInterface) {
         if (context == null || context.isFinishing() || context.isDestroyed()) {
+            Log.e(TAG, "🔴 [REWARD_AD] Cannot show - Activity is null or destroyed.");
             if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
             return;
         }
@@ -111,6 +112,7 @@ public class Task_RewardVideoManager {
 
         // Case 1: Rewarded Ad already pre-loaded
         if (googleRewardedAd != null) {
+            Log.e(TAG, "🟢 [REWARD_AD] >>> SHOWING pre-loaded Rewarded Ad to user NOW! <<<");
             final RewardedAd adToShow = googleRewardedAd;
             googleRewardedAd = null;
 
@@ -118,7 +120,8 @@ public class Task_RewardVideoManager {
                 @Override
                 public void onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent();
-                    preloadRewardAd(context);
+                    Log.e(TAG, "👋 [REWARD_AD] User dismissed the Ad. Reward earned: " + isUserEarnReward);
+                    // SMART LOAD: Do NOT preload. Will load only when user clicks reward button again.
                     if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(isUserEarnReward);
                 }
 
@@ -126,8 +129,13 @@ public class Task_RewardVideoManager {
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     super.onAdFailedToShowFullScreenContent(adError);
                     Log.e(TAG, "❌ [REWARD_AD] Failed to show: " + adError.getMessage());
-                    preloadRewardAd(context);
+                    // SMART LOAD: Do NOT preload. Will load only when user clicks reward button again.
                     if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
+                }
+
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    Log.e(TAG, "✅ [REWARD_AD] Ad is now VISIBLE on screen! (Impression counted)");
                 }
             });
 
@@ -135,6 +143,7 @@ public class Task_RewardVideoManager {
                 @Override
                 public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                     isUserEarnReward = true;
+                    Log.e(TAG, "🏆 [REWARD_AD] User EARNED reward: " + rewardItem.getAmount() + " " + rewardItem.getType());
                 }
             });
             return;
@@ -142,6 +151,7 @@ public class Task_RewardVideoManager {
 
         // Case 2: Rewarded Interstitial Fallback available
         if (mRewardedInterstitialAd != null) {
+            Log.e(TAG, "🟢 [REWARD_AD] >>> SHOWING pre-loaded Rewarded Interstitial to user NOW! <<<");
             final RewardedInterstitialAd adToShow = mRewardedInterstitialAd;
             mRewardedInterstitialAd = null;
 
@@ -149,15 +159,22 @@ public class Task_RewardVideoManager {
                 @Override
                 public void onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent();
-                    preloadRewardAd(context);
+                    Log.e(TAG, "👋 [REWARD_AD] User dismissed Rewarded Interstitial. Reward earned: " + isUserEarnReward);
+                    // SMART LOAD: Do NOT preload. Will load only when user clicks reward button again.
                     if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(isUserEarnReward);
                 }
 
                 @Override
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     super.onAdFailedToShowFullScreenContent(adError);
-                    preloadRewardAd(context);
+                    Log.e(TAG, "❌ [REWARD_AD] Rewarded Interstitial failed to show: " + adError.getMessage());
+                    // SMART LOAD: Do NOT preload. Will load only when user clicks reward button again.
                     if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
+                }
+
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    Log.e(TAG, "✅ [REWARD_AD] Rewarded Interstitial is now VISIBLE on screen!");
                 }
             });
 
@@ -165,22 +182,26 @@ public class Task_RewardVideoManager {
             return;
         }
 
-        // Case 3: Ad not preloaded yet -> show loader and fetch
+        // Case 3: Ad not preloaded yet -> show loader and fetch ON-DEMAND
+        Log.e(TAG, "📡 [REWARD_AD] No cached ad. User clicked reward button -> Loading ad ON-DEMAND now...");
         String adUnitId = taskPreferenceClass.getAdsId("GoogleRewardedAd");
         if (adUnitId == null || adUnitId.trim().isEmpty()) {
-            adUnitId = taskPreferenceClass.getAdsId("AdxRewardVideoUnitID");
+            // adUnitId = taskPreferenceClass.getAdsId("AdxRewardVideoUnitID");
         }
         if (adUnitId == null || adUnitId.trim().isEmpty()) {
+            Log.e(TAG, "🔴 [REWARD_AD] No Reward Ad ID found. Skipping.");
             if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
             return;
         }
 
         showLoadingDialog(context);
+        Log.e(TAG, "📡 [REWARD_AD] >>> REQUESTING Ad from AdMob (ID: " + adUnitId + ")");
         AdRequest adRequest = new AdRequest.Builder().build();
         RewardedAd.load(context, adUnitId, adRequest, new RewardedAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
                 dismissLoadingDialog();
+                Log.e(TAG, "🎉 [REWARD_AD] ✅ Ad LOADED on-demand! Showing immediately...");
                 if (context.isFinishing() || context.isDestroyed()) {
                     if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
                     return;
@@ -190,25 +211,35 @@ public class Task_RewardVideoManager {
                     @Override
                     public void onAdDismissedFullScreenContent() {
                         super.onAdDismissedFullScreenContent();
-                        preloadRewardAd(context);
+                        Log.e(TAG, "👋 [REWARD_AD] User dismissed on-demand Ad. Reward earned: " + isUserEarnReward);
+                        // SMART LOAD: Do NOT preload. Will load only when user clicks reward button again.
                         if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(isUserEarnReward);
                     }
 
                     @Override
                     public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                         super.onAdFailedToShowFullScreenContent(adError);
-                        preloadRewardAd(context);
+                        Log.e(TAG, "❌ [REWARD_AD] On-demand ad failed to show: " + adError.getMessage());
+                        // SMART LOAD: Do NOT preload. Will load only when user clicks reward button again.
                         if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
+                    }
+
+                    @Override
+                    public void onAdShowedFullScreenContent() {
+                        Log.e(TAG, "✅ [REWARD_AD] On-demand Ad is now VISIBLE on screen! (Impression counted)");
                     }
                 });
 
-                rewardedAd.show(context, rewardItem -> isUserEarnReward = true);
+                rewardedAd.show(context, rewardItem -> {
+                    isUserEarnReward = true;
+                    Log.e(TAG, "🏆 [REWARD_AD] User EARNED reward!");
+                });
             }
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 dismissLoadingDialog();
-                Log.e(TAG, "❌ [REWARD_AD] Load failed: " + loadAdError.getMessage());
+                Log.e(TAG, "❌ [REWARD_AD] On-demand load FAILED (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
                 if (onAdLoadInterface != null) onAdLoadInterface.onAdClose(true);
             }
         });

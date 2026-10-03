@@ -1,4 +1,5 @@
 package com.vehicle.information.trending.rtoexam.rto.Task_Activity;
+import com.vehicle.information.trending.rtoexam.rto.MyApplication;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -95,10 +96,20 @@ public class Task_ExamsActivity extends AllBaseActivity {
         }
 
         this.btnStart.setOnClickListener(view -> {
-            Intent intent = new Intent(Task_ExamsActivity.this, Task_QuizActivity.class);
-            intent.putExtra("language", "" + Task_ExamsActivity.this.str_language);
-            Task_ExamsActivity.this.startActivity(intent);
-            Task_ExamsActivity.this.finish();
+            Task_PreferenceClass pref = new Task_PreferenceClass(this);
+            if (pref.getInt("ForceExamStartAd", 0) == 1) {
+                MyApplication.forceShowInterstitialAd(Task_ExamsActivity.this, () -> {
+                    Intent intent = new Intent(Task_ExamsActivity.this, Task_QuizActivity.class);
+                    intent.putExtra("language", "" + Task_ExamsActivity.this.str_language);
+                    Task_ExamsActivity.this.startActivity(intent);
+                    Task_ExamsActivity.this.finish();
+                });
+            } else {
+                Intent intent = new Intent(Task_ExamsActivity.this, Task_QuizActivity.class);
+                intent.putExtra("language", "" + Task_ExamsActivity.this.str_language);
+                Task_ExamsActivity.this.startActivity(intent);
+                Task_ExamsActivity.this.finish();
+            }
         });
     }
 
@@ -107,8 +118,15 @@ public class Task_ExamsActivity extends AllBaseActivity {
         super.onDestroy();
     }
 
+
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        MyApplication.showInterstitialAd(this, () -> finish());
     }
 }
+
+
+
+
+
+

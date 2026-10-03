@@ -85,6 +85,11 @@ public class Task_QuizActivity extends AllBaseActivity {
         }
         Log.d("R_Quiz", "Language is = " + this.str_language);
 
+        android.widget.RelativeLayout rl_ad = findViewById(R.id.rl_ad);
+        if (rl_ad != null) {
+            com.vehicle.information.trending.rtoexam.rto.Task_adManager.Task_LoadAds.loadAdmobBannerAd(this, rl_ad);
+        }
+
         if (this.str_language.equalsIgnoreCase("gujarati")) {
             this.images = this.images_gujarati;
         } else if (this.str_language.equalsIgnoreCase("hindi")) {
@@ -165,6 +170,10 @@ public class Task_QuizActivity extends AllBaseActivity {
 
     private void finishQuiz() {
         this.timer.cancel();
+        proceedToResult();
+    }
+
+    private void proceedToResult() {
         Intent intent = new Intent(Task_QuizActivity.this, Task_ResultActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("score", this.Score);
@@ -188,7 +197,25 @@ public class Task_QuizActivity extends AllBaseActivity {
         @Override
         public void onTick(long j) {
             TextView textView = Task_QuizActivity.this.tvTimer;
-            textView.setText(String.format("%02ds", Long.valueOf(TimeUnit.MILLISECONDS.toSeconds(j) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(j)))));
+            long secondsLeft = java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(j) - java.util.concurrent.TimeUnit.MINUTES.toSeconds(java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(j));
+            textView.setText(String.format("%02ds", secondsLeft));
+
+            if (secondsLeft <= 5 && secondsLeft > 0) {
+                textView.setTextColor(android.graphics.Color.parseColor("#FF4444"));
+                android.widget.LinearLayout ll_timer = findViewById(R.id.ll_timer);
+                if (ll_timer != null) {
+                    ll_timer.animate().scaleX(1.15f).scaleY(1.15f).setDuration(250).withEndAction(() -> {
+                        ll_timer.animate().scaleX(1.0f).scaleY(1.0f).setDuration(250).start();
+                    }).start();
+                }
+            } else {
+                textView.setTextColor(android.graphics.Color.WHITE);
+                android.widget.LinearLayout ll_timer = findViewById(R.id.ll_timer);
+                if (ll_timer != null) {
+                    ll_timer.setScaleX(1.0f);
+                    ll_timer.setScaleY(1.0f);
+                }
+            }
         }
 
         @Override
@@ -238,6 +265,21 @@ public class Task_QuizActivity extends AllBaseActivity {
                     finishQuiz();
                 });
             } else {
+                // Shake effect and Vibration
+                android.os.Vibrator vibrator = (android.os.Vibrator) Task_QuizActivity.this.getSystemService(android.content.Context.VIBRATOR_SERVICE);
+                if (vibrator != null) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        vibrator.vibrate(android.os.VibrationEffect.createOneShot(300, android.os.VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        vibrator.vibrate(300);
+                    }
+                }
+                android.view.View rootView = Task_QuizActivity.this.findViewById(android.R.id.content);
+                if (rootView != null) {
+                    android.view.animation.Animation shake = android.view.animation.AnimationUtils.loadAnimation(Task_QuizActivity.this, com.vehicle.information.trending.rtoexam.rto.R.anim.task_shake);
+                    rootView.startAnimation(shake);
+                }
+
                 // Show Time Over dialog and proceed to next question
                 final Dialog dialog = new Dialog(Task_QuizActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -437,7 +479,7 @@ public class Task_QuizActivity extends AllBaseActivity {
         btnExit.setOnClickListener(v -> {
             dialog.dismiss();
             this.timer.cancel();
-            finish();
+            com.vehicle.information.trending.rtoexam.rto.MyApplication.showInterstitialAd(Task_QuizActivity.this, () -> finish());
         });
 
         btnContinue.setOnClickListener(v -> dialog.dismiss());
@@ -445,4 +487,13 @@ public class Task_QuizActivity extends AllBaseActivity {
         dialog.show();
     }
 }
+
+
+
+
+
+
+
+
+
 

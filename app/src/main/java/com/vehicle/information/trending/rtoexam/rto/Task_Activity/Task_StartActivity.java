@@ -134,15 +134,11 @@ public class Task_StartActivity extends AllBaseActivity implements GlobalReferen
             this.textView9.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MyApplication.showInterstitialAd(Task_StartActivity.this, () -> Next_FuelCityActivity());
+                    Next_FuelCityActivity();
                 }
             });
         }
 
-        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
-        OneSignal.initWithContext(Task_StartActivity.this);
-        OneSignal.setAppId("70979d73-f8a7-4936-b329-b14e18bb16d3");
-        OneSignal.promptForPushNotifications();
     }
 
     @Override

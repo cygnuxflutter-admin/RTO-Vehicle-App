@@ -3,6 +3,7 @@ package com.vehicle.information.trending.rtoexam.rto.Task_Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import com.vehicle.information.trending.rtoexam.rto.Task_utils.Task_PreferenceClass;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -145,23 +146,31 @@ public class Task_ResultCardsActivity extends AllBaseActivity {
         this.btnHome.setOnClickListener(view -> goHome());
 
         this.btnRetry.setOnClickListener(view -> {
-            Task_RewardVideoManager.showRewardVideoAd(Task_ResultCardsActivity.this, new Task_RewardVideoManager.OnRewardAdLoadInterface() {
-                @Override
-                public void onAdClose(boolean isWithReward) {
-                    Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
-                    intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
-                    Task_ResultCardsActivity.this.startActivity(intent);
-                    Task_ResultCardsActivity.this.finish();
-                }
+            Task_PreferenceClass pref = new Task_PreferenceClass(Task_ResultCardsActivity.this);
+            if (pref.getAdsStatus("RetryQuizRewardAd") == 1) {
+                Task_RewardVideoManager.showRewardVideoAd(Task_ResultCardsActivity.this, new Task_RewardVideoManager.OnRewardAdLoadInterface() {
+                    @Override
+                    public void onAdClose(boolean isWithReward) {
+                        Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
+                        intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
+                        Task_ResultCardsActivity.this.startActivity(intent);
+                        Task_ResultCardsActivity.this.finish();
+                    }
 
-                @Override
-                public void onAdFail() {
-                    Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
-                    intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
-                    Task_ResultCardsActivity.this.startActivity(intent);
-                    Task_ResultCardsActivity.this.finish();
-                }
-            });
+                    @Override
+                    public void onAdFail() {
+                        Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
+                        intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
+                        Task_ResultCardsActivity.this.startActivity(intent);
+                        Task_ResultCardsActivity.this.finish();
+                    }
+                });
+            } else {
+                Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
+                intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
+                Task_ResultCardsActivity.this.startActivity(intent);
+                Task_ResultCardsActivity.this.finish();
+            }
         });
     }
 
@@ -177,3 +186,4 @@ public class Task_ResultCardsActivity extends AllBaseActivity {
         goHome();
     }
 }
+

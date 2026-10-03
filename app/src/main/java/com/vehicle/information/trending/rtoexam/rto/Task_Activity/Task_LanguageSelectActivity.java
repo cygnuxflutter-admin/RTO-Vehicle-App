@@ -153,6 +153,11 @@ public class Task_LanguageSelectActivity extends AllBaseActivity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         getWindow().setStatusBarColor(android.graphics.Color.parseColor("#1E40AF"));
+
+        Task_PreferenceClass pref = new Task_PreferenceClass(this);
+        if (pref.getInt("ForceExamStartAd", 0) == 1) {
+            ((com.vehicle.information.trending.rtoexam.rto.MyApplication) getApplication()).getInterstitialAdManager().fetchAdMobAd();
+        }
         setContentView(R.layout.task_activity_lang_select);
 
         //  NativeLoad();
@@ -2652,6 +2657,9 @@ public class Task_LanguageSelectActivity extends AllBaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        com.vehicle.information.trending.rtoexam.rto.MyApplication.showInterstitialAd(this, () -> super.onBackPressed());
     }
 }
+
+
+

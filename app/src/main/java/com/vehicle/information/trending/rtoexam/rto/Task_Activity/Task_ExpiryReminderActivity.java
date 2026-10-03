@@ -1,4 +1,5 @@
 package com.vehicle.information.trending.rtoexam.rto.Task_Activity;
+import com.vehicle.information.trending.rtoexam.rto.MyApplication;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -215,4 +216,12 @@ public class Task_ExpiryReminderActivity extends AllBaseActivity {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        MyApplication.showInterstitialAd(this, () -> finish());
+    }
 }
+
+
+

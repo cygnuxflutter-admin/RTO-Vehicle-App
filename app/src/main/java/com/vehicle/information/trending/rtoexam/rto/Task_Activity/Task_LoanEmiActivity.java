@@ -1,4 +1,5 @@
 package com.vehicle.information.trending.rtoexam.rto.Task_Activity;
+import com.vehicle.information.trending.rtoexam.rto.MyApplication;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -175,4 +176,12 @@ public class Task_LoanEmiActivity extends AllBaseActivity {
             return "₹ " + String.format(Locale.getDefault(), "%,d", Math.round(amount));
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        MyApplication.showInterstitialAd(this, () -> finish());
+    }
 }
+
+
+

@@ -38,6 +38,38 @@ public class Task_PreferenceClass {
     }
 
     public String getAdsId(String type) {
+        if (com.vehicle.information.trending.rtoexam.rto.BuildConfig.DEBUG) {
+            if (type != null) {
+                switch (type) {
+                    case "GoogleBannerAd":
+                    case "CollapsibleBannerID":
+                    case "AdxBannerAdunitID":
+                    case "AdxBannerUnitID":
+                        return "ca-app-pub-3940256099942544/6300978111";
+                    case "GoogleAppopenAd":
+                    case "AdxAppOpenID":
+                        return "ca-app-pub-3940256099942544/9257395921";
+                    case "GoogleInterstitialAd":
+                    case "GoogleInterstialRewardAd":
+                    case "AdxInterstitalAdunitID":
+                    case "AdxInterstialUnitID":
+                        return "ca-app-pub-3940256099942544/1033173712";
+                    case "GoogleRewardedAd":
+                    case "AdxRewardVideoUnitID":
+                    case "AdxRewardUnitID":
+                        return "ca-app-pub-3940256099942544/5224354917";
+                    case "GoogleNativeAd":
+                    case "AdxNativeUnitID":
+                    case "AdxNativeAdunitID":
+                        return "ca-app-pub-3940256099942544/2247696110";
+                    case "FbNativeAd":
+                    case "FbInterstitialAd":
+                    case "FbBannerAd":
+                        return "";
+                }
+            }
+        }
+        
         if (prefs != null) {
             String val = prefs.getString(type, "");
             if (val != null && !val.trim().isEmpty()) {

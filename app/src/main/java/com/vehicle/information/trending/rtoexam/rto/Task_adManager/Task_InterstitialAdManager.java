@@ -44,9 +44,9 @@ public class Task_InterstitialAdManager {
         fbInterstitialAdId = (rawFb != null) ? rawFb.trim() : "";
 
         Log.d(TAG, "🔹 Interstitial Config: ID=" + admobInterstitialAdId + " | TargetClicks=" + taskPreferenceClass.getAdsStatus("InerstialClickCount"));
-        if (!admobInterstitialAdId.isEmpty() && taskPreferenceClass.getAdsStatus("InerstialClickCount") > 0) {
-            fetchAdMobAd();
-        }
+        
+        // Removed immediate fetch on startup. We will only load when click count reaches (Target - 1)
+        // to prevent wasting ads if the user closes the app early.
     }
 
     public void fetchAdMobAd() {
@@ -72,7 +72,7 @@ public class Task_InterstitialAdManager {
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 isLoading = false;
                 Log.e(TAG, "❌ [INTERSTITIAL_AD] AdMob Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
-                fetchAdXAd();
+                // fetchAdXAd();
             }
         };
         AdRequest request = getAdRequest();
@@ -93,7 +93,7 @@ public class Task_InterstitialAdManager {
         }
 
         if (adXInterstitialAdId == null || adXInterstitialAdId.trim().isEmpty()) {
-            fetchFbAd();
+            // fetchFbAd();
             return;
         }
 
@@ -111,7 +111,7 @@ public class Task_InterstitialAdManager {
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 isLoading = false;
                 Log.e(TAG, "❌ [INTERSTITIAL_AD] AdX Failed to load (Code " + loadAdError.getCode() + "): " + loadAdError.getMessage());
-                fetchFbAd();
+                // fetchFbAd();
             }
         };
 
@@ -135,7 +135,7 @@ public class Task_InterstitialAdManager {
 
             @Override
             public void onInterstitialDismissed(Ad ad) {
-                fetchAdMobAd();
+                // Do NOT auto-fetch immediately after close anymore. Wait for next (Target - 1) click!
             }
 
             @Override
@@ -191,8 +191,14 @@ public class Task_InterstitialAdManager {
 
         if (getClickCount < interstitalAdStatus) {
             taskPreferenceClass.setInt("getClickCount", getClickCount);
-            if (!isAdmobAdAvailable()) {
-                fetchAdMobAd();
+            
+            // SMART LOADING LOGIC: Load the ad only on (Target - 1) count!
+            int preLoadTarget = Math.max(1, interstitalAdStatus - 1);
+            if (getClickCount == preLoadTarget) {
+                if (!isAdmobAdAvailable() && !isLoading) {
+                    Log.d(TAG, "📊 [INTERSTITIAL_COUNTER] Click " + getClickCount + " reached! Smart-loading Interstitial Ad in background...");
+                    fetchAdMobAd();
+                }
             }
             if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
             return;
@@ -215,7 +221,7 @@ public class Task_InterstitialAdManager {
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     super.onAdFailedToShowFullScreenContent(adError);
                     admobInterstitialAd = null;
-                    fetchAdMobAd();
+                    // Do NOT auto-fetch. Wait for (Target-1) click!
                     if (!callbackTriggered[0]) {
                         callbackTriggered[0] = true;
                         if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
@@ -231,7 +237,7 @@ public class Task_InterstitialAdManager {
                 public void onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent();
                     admobInterstitialAd = null;
-                    fetchAdMobAd();
+                    // Do NOT auto-fetch. Wait for (Target-1) click!
                     if (!callbackTriggered[0]) {
                         callbackTriggered[0] = true;
                         if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
@@ -245,6 +251,57 @@ public class Task_InterstitialAdManager {
             if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
         } else {
             Log.d(TAG, "⚠️ [INTERSTITIAL_AD] Ad not ready yet. Pre-fetching now and continuing flow.");
+            fetchAdMobAd();
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+        }
+    }
+
+    public void forceShowInterstitialAd(Activity activity, OnAdLoadInterface onAdLoadInterface) {
+        if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+            return;
+        }
+
+        // Respect Firebase kill-switch: if InerstialClickCount=0, never force-show
+        if (taskPreferenceClass.getAdsStatus("InerstialClickCount") <= 0) {
+            Log.d(TAG, "🔴 [INTERSTITIAL_AD] Force Show blocked: InerstialClickCount=0 (disabled via Firebase)");
+            if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+            return;
+        }
+
+        if (isAdmobAdAvailable()) {
+            Log.d(TAG, "🟢 [INTERSTITIAL_AD] FORCING Google Interstitial Ad (Bypass count)");
+            final boolean[] callbackTriggered = {false};
+            
+            admobInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                    super.onAdFailedToShowFullScreenContent(adError);
+                    admobInterstitialAd = null;
+                    if (!callbackTriggered[0]) {
+                        callbackTriggered[0] = true;
+                        if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+                    }
+                }
+
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    super.onAdShowedFullScreenContent();
+                }
+
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+                    admobInterstitialAd = null;
+                    if (!callbackTriggered[0]) {
+                        callbackTriggered[0] = true;
+                        if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
+                    }
+                }
+            });
+            admobInterstitialAd.show(activity);
+        } else {
+            Log.d(TAG, "⚠️ [INTERSTITIAL_AD] Ad not ready yet (Force Show). Pre-fetching now and skipping display.");
             fetchAdMobAd();
             if (onAdLoadInterface != null) onAdLoadInterface.onAdClose();
         }
@@ -265,3 +322,8 @@ public class Task_InterstitialAdManager {
         void onAdClose();
     }
 }
+
+
+
+
+
