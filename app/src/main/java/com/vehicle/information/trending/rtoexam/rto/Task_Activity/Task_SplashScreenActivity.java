@@ -21,6 +21,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.KeyEvent;
+import android.view.Gravity;
+import android.view.WindowManager;
 
 import com.facebook.ads.Ad;
 import com.facebook.ads.InterstitialAdListener;
@@ -115,7 +118,8 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
         MyApplication.isAdsSplash = true;
         
         // Safety Watchdog: Ensure Splash screen NEVER gets stuck if Firebase is slow/disconnected
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+        watchdogHandler = new Handler(Looper.getMainLooper());
+        watchdogRunnable = new Runnable() {
             @Override
             public void run() {
                 if (!isFinishing() && !hasStarted && !isUpdateDialogShowing) {
@@ -123,7 +127,8 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
                     startToMainActivity();
                 }
             }
-        }, 4000);
+        };
+        watchdogHandler.postDelayed(watchdogRunnable, 5000);
 
         if (Task_NetworkUtils.isNetworkAvailable(this)) {
             getData();
@@ -132,12 +137,17 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
         }
     }
 
+    private Handler watchdogHandler;
+    private Runnable watchdogRunnable;
     private boolean hasStarted = false;
     private boolean isUpdateDialogShowing = false;
 
     public synchronized void startToMainActivity() {
         if (hasStarted) return;
         hasStarted = true;
+        if (watchdogHandler != null && watchdogRunnable != null) {
+            watchdogHandler.removeCallbacks(watchdogRunnable);
+        }
         startIntent();
     }
 
@@ -258,8 +268,9 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
                         String updateMessage = taskPreferenceClass.getDataType("UpdateMessage", "");
 
                         boolean isNewerVersion = (targetVersionCode > BuildConfig.VERSION_CODE);
+                        boolean shouldShowUpdate = (updateAvailable == 1 || isForceUpdate == 1) && isNewerVersion;
 
-                        if (updateAvailable == 1 && isNewerVersion) {
+                        if (shouldShowUpdate) {
                             Log.e("FIREBASE_ADS", "🔔 TRIGGERING UPDATE DIALOG -> Version: " + targetVersionName + " (Force: " + isForceUpdate + ")");
                             showUpdateDialog(targetVersionName, isForceUpdate == 1, updateMessage);
                         } else {
@@ -313,7 +324,12 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
             if (materialDialog != null && materialDialog.isShowing()) return;
 
             isUpdateDialogShowing = true;
-            materialDialog = new Dialog(Task_SplashScreenActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+            if (watchdogHandler != null && watchdogRunnable != null) {
+                watchdogHandler.removeCallbacks(watchdogRunnable);
+            }
+
+            materialDialog = new Dialog(Task_SplashScreenActivity.this);
+            materialDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             materialDialog.setContentView(R.layout.task_reward_dialog);
             materialDialog.setCancelable(!isForceUpdate);
             materialDialog.setCanceledOnTouchOutside(!isForceUpdate);
@@ -321,7 +337,14 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
             if (materialDialog.getWindow() != null) {
                 Window window = materialDialog.getWindow();
                 window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                int screenWidth = getResources().getDisplayMetrics().widthPixels;
+                int margin = (int) (28 * getResources().getDisplayMetrics().density);
+                int dialogWidth = screenWidth - (2 * margin);
+                window.setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
+                window.setGravity(Gravity.CENTER);
+                window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                window.setDimAmount(0.65f);
             }
 
             TextView tv_title = materialDialog.findViewById(R.id.title);
@@ -329,44 +352,72 @@ public class Task_SplashScreenActivity extends AllBaseActivity {
             TextView button1 = materialDialog.findViewById(R.id.button1);
             TextView button2 = materialDialog.findViewById(R.id.button2);
 
-            tv_title.setText(isForceUpdate ? "Important App Update" : "New Update Available");
-
-            if (customMsg != null && !customMsg.trim().isEmpty()) {
-                tv_description.setText(customMsg);
-            } else if (versionName != null && !versionName.isEmpty()) {
-                tv_description.setText("Version v" + versionName + " is now available.");
-            } else {
-                tv_description.setText("A new version is now available.");
+            if (tv_title != null) {
+                tv_title.setText(isForceUpdate ? "Important App Update" : "New Update Available");
             }
 
-            button2.setText("Update Now");
-            button2.setOnClickListener(v -> {
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
-                } catch (ActivityNotFoundException unused) {
-                    try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
-                    } catch (Exception e) {
-                        Toast.makeText(Task_SplashScreenActivity.this, "Unable to find Google Play Store", Toast.LENGTH_LONG).show();
-                    }
+            if (tv_description != null) {
+                if (customMsg != null && !customMsg.trim().isEmpty()) {
+                    tv_description.setText(customMsg);
+                } else {
+                    String vText = (versionName != null && !versionName.trim().isEmpty()) ? " (v" + versionName.trim() + ")" : "";
+                    tv_description.setText("A newer version" + vText + " of RTO Vehicle App is ready with updated 2026 questions, live fuel rates, and improvements.");
                 }
-            });
+            }
+
+            if (button2 != null) {
+                button2.setText("Update Now");
+                button2.setOnClickListener(v -> {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+                    } catch (ActivityNotFoundException unused) {
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
+                        } catch (Exception e) {
+                            Toast.makeText(Task_SplashScreenActivity.this, "Unable to find Google Play Store", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
 
             if (isForceUpdate) {
-                if (button1 != null) button1.setVisibility(View.GONE);
-                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) button2.getLayoutParams();
-                lp.setMarginStart(0);
-                button2.setLayoutParams(lp);
+                if (button1 != null) {
+                    button1.setVisibility(View.GONE);
+                }
+                if (button2 != null) {
+                    int dp50 = (int) (50 * getResources().getDisplayMetrics().density);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp50);
+                    lp.setMargins(0, 0, 0, 0);
+                    button2.setLayoutParams(lp);
+                }
+                // When force update is mandatory, back button terminates the app
+                materialDialog.setOnKeyListener((dialog, keyCode, event) -> {
+                    if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                        finishAffinity();
+                        return true;
+                    }
+                    return false;
+                });
             } else {
+                int dp50 = (int) (50 * getResources().getDisplayMetrics().density);
+                int margin6 = (int) (6 * getResources().getDisplayMetrics().density);
                 if (button1 != null) {
                     button1.setVisibility(View.VISIBLE);
                     button1.setText("Later");
+                    LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(0, dp50, 1.0f);
+                    lp1.setMarginEnd(margin6);
+                    button1.setLayoutParams(lp1);
                     button1.setOnClickListener(v -> {
                         if (materialDialog != null && materialDialog.isShowing()) {
                             materialDialog.dismiss();
                         }
                         next();
                     });
+                }
+                if (button2 != null) {
+                    LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(0, dp50, 1.0f);
+                    lp2.setMarginStart(margin6);
+                    button2.setLayoutParams(lp2);
                 }
             }
 

@@ -1,141 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_card_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#80000000"
-    android:clickable="true"
-    android:focusable="true"
-    android:gravity="center"
-    android:padding="28dp">
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_container"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-    <!-- Wrapper to hold CardView + floating icon -->
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/native_banner_ad_containers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:visibility="gone" />
 
-        <!-- CardView with top margin for the overlapping icon -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="8dp"
-            app:cardMaxElevation="10dp"
-            app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="false">
+    <!-- Circular Cloud Download Icon -->
+    <FrameLayout
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/bg_dialog_icon_circle">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingStart="20dp"
-                android:paddingTop="44dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="24dp">
-
-                <RelativeLayout
-                    android:id="@+id/native_banner_ad_containers"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
-
-                <!-- Dialog Title -->
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/task_roboto_bold"
-                    android:gravity="center"
-                    android:text="New Update Available"
-                    android:textColor="#0F172A"
-                    android:textSize="18sp" />
-
-                <!-- Dialog Description -->
-                <TextView
-                    android:id="@+id/description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/task_roboto_regular"
-                    android:gravity="center"
-                    android:lineSpacingExtra="3dp"
-                    android:text="Version v3.7 is now available."
-                    android:textColor="#64748B"
-                    android:textSize="14sp" />
-
-                <!-- Action Buttons -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <!-- Cancel / Later Button -->
-                    <TextView
-                        android:id="@+id/button1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="6dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_btn_dialog_secondary"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:fontFamily="@font/task_roboto_regular"
-                        android:gravity="center"
-                        android:minHeight="46dp"
-                        android:paddingStart="12dp"
-                        android:paddingTop="12dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="12dp"
-                        android:text="Later"
-                        android:textColor="#475569"
-                        android:textSize="14sp" />
-
-                    <!-- Update Now Button -->
-                    <TextView
-                        android:id="@+id/button2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:layout_weight="1.2"
-                        android:background="@drawable/bg_btn_dialog_primary"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:fontFamily="@font/task_roboto_bold"
-                        android:gravity="center"
-                        android:minHeight="46dp"
-                        android:paddingStart="12dp"
-                        android:paddingTop="12dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="12dp"
-                        android:text="Update Now"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Floating Header Icon centered on CardView top edge -->
-        <FrameLayout
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_gravity="top|center_horizontal"
-            android:background="@drawable/bg_dialog_icon_circle"
-            android:elevation="12dp"
-            android:translationZ="12dp">
-
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_dialog_update" />
-        </FrameLayout>
-
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_dialog_update"
+            app:tint="#2563EB" />
     </FrameLayout>
 
-</FrameLayout>
+    <!-- Title -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/task_roboto_bold"
+        android:gravity="center"
+        android:text="Important App Update"
+        android:textColor="#0F172A"
+        android:textSize="20sp" />
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/task_roboto_regular"
+        android:gravity="center"
+        android:lineSpacingExtra="3.5dp"
+        android:text="A newer version (v3.7) of RTO Vehicle App is ready with updated 2026 questions, live fuel rates, and improvements."
+        android:textColor="#64748B"
+        android:textSize="14sp" />
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:id="@+id/ll_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="28dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Cancel / Later Button (Shown only for optional update) -->
+        <TextView
+            android:id="@+id/button1"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_dialog_secondary"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/task_roboto_bold"
+            android:gravity="center"
+            android:text="Later"
+            android:textColor="#475569"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+        <!-- Update Now Button -->
+        <TextView
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_btn_dialog_primary"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/task_roboto_bold"
+            android:gravity="center"
+            android:text="Update Now"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+</LinearLayout>
