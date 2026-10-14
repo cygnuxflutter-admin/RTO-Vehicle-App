@@ -148,23 +148,31 @@ public class Task_ResultCardsActivity extends AllBaseActivity {
         this.btnRetry.setOnClickListener(view -> {
             Task_PreferenceClass pref = new Task_PreferenceClass(Task_ResultCardsActivity.this);
             if (pref.getAdsStatus("RetryQuizRewardAd") == 1) {
-                Task_RewardVideoManager.showRewardVideoAd(Task_ResultCardsActivity.this, new Task_RewardVideoManager.OnRewardAdLoadInterface() {
-                    @Override
-                    public void onAdClose(boolean isWithReward) {
-                        Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
-                        intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
-                        Task_ResultCardsActivity.this.startActivity(intent);
-                        Task_ResultCardsActivity.this.finish();
-                    }
+                new androidx.appcompat.app.AlertDialog.Builder(Task_ResultCardsActivity.this)
+                    .setTitle("Retry Quiz")
+                    .setMessage("Watch a short video ad to try the quiz again.")
+                    .setCancelable(true)
+                    .setPositiveButton("Watch Ad", (dialog, which) -> {
+                        Task_RewardVideoManager.showRewardVideoAd(Task_ResultCardsActivity.this, new Task_RewardVideoManager.OnRewardAdLoadInterface() {
+                            @Override
+                            public void onAdClose(boolean isWithReward) {
+                                Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
+                                intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
+                                Task_ResultCardsActivity.this.startActivity(intent);
+                                Task_ResultCardsActivity.this.finish();
+                            }
 
-                    @Override
-                    public void onAdFail() {
-                        Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
-                        intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
-                        Task_ResultCardsActivity.this.startActivity(intent);
-                        Task_ResultCardsActivity.this.finish();
-                    }
-                });
+                            @Override
+                            public void onAdFail() {
+                                Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
+                                intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
+                                Task_ResultCardsActivity.this.startActivity(intent);
+                                Task_ResultCardsActivity.this.finish();
+                            }
+                        });
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .show();
             } else {
                 Intent intent = new Intent(Task_ResultCardsActivity.this, Task_QuizActivity.class);
                 intent.putExtra("language", Task_ResultCardsActivity.this.str_language);
@@ -186,4 +194,5 @@ public class Task_ResultCardsActivity extends AllBaseActivity {
         goHome();
     }
 }
+
 

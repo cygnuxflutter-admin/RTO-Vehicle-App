@@ -59,6 +59,7 @@
         <item name="colorPrimaryDark">@color/theme_primary</item>
         <item name="android:statusBarColor">@color/theme_primary</item>
         <item name="android:fitsSystemWindows">true</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">
@@ -81,3 +82,4 @@
         <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
 </resources>
+
